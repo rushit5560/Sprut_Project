@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "901900770928",
+    "firebase_url": "https://sprut-client-android.firebaseio.com",
+    "project_id": "sprut-client-android",
+    "storage_bucket": "sprut-client-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901900770928:android:689a2634f3dfecb2121eb5",
+        "android_client_info": {
+          "package_name": "com.clientflutter.sprut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901900770928-5fv9euet2scaa2atnj9ll07nbm1d718a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV5x8F9_1t5yGJa4Pu7uIzGeHUL8Wjhsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901900770928-5fv9euet2scaa2atnj9ll07nbm1d718a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "901900770928-fa9iui6dh8rfuvf1nmfn6eon0juv60pu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sprut.sprut",
+                "app_store_id": "1277760121"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901900770928:android:07a0dc483033f0d6",
+        "android_client_info": {
+          "package_name": "com.sprut.sprut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901900770928-5fv9euet2scaa2atnj9ll07nbm1d718a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV5x8F9_1t5yGJa4Pu7uIzGeHUL8Wjhsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901900770928-5fv9euet2scaa2atnj9ll07nbm1d718a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "901900770928-fa9iui6dh8rfuvf1nmfn6eon0juv60pu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sprut.sprut",
+                "app_store_id": "1277760121"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
