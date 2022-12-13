@@ -1,4 +1,6 @@
 // ignore_for_file: file_names
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -390,8 +392,58 @@ class _MyDrawerState extends State<MyDrawer> {
                               databaseService.saveToDisk(
                                   DatabaseKeys.isLoginTypeIn,
                                   AppConstants.TAXI_APP);
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  Routes.homeScreen, ModalRoute.withName('/'));
+                              String order = databaseService
+                                  .getFromDisk(DatabaseKeys.order) ??
+                                  "";
+
+                              log("order model stored changed in prefs is :: ${order}");
+
+                              if (order != "") {
+                                // Navigator.pushNamedAndRemoveUntil(
+                                //   context,
+                                //   Routes.homeScreen,
+                                //   ModalRoute.withName('/'),
+                                // );
+
+                                // await Get.toNamed(Routes.tarrifSelectionView,
+                                //     arguments: {
+                                //       "currentCity": currentCity,
+                                //       "arrivalAddress": arrivalAddress,
+                                //       "destinationAddress": destinationAddress,
+                                //       "kGooglePlex": kGooglePlex,
+                                //       "kLake": kLake,
+                                //       "repeatOrder": repeatOrder,
+                                //     });
+
+                                await Get.toNamed(Routes.searchView);
+
+                                // .whenComplete(() async {
+                                //   await Get.toNamed(Routes.tarrifSelectionView,
+                                //           arguments: {
+                                //         "currentCity": currentCity,
+                                //         "arrivalAddress": arrivalAddress,
+                                //         "destinationAddress":
+                                //             destinationAddress,
+                                //         "kGooglePlex": kGooglePlex,
+                                //         "kLake": kLake,
+                                //         "repeatOrder": repeatOrder,
+                                //       })!
+                                //       .whenComplete(() async {
+                                //     await Get.toNamed(Routes.searchView);
+                                //   });
+                                // });
+
+                                // await Get.toNamed(Routes.tarrifSelectionView);
+                                // await Get.toNamed(Routes.searchView);
+                              } else {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  Routes.homeScreen,
+                                  ModalRoute.withName('/'),
+                                );
+                              }
+                              /*Navigator.pushNamedAndRemoveUntil(context,
+                                  Routes.homeScreen, ModalRoute.withName('/'));*/
                             } else {
                               //open food screen
                               databaseService.saveToDisk(

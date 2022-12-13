@@ -12,6 +12,7 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
 import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
 import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
+import 'package:sprut/presentation/widgets/my_drawer/my_drawer.dart';
 
 import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/configs/responsive/responsive.dart';
@@ -26,6 +27,8 @@ class TariffView extends GetView<TariffController> {
   @override
   Widget build(BuildContext context) {
     Helpers.systemStatusBar();
+
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
 
     var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
@@ -63,11 +66,19 @@ class TariffView extends GetView<TariffController> {
                     controller.update();
                   }
                 },
-                minHeight: MediaQuery.of(context).size.width * 0.950,
+                minHeight: _scaffoldKey.currentState != null
+                    ? _scaffoldKey.currentState!.isDrawerOpen
+              ? 0 : MediaQuery.of(context).size.width * 0.950 : MediaQuery.of(context).size.width * 0.950,
                 maxHeight: MediaQuery.of(context).size.height * 0.950,
                 panel: TariffBottomView(),
+
                 body: Scaffold(
+                    key: _scaffoldKey,
                     resizeToAvoidBottomInset: false,
+
+                    drawer: MyDrawer(
+                      isEnable: false,
+                    ),
                     body: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -163,6 +174,30 @@ class TariffView extends GetView<TariffController> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
+                                    _scaffoldKey.currentState!.openDrawer();
+                                  },
+                                  child: Container(
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.menu,
+                                            color: Colors.white,
+                                            size: 7.w,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    height: 5.h,
+                                    width: 5.h,
+                                    decoration: BoxDecoration(
+                                        color: colorScheme.primary,
+                                        borderRadius: BorderRadius.circular(5)),
+                                  ),
+                                ),
+                                /*GestureDetector(
+                                  onTap: () {
                                     homeViewController
                                         .updateSuggestionsOnBack();
                                     Get.back();
@@ -180,7 +215,7 @@ class TariffView extends GetView<TariffController> {
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                   ),
-                                ),
+                                ),*/
                                 const SizedBox(
                                   height: 8.0,
                                 ),
