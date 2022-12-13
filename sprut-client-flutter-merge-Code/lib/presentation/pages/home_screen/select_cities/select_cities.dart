@@ -6,6 +6,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/data/models/available_cities_model/available_cities_model.dart';
 import 'package:sprut/presentation/pages/choose_on_map/controller/choose_on_map_controller.dart';
 import 'package:sprut/presentation/pages/home_screen/controllers/home_controller.dart';
@@ -18,6 +21,8 @@ import 'package:sprut/resources/configs/helpers/helpers.dart';
 import 'package:sprut/resources/configs/service_locator/service_locator.dart';
 import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
+
+import '../../no_internet/no_internet.dart';
 
 class SelectCities extends StatefulWidget {
   bool isChooseMapScreen;
@@ -48,6 +53,15 @@ class _SelectCitiesState extends State<SelectCities> {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var language = AppLocalizations.of(context)!;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+      return NoInternetScreen(onPressed: () async {});
+    }
+    if (connectionState is ConnectedSucessState) {}
     return SafeArea(
       top: widget.isSettingScreen ? false : true,
       bottom: widget.isSettingScreen ? false : true,
@@ -421,6 +435,8 @@ class _SelectCitiesState extends State<SelectCities> {
         backgroundColor: colorScheme.onBackground,
       ),
     );
+  },
+);
   }
 
   SizedBox _sizedBox() {

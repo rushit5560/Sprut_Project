@@ -33,10 +33,8 @@ class MyCustomDialog extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                  
                     onPressed: () {
-                    
-                       Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     },
                     child: Text(
                       "OK",

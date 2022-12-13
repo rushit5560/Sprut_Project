@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 
 import '../../../../../../data/models/tariff_screen_model/card_model.dart';
 import '../../../../../../resources/app_constants/app_constants.dart';
@@ -13,6 +17,7 @@ import '../../../../resources/assets_path/assets_path.dart';
 import '../../../widgets/cart_leave_dialog/cart_leave_dialog.dart';
 import '../../../widgets/common_dialog/common_dialog.dart';
 import '../../../widgets/primary_elevated_btn/primary_elevated_btn.dart';
+import '../../no_internet/no_internet.dart';
 import 'payment_add_view.dart';
 import '../../payment_screen/controllers/payment_controller.dart';
 
@@ -36,6 +41,17 @@ class PaymentView extends GetView<PaymentController> {
     var size = MediaQuery.of(context).size;
 
 
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
     return GetBuilder<PaymentController>(
       init: PaymentController(),
       initState: (_) {
@@ -168,6 +184,8 @@ class PaymentView extends GetView<PaymentController> {
         );
       },
     );
+  },
+);
   }
 
   Widget buildBalanceItem(dynamic map, ColorScheme colorScheme,

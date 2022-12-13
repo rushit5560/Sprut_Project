@@ -17,15 +17,14 @@ import '../../../../widgets/cash_back_dialog/cash_back_dialog.dart';
 
 class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
 
-
-
-
   @override
   Widget build(BuildContext context) {
     // _homeViewController.checkLocationIfNeeded();
     var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
+    Locale appLocale = Localizations.localeOf(context);
+
 
     return SafeArea(
         child: SingleChildScrollView(
@@ -33,7 +32,7 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
       child: Column(
         children: [
           Container(
-            height: 54.h,
+            height: (MediaQuery.of(context).size.height <= 1334) ? 55.h : 60.h,
             child: Stack(
               children: [
                 Positioned(
@@ -41,11 +40,10 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.network(
-                        controller.isShowData
+                      Image.network(controller.isShowData
                             ? "${controller.storeDetailsData.imgUrl.toString()}"
                             : "",
-                        height: 325,
+                        height: MediaQuery.of(context).size.height*0.30,
                         width: double.infinity,
                         fit: BoxFit.fill,
                       ),
@@ -54,235 +52,242 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
                 ),
                 (MediaQuery.of(context).size.height <= 1334) ?
                 Padding(
-                  padding: const EdgeInsets.only(top: 172.0),
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.25),
                   child: Container(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: AppThemes.foodBgColor,
-                          borderRadius: BorderRadius.circular(15)),
-                      margin: EdgeInsets.only(left: 11, right: 11),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                      constraints: BoxConstraints(maxHeight: 250),
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: AppThemes.foodBgColor,
-                                borderRadius: BorderRadius.circular(15)),
-                            constraints: BoxConstraints(minHeight: 75),
-                            margin: EdgeInsets.only(
-                                bottom: 8.0, top: 8.0, left: 12.0, right: 12.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: AppThemes.cashBackCardBgColor,
-                                        borderRadius: BorderRadius.circular(8)),
-                                    child: GestureDetector(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            " ${language.minimum_delivery_order_placeholder_message} ${controller.storeDetailsData.minimalPrice} ${language.currency_symbol}",
-                                            style: textTheme.bodyText2!.copyWith(
-                                                color: AppThemes.offWhiteColor,
-                                                fontSize: 10.sp),
-                                            softWrap: true,
-                                            maxLines: 2,
-                                          ),
-                                          Container(
-                                              height: 15,
-                                              width: 15,
-                                              margin: EdgeInsets.only(left: 4.0),
-                                              child: SvgPicture.asset(
-                                                AssetsPath.icAlertFull,
-                                              )),
-                                        ],
-                                      ),
-                                      onTap: () async{
-                                        print("Minimum Amount open dialog....");
-                                        await controller.onViewCart(context);
-                                      },
+                    // height: MediaQuery.of(context).size.height*0.45,
+                    // height: MediaQuery.of(context).size.height*0.31,
+                    decoration: BoxDecoration(
+                        color: AppThemes.foodBgColor,
+                        // color: Colors.red,
+                        borderRadius: BorderRadius.circular(15)),
+                    margin: EdgeInsets.only(left: 11, right: 11),
+                    padding:EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                    // constraints: BoxConstraints(/*maxHeight: MediaQuery.of(context).size.height *0.32*/),
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: AppThemes.foodBgColor,
+                              borderRadius: BorderRadius.circular(15)),
+                          constraints: BoxConstraints(minHeight: 25),
+                          margin: EdgeInsets.only(
+                              bottom: 8.0, top: 8.0, left: 12.0, right: 12.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: AppThemes.cashBackCardBgColor,
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: GestureDetector(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          " ${language.minimum_delivery_order_placeholder_message} ${controller.storeDetailsData.minimalPrice} ${language.currency_symbol}",
+                                          style: textTheme.bodyText2!.copyWith(
+                                              color: AppThemes.offWhiteColor,
+                                              fontSize: 10.sp),
+                                          softWrap: true,
+                                          maxLines: 2,
+                                        ),
+                                        Container(
+                                            height: 15,
+                                            width: 15,
+                                            margin: EdgeInsets.only(left: 4.0),
+                                            child: SvgPicture.asset(
+                                              AssetsPath.icAlertFull,
+                                            )),
+                                      ],
                                     ),
-                                    padding: EdgeInsets.all(8.0),
+                                    onTap: () async{
+                                      print("Minimum Amount open dialog....");
+                                      await controller.onViewCart(context);
+                                    },
                                   ),
-                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(8.0),
                                 ),
-                                Align(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 16.0,
-                                    ),
-                                    child: Text(
-                                      '${controller.storeDetailsData.name}',
-                                      style: textTheme.bodyText1!.copyWith(
-                                          fontSize: 13.sp, color: Colors.white),
-                                      textAlign: TextAlign.start,
-                                      maxLines: 2,
-                                    ),
+                                alignment: Alignment.center,
+                              ),
+                              Align(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 10.0,
                                   ),
-                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    // '${controller.storeDetailsData.name}',
+                                    (appLocale==Locale('en'))? '${controller.storeDetailsData.nameEn}':
+                                    (appLocale==Locale('uk'))?'${controller.storeDetailsData.nameUk}':
+                                    (appLocale==Locale('ru'))?'${controller.storeDetailsData.nameRu}':'${controller.storeDetailsData.name}',
+                                    style: textTheme.bodyText1!.copyWith(
+                                        fontSize: 13.sp, color: Colors.white),
+                                    textAlign: TextAlign.start,
+                                    maxLines: 2,
+                                  ),
                                 ),
-                              ],
-                            ),
+                                alignment: Alignment.centerLeft,
+                              ),
+                            ],
                           ),
-                          if (controller.storeDetailsData.cashbackPercent! >
-                              0) ...[
-                            GestureDetector(
-                              child: Container(
+                        ),
+                        if (controller.storeDetailsData.cashbackPercent! >
+                            0) ...[
+                          GestureDetector(
+                            child: Container(
 
-                                margin: EdgeInsets.only(
-                                    bottom: 8.0, left: 12.0, right: 12.0),
-                                child: Row(
+                              margin: EdgeInsets.only(
+                                  bottom: 8.0, left: 12.0, right: 12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      height: 15,
+                                      width: 15,
+                                      child: SvgPicture.asset(
+                                        AssetsPath.icAlertFull,
+                                      )),
+                                  SizedBox(
+                                    width:4.0,
+                                  ),
+                                  Text(
+                                    "${language.cashback} ${controller.storeDetailsData.cashbackPercent}%",
+                                    style: textTheme.bodyText2!.copyWith(
+                                        color: AppThemes.primary,
+                                        fontSize: 11.sp),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                              debugPrint("click cashback");
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => CashBackDialog(
+                                        message: language.networkError,
+                                      ));
+                            },
+                          )
+                        ],
+                        Divider(
+                          thickness: 1,
+                          indent: 16.0,
+                          endIndent: 16.0,
+                          color: AppThemes.cashBackCardBgColor,
+                        ),
+                        IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 10.0,
+                                    bottom: 12.0,
+                                    left: 6.0,
+                                    right: 6.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 15,
+                                      width: 15,
+                                      child: SvgPicture.asset(
+                                        AssetsPath.storeLocation,
+                                      ),
+                                      margin: EdgeInsets.only(right: 3.0),
+                                    ),
+                                    SizedBox(
+                                      height: 8.0,
+                                    ),
+                                    controller.isShowData
+                                        ? Text(
+                                            '${controller.storeDetailsData.getDistance()} ${language.symbol_km}',
+                                            style: textTheme.bodyText1!
+                                                .copyWith(
+                                                    color: AppThemes.colorWhite,
+                                                    fontSize: 11.sp),
+                                          )
+                                        : Text("0.00"),
+                                  ],
+                                ),
+                              ),
+                              VerticalDivider(
+                                color: AppThemes.colorBorderLine,
+                                thickness: 1,
+                                endIndent: 16.0,
+                                indent: 16.0,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 8.0, right: 8.0),
+                                padding: EdgeInsets.only(
+                                    top: 10.0,
+                                    bottom: 12.0,
+                                    left: 6.0,
+                                    right: 6.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: SvgPicture.asset(
+                                          AssetsPath.storeCar,
+                                        )),
+                                    SizedBox(
+                                      height: 8.0,
+                                    ),
+                                    Text(
+                                        " ${controller.storeDetailsData.calculatedPrice} ${language.currency_symbol}",
+                                        style: textTheme.bodyText1!.copyWith(
+                                            color: AppThemes.colorWhite,
+                                            fontSize: 11.sp)),
+                                  ],
+                                ),
+                              ),
+                              VerticalDivider(
+                                color: AppThemes.colorBorderLine,
+                                thickness: 1,
+                                endIndent: 16.0,
+                                indent: 16.0,
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 10.0,
+                                    bottom: 12.0,
+                                    left: 6.0,
+                                    right: 6.0),
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Container(
                                         height: 15,
                                         width: 15,
                                         child: SvgPicture.asset(
-                                          AssetsPath.icAlertFull,
+                                          AssetsPath.storeTimer,
                                         )),
                                     SizedBox(
-                                      width: 4.0,
+                                      height: 8.0,
                                     ),
                                     Text(
-                                      "${language.cashback} ${controller.storeDetailsData.cashbackPercent}%",
-                                      style: textTheme.bodyText2!.copyWith(
-                                          color: AppThemes.primary,
+                                      " ${controller.storeDetailsData.deliveryTime?.roundToDouble().toPrecision(0).round()} ${language.symbol_min}",
+                                      style: textTheme.bodyText1!.copyWith(
+                                          color: AppThemes.colorWhite,
                                           fontSize: 11.sp),
                                     ),
                                   ],
                                 ),
-                              ),
-                              onTap: () {
-                                debugPrint("click cashback");
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => CashBackDialog(
-                                          message: language.networkError,
-                                        ));
-                              },
-                            )
-                          ],
-                          Divider(
-                            thickness: 1,
-                            indent: 16.0,
-                            endIndent: 16.0,
-                            color: AppThemes.cashBackCardBgColor,
+                              )
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                           ),
-                          IntrinsicHeight(
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      top: 12.0,
-                                      bottom: 12.0,
-                                      left: 6.0,
-                                      right: 6.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        child: SvgPicture.asset(
-                                          AssetsPath.storeLocation,
-                                        ),
-                                        margin: EdgeInsets.only(right: 3.0),
-                                      ),
-                                      SizedBox(
-                                        height: 8.0,
-                                      ),
-                                      controller.isShowData
-                                          ? Text(
-                                              '${controller.storeDetailsData.getDistance()} ${language.symbol_km}',
-                                              style: textTheme.bodyText1!
-                                                  .copyWith(
-                                                      color: AppThemes.colorWhite,
-                                                      fontSize: 11.sp),
-                                            )
-                                          : Text("0.00"),
-                                    ],
-                                  ),
-                                ),
-                                VerticalDivider(
-                                  color: AppThemes.colorBorderLine,
-                                  thickness: 1,
-                                  endIndent: 16.0,
-                                  indent: 16.0,
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 8.0, right: 8.0),
-                                  padding: EdgeInsets.only(
-                                      top: 12.0,
-                                      bottom: 12.0,
-                                      left: 6.0,
-                                      right: 6.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                          height: 15,
-                                          width: 15,
-                                          child: SvgPicture.asset(
-                                            AssetsPath.storeCar,
-                                          )),
-                                      SizedBox(
-                                        height: 8.0,
-                                      ),
-                                      Text(
-                                          " ${controller.storeDetailsData.calculatedPrice} ${language.currency_symbol}",
-                                          style: textTheme.bodyText1!.copyWith(
-                                              color: AppThemes.colorWhite,
-                                              fontSize: 11.sp)),
-                                    ],
-                                  ),
-                                ),
-                                VerticalDivider(
-                                  color: AppThemes.colorBorderLine,
-                                  thickness: 1,
-                                  endIndent: 16.0,
-                                  indent: 16.0,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      top: 12.0,
-                                      bottom: 12.0,
-                                      left: 6.0,
-                                      right: 6.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                          height: 15,
-                                          width: 15,
-                                          child: SvgPicture.asset(
-                                            AssetsPath.storeTimer,
-                                          )),
-                                      SizedBox(
-                                        height: 8.0,
-                                      ),
-                                      Text(
-                                        " ${controller.storeDetailsData.deliveryTime?.roundToDouble().toPrecision(0).round()} ${language.symbol_min}",
-                                        style: textTheme.bodyText1!.copyWith(
-                                            color: AppThemes.colorWhite,
-                                            fontSize: 11.sp),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(6.0),
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.only(top: 2),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.08,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 controller.isShowData
                                     ? Text(
@@ -296,12 +301,9 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    // top: 31.h,
-                    // left: 0,
-                    // right: 0,
                   ),
                 ):
                 Positioned(
@@ -369,7 +371,9 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
                                     top: 16.0,
                                   ),
                                   child: Text(
-                                    '${controller.storeDetailsData.name}',
+                                      (appLocale==Locale('en'))? '${controller.storeDetailsData.nameEn}':
+                                      (appLocale==Locale('uk'))?'${controller.storeDetailsData.nameUk}':
+                                      (appLocale==Locale('ru'))?'${controller.storeDetailsData.nameRu}':'${controller.storeDetailsData.name}',
                                     style: textTheme.bodyText1!.copyWith(
                                         fontSize: 13.sp, color: Colors.white),
                                     textAlign: TextAlign.start,
@@ -695,11 +699,12 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
                   padding: const EdgeInsets.only(
                       left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
                   child: Text(
-                    (item.section?.name ?? "") + " ($count)",
-                    style: textTheme.bodyText2!.copyWith(
-                        color: AppThemes.colorWhite,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400),
+                    // (item.section?.name ?? "") + " ($count)",
+                    (appLocale==Locale('en'))? '${item.name} ($count)':
+                    (appLocale==Locale('uk'))?'${item.nameUk} ($count)':
+                    (appLocale==Locale('ru'))?'${item.nameRu} ($count)':'${item.name} ($count)',
+
+                    style: textTheme.bodyText2!.copyWith(color: AppThemes.colorWhite, fontSize: 14.sp, fontWeight: FontWeight.w400),
                     textAlign: TextAlign.left,
                     softWrap: true,
                     maxLines: 2,
@@ -733,6 +738,4 @@ class StoreItemDetailsUi extends GetView<EstablishmentDetailsController> {
       ),
     ));
   }
-
-
 }

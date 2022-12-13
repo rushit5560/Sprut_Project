@@ -15,6 +15,8 @@ class DescriptionUi extends GetView<EstablishmentDetailsController> {
     var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
+    Locale appLocale = Localizations.localeOf(context);
+
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -44,7 +46,11 @@ class DescriptionUi extends GetView<EstablishmentDetailsController> {
                   // "In non arcu congue, semper nulla quis, sollicitudin nibh. Fusce nec efficitur sem. Integer auctor massa quis lacus vulputate, quis gravida felis aliquet. Fusce ultricies ligula id ultricies tempor. Fusce suscipit mi nec nisi faucibus placerat. Cras tempus tempus lectus sit amet rhoncus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse nec sapien id diam maximus aliquam. Donec commodo, ligula quis bibendum rutrum, mauris dolor cursus dolor, eu consectetur lorem libero vitae enim. Donec eget enim commodo est vestibulum porttitor. Vestibulum leo quam, cursus non scelerisque nec, sodales et leo. Nam nec nulla erat. Curabitur non rhoncus enim. In non arcu congue, semper nulla quis, sollicitudin nibh. Fusce nec efficitur sem. Integer auctor massa quis lacus vulputate, quis gravida felis aliquet. Fusce ultricies ligula id ultricies tempor. Fusce suscipit mi nec nisi faucibus placerat. Cras tempus tempus lectus sit amet rhoncus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse nec sapien id diam maximus aliquam. Donec commodo, ligula quis bibendum rutrum, mauris dolor cursus dolor, eu consectetur lorem libero vitae enim. Donec eget enim commodo est vestibulum porttitor. Vestibulum leo quam, cursus non scelerisque nec, sodales et leo. Nam nec nulla erat. Curabitur non rhoncus enim. ",
                   '${controller.tempItems?.detailedDescription}' == "null"
                       ? ""
-                      : '${controller.tempItems?.detailedDescription}',
+                      :
+                  // '${controller.tempItems?.detailedDescription}'
+                    (appLocale==Locale('en'))? '${controller.tempItems?.detailedDescriptionEn}':
+                  (appLocale==Locale('uk'))?'${controller.tempItems?.detailedDescriptionUk}':
+                  (appLocale==Locale('ru'))?'${controller.tempItems?.detailedDescriptionRu}':'${controller.tempItems?.detailedDescription}',
                   style: textTheme.bodyText2!.copyWith(
                       color: AppThemes.colorWhite,
                       fontWeight: FontWeight.w400,

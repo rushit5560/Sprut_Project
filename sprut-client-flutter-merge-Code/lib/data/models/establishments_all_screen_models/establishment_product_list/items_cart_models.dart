@@ -8,6 +8,15 @@ class ItemsCartModels {
     required this.imgUrl,
     required this.shortDescription,
     required this.detailedDescription,
+    required this.nameUk,
+    required this.nameRu,
+    required this.nameEn,
+    required this.shortDescriptionUk,
+    required this.shortDescriptionRu,
+    required this.shortDescriptionEn,
+    required this.detailedDescriptionUk,
+    required this.detailedDescriptionRu,
+    required this.detailedDescriptionEn,
     required this.status,
     required this.removed,
     required this.createdAt,
@@ -24,6 +33,15 @@ class ItemsCartModels {
   String? imgUrl;
   String? shortDescription;
   String? detailedDescription;
+  String? nameUk;
+  String? nameRu;
+  String? nameEn;
+  String? shortDescriptionUk;
+  String? shortDescriptionRu;
+  String? shortDescriptionEn;
+  String? detailedDescriptionUk;
+  String? detailedDescriptionRu;
+  String? detailedDescriptionEn;
   String? status;
   bool? removed;
   DateTime? createdAt;
@@ -40,8 +58,17 @@ class ItemsCartModels {
       imgUrl: json["imgUrl"],
       shortDescription: json["shortDescription"] == null ? null : json["shortDescription"],
       detailedDescription: json["detailedDescription"] == null ? null : json["detailedDescription"],
+      nameUk: json['name:uk'],
+      nameRu: json['name:ru'],
+      nameEn: json['name:en'],
+      shortDescriptionUk: json['shortDescription:uk'],
+      shortDescriptionRu: json['shortDescription:ru'],
+      shortDescriptionEn: json['shortDescription:en'],
+      detailedDescriptionUk: json['detailedDescription:uk'],
+      detailedDescriptionRu: json['detailedDescription:ru'],
+      detailedDescriptionEn: json['detailedDescription:en'],
       status: json["status"],
-      removed: json["removed"] == null ? null : json["removed"],
+      removed: json["removed"] == null ? false : json["removed"],
       createdAt: DateTime.parse(json["createdAt"]),
       updatedAt: DateTime.parse(json["updatedAt"]),
       brandId: json["brandId"],
@@ -57,6 +84,15 @@ class ItemsCartModels {
     "imgUrl": imgUrl,
     "shortDescription": shortDescription == null ? null : shortDescription,
     "detailedDescription": detailedDescription == null ? null : detailedDescription,
+    "name:uk": nameUk,
+    "name:ru": nameRu,
+    "name:en": nameEn,
+    "shortDescription:uk": shortDescriptionUk,
+    "shortDescription:ru": shortDescriptionRu,
+    "shortDescription:en": shortDescriptionEn,
+    "detailedDescription:uk": detailedDescriptionUk,
+    "detailedDescription:ru": detailedDescriptionRu,
+    "detailedDescription:en": detailedDescriptionEn,
     "status": status,
     "removed": removed == null ? null : removed,
     "createdAt": createdAt?.toIso8601String(),

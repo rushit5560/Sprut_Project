@@ -179,12 +179,7 @@ class RideView extends GetView<SearchController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              language.for_payment,
-                              style: textTheme.bodyText1!.copyWith(
-                                fontSize: 11.sp,
-                                color: AppThemes.darkGrey,
-                              ),
+                            Text(language.for_payment,style: textTheme.bodyText1!.copyWith(fontSize: 11.sp,color: AppThemes.darkGrey,),
                             ),
                             Expanded(
                               child: Text(
@@ -354,12 +349,10 @@ class RideView extends GetView<SearchController> {
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(
-                                              left: !controller
-                                                      .isBottomSheetExpanded
+                                              left: !controller.isBottomSheetExpanded
                                                   ? 0
                                                   : 0),
-                                          width:
-                                              MediaQuery.of(context).size.width,
+                                          width: MediaQuery.of(context).size.width,
                                           height: 0.5,
                                           decoration: BoxDecoration(
                                             color: Colors.grey,

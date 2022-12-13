@@ -20,6 +20,7 @@ import '../../../../../data/models/establishments_all_screen_models/all_sstablis
 import '../../../../../resources/app_constants/app_constants.dart';
 import '../../../../../resources/configs/helpers/helpers.dart';
 import '../../../../../resources/services/database/database_keys.dart';
+import '../../../../widgets/custom_dialog/custom_dialog.dart';
 import '../../../home_screen/controllers/home_controller.dart';
 import '../../../no_internet/no_internet.dart';
 
@@ -36,8 +37,7 @@ class _EstablishmentDetailsScreenViewState
   EstablishmentDetailsController _establishmentDetailsController =
       Get.put(EstablishmentDetailsController(), permanent: true);
 
-  final HomeViewController _homeViewController =
-      Get.put(HomeViewController(), permanent: true);
+  final HomeViewController _homeViewController = Get.put(HomeViewController(), permanent: true);
 
   @override
   void initState() {
@@ -46,17 +46,16 @@ class _EstablishmentDetailsScreenViewState
       setState(() {
         _establishmentDetailsController.clearData();
         // _establishmentDetailsController.fetchingSaveAddress();
-        _establishmentDetailsController.storeDetailsData =
-            ModalRoute.of(context)!.settings.arguments as Establishments;
-        // debugPrint("Store ID:: " +
-        //     _establishmentDetailsController.storeDetailsData.brandId
-        //         .toString());
-        // debugPrint("Image URL:: " +
-        //     _establishmentDetailsController.storeDetailsData.imgUrl.toString());
+        _establishmentDetailsController.storeDetailsData = ModalRoute.of(context)!.settings.arguments as Establishments;
+
+        debugPrint("Store ID:: " + _establishmentDetailsController.storeDetailsData.brandId.toString());
+        debugPrint("Establishment ID:: " + _establishmentDetailsController.storeDetailsData.id.toString());
+        debugPrint("Place ID:: " + "${_establishmentDetailsController.storeDetailsData.place?.id.toString()}");
+
         _establishmentDetailsController.fetchingItemList(
             context,
             _establishmentDetailsController.storeDetailsData.brandId
-                .toString());
+                .toString(), _establishmentDetailsController.storeDetailsData.id.toString(), "${_establishmentDetailsController.storeDetailsData.place?.id.toString()}");
         _establishmentDetailsController.update();
       });
     });
@@ -78,26 +77,7 @@ class _EstablishmentDetailsScreenViewState
         builder: (context) {
           return BlocConsumer<ConnectedBloc, ConnectedState>(
             listener: (context, state) {
-              if (state is ConnectedFailureState) {
-                // showDialog(
-                //     context: context,
-                //     builder: (context) => MyCustomDialog(
-                //           message: language.networkError,
-                //         ));
-              }
 
-              if (state is ConnectedInitialState) {
-                debugPrint("ConnectedInitialState:::");
-              }
-
-              if(state is ConnectedSucessState){
-                print("--------------Establishment details ConnectedSuccessState--------------");
-                // Helpers.showCircularProgressDialog(context: context);
-                // _establishmentDetailsController.fetchingItemList(
-                //     context,
-                //     _establishmentDetailsController.storeDetailsData.brandId
-                //         .toString());
-              }
             },
             builder: (context, connectionState) {
               if (connectionState is ConnectedFailureState) {
@@ -106,6 +86,7 @@ class _EstablishmentDetailsScreenViewState
                 }
                 return NoInternetScreen(onPressed: () async {});
               }
+              if (connectionState is ConnectedSucessState) {}
 
               return BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, authState) {
@@ -205,8 +186,7 @@ class _EstablishmentDetailsScreenViewState
                                                         },
                                                       ));
                                             } else {
-                                              _establishmentDetailsController
-                                                  .clearData();
+                                              _establishmentDetailsController.clearData();
                                               //close screen
                                               Navigator.of(context).pop();
                                             }
@@ -227,9 +207,7 @@ class _EstablishmentDetailsScreenViewState
                                         ),
                                       ),
                                     ),
-                                    if (_establishmentDetailsController
-                                            .cartItemList?.isNotEmpty ==
-                                        true) ...[
+                                    if (_establishmentDetailsController.cartItemList?.isNotEmpty ==true) ...[
                                       Positioned(
                                           bottom: 0,
                                           left: 0,
@@ -243,20 +221,12 @@ class _EstablishmentDetailsScreenViewState
                                                 // _onViewCart();
                                               },
                                               child: Container(
-                                                margin: EdgeInsets.only(
-                                                    left: 16.0,
-                                                    right: 16.0,
-                                                    bottom: 16.0),
+                                                margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
                                                 height: 56.0,
-                                                padding: EdgeInsets.only(
-                                                    left: 16.0,
-                                                    right: 12.0,
-                                                    bottom: 8.0,
-                                                    top: 8.0),
+                                                padding: EdgeInsets.only(left: 16.0, right: 12.0, bottom: 8.0, top: 8.0),
                                                 decoration: BoxDecoration(
                                                     color: colorScheme.primary,
-                                                    borderRadius:
-                                                        BorderRadius.all(
+                                                    borderRadius:BorderRadius.all(
                                                       Radius.circular(8.0),
                                                     )),
                                                 child: Row(

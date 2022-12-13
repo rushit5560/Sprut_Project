@@ -7,8 +7,6 @@ import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:sprut/business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
-import 'package:sprut/business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
 import 'package:sprut/presentation/pages/order_screen/controllers/order_controller.dart';
 import 'package:sprut/presentation/pages/order_screen/views/order_detail_bottom_sheet_view.dart';
 
@@ -35,19 +33,17 @@ class OrderDetailViewState extends State<OrderDetailView> {
   @override
   Widget build(BuildContext context) {
     Helpers.systemStatusBar1();
-    dynamic object = ModalRoute
-        .of(context)!
-        .settings
-        .arguments;
+    dynamic object = ModalRoute.of(context)!.settings.arguments;
     Map<String, dynamic> mapData = jsonDecode(object);
     // String orderId = ModalRoute.of(context)!.settings.arguments as String;
-    var colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    var colorScheme = Theme.of(context).colorScheme;
     var language = AppLocalizations.of(context)!;
 
     return BlocConsumer<ConnectedBloc, ConnectedState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ConnectedInitialState) {}
+        if (state is ConnectedSucessState) {}
+      },
       builder: (context, connectionState) {
         return connectionState is ConnectedFailureState ? NoInternetScreen(
             onPressed: () {}) : WillPopScope(
@@ -72,7 +68,7 @@ class OrderDetailViewState extends State<OrderDetailView> {
               elevation: 0,
               backgroundColor: Colors.transparent,
               leading: Obx(() {
-                if (controller.isExpanded.isTrue) {
+                if (controller.isExpanded.value) {
                   return SizedBox();
                 }
                 return Padding(
@@ -82,8 +78,7 @@ class OrderDetailViewState extends State<OrderDetailView> {
                       onPressed: () async {
                         controller.timer?.cancel();
                         FocusScope.of(context).unfocus();
-                        if (mapData['from'].toString() ==
-                            "orderListing") {
+                        if (mapData['from'].toString() =="orderListing") {
                           Get.back();
                         } else {
                           // Navigator.pushNamedAndRemoveUntil(
@@ -108,8 +103,7 @@ class OrderDetailViewState extends State<OrderDetailView> {
                 controller.isMapView = false;
                 controller.getOrderInfoInitCall(context, mapData['order_id']);
                 controller.timer?.cancel();
-                controller.timer =
-                    Timer.periodic(Duration(seconds: 5), (timer) {
+                controller.timer = Timer.periodic(Duration(seconds: 5), (timer) {
                       // print("Call Order Info Api2");
                       controller.getOrderInfo(context, mapData['order_id'],0);
                       print("deliveryStatus Status-----------> ${controller
@@ -118,9 +112,8 @@ class OrderDetailViewState extends State<OrderDetailView> {
                           .value?.status}");
                     });
                 controller.timer1?.cancel();
-
                 controller.timer1 = Timer.periodic(Duration(seconds: 1), (timer) {
-                        if (controller.orderInfoDetails.value?.car != null) {
+                        if (controller.orderInfoDetails.value?.car != null && controller.orderInfoDetails.value?.status != "cancelled") {
                           controller.timer?.cancel();
                           controller.timer1?.cancel();
                           controller.orderCurrentStatus = Helpers
@@ -141,8 +134,7 @@ class OrderDetailViewState extends State<OrderDetailView> {
                             Get.offNamed(Routes.orderMapView,
                                 arguments: jsonEncode({
                                   "from": "orderListing",
-                                  "order_id":
-                                  "${controller.orderInfoDetails.value?.orderId}"
+                                  "order_id": "${controller.orderInfoDetails.value?.orderId}"
                                 }));
                           }
                         }
@@ -170,12 +162,7 @@ class OrderDetailViewState extends State<OrderDetailView> {
                     top: false,
                     bottom: false,
                     child: Padding(
-                      padding: EdgeInsets.only(
-                          bottom:
-                          MediaQuery
-                              .of(context)
-                              .viewInsets
-                              .bottom),
+                      padding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
                       child: SlidingUpPanel(
                         onPanelSlide: (value) {
                           // if (controller.isExpanded.value) {
@@ -213,15 +200,12 @@ class OrderDetailViewState extends State<OrderDetailView> {
                             children: [
                               ClipRRect(
                                 child: Image.network(
-                                  '${controller.orderInfoDetails.value
-                                      ?.establishment?.imgUrl}'
-                                      .isNotEmpty ==
-                                      true
+                                  '${controller.orderInfoDetails.value?.establishment?.imgUrl}'.isNotEmpty ==true
                                       ? '${controller.orderInfoDetails.value
                                       ?.establishment?.imgUrl}'
                                       : 'https://t3.ftcdn.net/jpg/03/24/73/92/360_F_324739203_keeq8udvv0P2h1MLYJ0GLSlTBagoXS48.jpg',
                                   width: double.infinity,
-                                  height: 500,
+                                  height: MediaQuery.of(context).size.height*0.55,
                                   fit: BoxFit.cover,
                                 ),
                               )

@@ -17,5 +17,7 @@ class ApiConstants {
   static String orderStatusChecked = '/orders';
   static String orderActiveCounts = '$orderDelivery/activeCount';
 
+  // https://fp-test.altertaxi.com.ua/v1/ukrvin/places/reverse?lat=23.0274709&lon=72.5246119
+
 
 }

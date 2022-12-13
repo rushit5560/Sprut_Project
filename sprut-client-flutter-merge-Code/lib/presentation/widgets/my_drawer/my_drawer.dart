@@ -1,6 +1,4 @@
 // ignore_for_file: file_names
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -8,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import 'package:sprut/presentation/pages/home_screen/controllers/home_controller.dart';
 import 'package:sprut/presentation/pages/news/controllers/news_controller.dart';
 import 'package:sprut/presentation/pages/order_history/controllers/order_history_controller.dart';
+import 'package:sprut/presentation/pages/search_screen/controllers/search_controller.dart';
 import 'package:sprut/resources/app_themes/app_themes.dart';
 import 'package:sprut/resources/assets_path/assets_path.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
@@ -17,31 +16,34 @@ import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../data/models/oder_delivery/delivery_payment_response.dart';
 import '../../../resources/app_constants/app_constants.dart';
 
 class MyDrawer extends StatefulWidget {
-  MyDrawer({required this.isEnable});
-
   final isEnable;
+  MyDrawer({required this.isEnable});
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+
+
   HomeViewController homeViewController = Get.put(HomeViewController());
   final DatabaseService databaseService = serviceLocator.get<DatabaseService>();
 
-  OrderHistoryController orderViewController =
-      Get.put(OrderHistoryController());
+  OrderHistoryController orderViewController = Get.put(OrderHistoryController());
 
   NewsController newsController = Get.put(NewsController());
 
+
   @override
   Widget build(BuildContext context) {
-    if (Helpers.isLoginTypeIn() == AppConstants.TAXI_APP) {
+    if(Helpers.isLoginTypeIn() == AppConstants.TAXI_APP){
       Helpers.systemStatusBar();
-    } else {
+    }else {
       Helpers.systemStatusBar1();
     }
 
@@ -103,22 +105,11 @@ class _MyDrawerState extends State<MyDrawer> {
                                       if (widget.isEnable) {
                                         Helpers.clearUser();
 
-                                        dynamic workAddress =
-                                            databaseService.getFromDisk(
-                                                DatabaseKeys.userWorkAddress);
-                                        dynamic homeAddress =
-                                            databaseService.getFromDisk(
-                                                DatabaseKeys.userHomeAddress);
-                                        homeViewController
-                                                .cacheAddress["homeAddress"] =
-                                            homeAddress;
-                                        homeViewController
-                                                .cacheAddress["workAddress"] =
-                                            workAddress;
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.loginScreen,
-                                            (route) => false);
+                                        dynamic workAddress = databaseService.getFromDisk(DatabaseKeys.userWorkAddress);
+                                        dynamic homeAddress =databaseService.getFromDisk(DatabaseKeys.userHomeAddress);
+                                        homeViewController.cacheAddress["homeAddress"] = homeAddress;
+                                        homeViewController.cacheAddress["workAddress"] = workAddress;
+                                        Navigator.pushNamedAndRemoveUntil(context,Routes.loginScreen,(route) => false);
                                       }
                                     },
                                     child: Text(
@@ -152,46 +143,91 @@ class _MyDrawerState extends State<MyDrawer> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            DrawerItem(
-                              title: language.orderHistory,
-                              icon: AssetsPath.order,
-                              onPressed: () {
-                                if (widget.isEnable) {
-                                  Navigator.of(context).pop();
-                                  //open type base History
-                                  if (Helpers.isLoginTypeIn() ==
-                                      AppConstants.FOOD_APP) {
-                                    //delivery History List
-                                    Get.toNamed(Routes.orderView);
-                                  } else {
-                                    orderViewController.lastOrder = false;
-                                    orderViewController.page = 1;
-                                    orderViewController.getOrderHistory();
-                                    Get.toNamed(Routes.orderHistoryView);
+                            // DrawerItem(
+                            //   title: language.orderHistory,
+                            //   icon: AssetsPath.order,
+                            //   onPressed: () {
+                            //     if (widget.isEnable) {
+                            //       Navigator.of(context).pop();
+                            //       //open type base History
+                            //       if (Helpers.isLoginTypeIn() == AppConstants.FOOD_APP) {
+                            //         //delivery History List
+                            //         Get.toNamed(Routes.orderView);
+                            //       } else {
+                            //         orderViewController.lastOrder = false;
+                            //         orderViewController.page = 1;
+                            //         orderViewController.getOrderHistory();
+                            //         Get.toNamed(Routes.orderHistoryView);
+                            //       }
+                            //     }
+                            //   },
+                            //   isReadCount: Helpers.isLoginTypeIn() == AppConstants.FOOD_APP && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !=null && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !="0"
+                            //       ? true
+                            //       : false,
+                            //   readCount: databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) != null && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !="0"
+                            //       ? int.parse(databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)) : 0,
+                            // ),
+
+                            if (Helpers.isLoginTypeIn() ==AppConstants.FOOD_APP)
+                              DrawerItem(
+                                title: language.orderHistory,
+                                icon: AssetsPath.order,
+                                onPressed: () {
+                                  if (widget.isEnable) {
+                                    Navigator.of(context).pop();
+                                    //open type base History
+                                    if (Helpers.isLoginTypeIn() == AppConstants.FOOD_APP) {
+                                      //delivery History List
+                                      Get.toNamed(Routes.orderView);
+                                    } else {
+                                      orderViewController.lastOrder = false;
+                                      orderViewController.page = 1;
+                                      orderViewController.getOrderHistory();
+                                      Get.toNamed(Routes.orderHistoryView);
+                                    }
                                   }
-                                }
-                              },
-                              isReadCount: Helpers.isLoginTypeIn() ==
-                                          AppConstants.FOOD_APP &&
-                                      databaseService.getFromDisk(
-                                              DatabaseKeys.activeOrderCounts) !=
-                                          null &&
-                                      databaseService.getFromDisk(
-                                              DatabaseKeys.activeOrderCounts) !=
-                                          "0"
-                                  ? true
-                                  : false,
-                              readCount: databaseService.getFromDisk(
-                                              DatabaseKeys.activeOrderCounts) !=
-                                          null &&
-                                      databaseService.getFromDisk(
-                                              DatabaseKeys.activeOrderCounts) !=
-                                          "0"
-                                  ? int.parse(databaseService.getFromDisk(
-                                      DatabaseKeys.activeOrderCounts))
-                                  : 0,
-                            ),
+                                },
+                                isReadCount: Helpers.isLoginTypeIn() == AppConstants.FOOD_APP && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !=null && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !="0"
+                                    ? true
+                                    : false,
+                                readCount: databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) != null && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !="0"
+                                    ? int.parse(databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)) : 0,
+                              ),
+
+
+                            if (Helpers.isLoginTypeIn() ==AppConstants.TAXI_APP)
+                              (databaseService.getFromDisk(DatabaseKeys.order) == null || databaseService.getFromDisk(DatabaseKeys.order) == "")?
+                              DrawerItem(
+                                title: language.orderHistory,
+                                icon: AssetsPath.order,
+                                onPressed: () {
+                                  if (widget.isEnable) {
+                                    Navigator.of(context).pop();
+                                    //open type base History
+                                    if (Helpers.isLoginTypeIn() == AppConstants.FOOD_APP) {
+                                      //delivery History List
+                                      Get.toNamed(Routes.orderView);
+                                    } else {
+                                      orderViewController.lastOrder = false;
+                                      orderViewController.page = 1;
+                                      orderViewController.getOrderHistory();
+                                      Get.toNamed(Routes.orderHistoryView);
+                                    }
+                                  }
+                                },
+                                isReadCount: Helpers.isLoginTypeIn() == AppConstants.FOOD_APP && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !=null && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !="0"
+                                    ? true
+                                    : false,
+                                readCount: databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) != null && databaseService.getFromDisk(DatabaseKeys.activeOrderCounts) !="0"
+                                    ? int.parse(databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)) : 0,
+                              ):Wrap(),
+
+
+
+
                             //Food delivery
+                          if (Helpers.isLoginTypeIn() ==AppConstants.FOOD_APP)
+                            (databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)!= null && int.parse(databaseService.getFromDisk(DatabaseKeys.activeOrderCounts))==0)?
                             DrawerItem(
                               title: language.payment,
                               icon: AssetsPath.payment,
@@ -201,27 +237,48 @@ class _MyDrawerState extends State<MyDrawer> {
                                   Get.toNamed(Routes.paymentView);
                                 }
                               },
-                            ),
-                            DrawerItem(
+                            ):Wrap(),
+
+                            if (Helpers.isLoginTypeIn() ==AppConstants.TAXI_APP)
+                              (databaseService.getFromDisk(DatabaseKeys.order) == null || databaseService.getFromDisk(DatabaseKeys.order) == "")?
+                              DrawerItem(
+                                title: language.payment,
+                                icon: AssetsPath.payment,
+                                onPressed: () {
+                                  if (widget.isEnable) {
+                                    Navigator.of(context).pop();
+                                    Get.toNamed(Routes.paymentView);
+                                  }
+                                },
+                              ):Wrap(),
+
+                            if (Helpers.isLoginTypeIn() ==AppConstants.FOOD_APP)
+                              (databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)!= null && int.parse(databaseService.getFromDisk(DatabaseKeys.activeOrderCounts))==0)? DrawerItem(
                               title: language.setting,
                               icon: AssetsPath.settings,
                               onPressed: () {
                                 // if (widget.isEnable) {
                                 Navigator.of(context).pop();
                                 Get.toNamed(Routes.settingsView);
-                                // }
-                                // showCupertinoModalBottomSheet(
-                                //   expand: false,
-                                //   enableDrag: true,
-                                //   shape: RoundedRectangleBorder(
-                                //       borderRadius: BorderRadius.circular(14)),
-                                //   context: context,
-                                //   builder: (context) =>
-                                //       SafeArea(child: SelectCities()),
-                                // );
+
                               },
-                            ),
-                            DrawerItem(
+                            ):Wrap(),
+
+                            if (Helpers.isLoginTypeIn() ==AppConstants.TAXI_APP)
+                              (databaseService.getFromDisk(DatabaseKeys.order) == null || databaseService.getFromDisk(DatabaseKeys.order) == "")? DrawerItem(
+                                title: language.setting,
+                                icon: AssetsPath.settings,
+                                onPressed: () {
+                                  // if (widget.isEnable) {
+                                  Navigator.of(context).pop();
+                                  Get.toNamed(Routes.settingsView);
+
+                                },
+                              ):Wrap(),
+
+                            if (Helpers.isLoginTypeIn() ==AppConstants.FOOD_APP)
+                              (databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)!= null && int.parse(databaseService.getFromDisk(DatabaseKeys.activeOrderCounts))==0)?
+                              DrawerItem(
                               title: language.about,
                               icon: AssetsPath.about,
                               onPressed: () {
@@ -230,39 +287,32 @@ class _MyDrawerState extends State<MyDrawer> {
                                 Get.toNamed(Routes.aboutUsView);
                                 // }
                               },
-                            ),
+                            ):Wrap(),
+                            if (Helpers.isLoginTypeIn() ==AppConstants.TAXI_APP)
+                              (databaseService.getFromDisk(DatabaseKeys.order) == null || databaseService.getFromDisk(DatabaseKeys.order) == "")?
+                              DrawerItem(
+                                title: language.about,
+                                icon: AssetsPath.about,
+                                onPressed: () {
+                                  // if (widget.isEnable) {
+                                  Navigator.of(context).pop();
+                                  Get.toNamed(Routes.aboutUsView);
+                                  // }
+                                },
+                              ):Wrap(),
+
                             DrawerItem(
                               title: language.news,
                               icon: AssetsPath.news,
-                              isReadCount: (databaseService.getFromDisk(
-                                                  DatabaseKeys.readNews) ==
-                                              null ||
-                                          (databaseService.getFromDisk(
-                                                      DatabaseKeys.readNews) !=
-                                                  null &&
-                                              homeViewController.newsCount >
-                                                  databaseService.getFromDisk(
-                                                      DatabaseKeys
-                                                          .readNews))) &&
-                                      homeViewController.newsCount > 0
+                              isReadCount: (databaseService.getFromDisk(DatabaseKeys.readNews) ==null ||(databaseService.getFromDisk(DatabaseKeys.readNews) !=null &&homeViewController.newsCount >databaseService.getFromDisk(DatabaseKeys.readNews))) &&homeViewController.newsCount > 0
                                   ? true
                                   : false,
-                              readCount: (databaseService.getFromDisk(
-                                              DatabaseKeys.readNews) !=
-                                          null &&
-                                      homeViewController.newsCount >
-                                          databaseService.getFromDisk(
-                                              DatabaseKeys.readNews))
-                                  ? (homeViewController.newsCount -
-                                          databaseService.getFromDisk(
-                                              DatabaseKeys.readNews))
-                                      .toInt()
+                              readCount: (databaseService.getFromDisk(DatabaseKeys.readNews) !=null && homeViewController.newsCount >databaseService.getFromDisk(DatabaseKeys.readNews))
+                                  ? (homeViewController.newsCount -databaseService.getFromDisk(DatabaseKeys.readNews)).toInt()
                                   : homeViewController.newsCount,
                               onPressed: () {
                                 // if (widget.isEnable) {
-                                databaseService.saveToDisk(
-                                    DatabaseKeys.readNews,
-                                    homeViewController.newsCount);
+                                databaseService.saveToDisk(DatabaseKeys.readNews,homeViewController.newsCount);
                                 Navigator.of(context).pop();
                                 newsController.page = 1;
                                 newsController.getNews();
@@ -274,16 +324,15 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                       //food delivery
-                      if (Get.find<HomeViewController>().selectCityName.value ==
-                          "Vinnytsia") ...[
+                      if(Get.find<HomeViewController>().selectCityName.value == "Vinnytsia")...[
                         GestureDetector(
                           child: Container(
                             child: Align(
                               alignment: FractionalOffset.bottomCenter,
                               child: Container(
                                 padding: EdgeInsets.all(12),
-                                margin: EdgeInsets.only(
-                                    left: 4, right: 10, top: 8.0),
+                                margin:
+                                EdgeInsets.only(left: 4, right: 10, top: 8.0),
                                 decoration: BoxDecoration(
                                   color: colorScheme.primary,
                                   borderRadius: BorderRadius.all(
@@ -292,17 +341,17 @@ class _MyDrawerState extends State<MyDrawer> {
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       height: 40,
                                       width: 50,
                                       child: Helpers.isLoginTypeIn() ==
-                                              AppConstants.TAXI_APP
+                                          AppConstants.TAXI_APP
                                           ? SvgPicture.asset(
-                                              AssetsPath.deliverySmallLogo)
+                                          AssetsPath.deliverySmallLogo)
                                           : SvgPicture.asset(
-                                              AssetsPath.taxiSmallLogo),
+                                          AssetsPath.taxiSmallLogo),
                                     ),
                                     Expanded(
                                       child: Container(
@@ -310,18 +359,18 @@ class _MyDrawerState extends State<MyDrawer> {
                                         padding: EdgeInsets.only(left: 15),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               Helpers.isLoginTypeIn() ==
-                                                      AppConstants.TAXI_APP
+                                                  AppConstants.TAXI_APP
                                                   ? language.order_a_delivery
                                                   : language.order_a_taxi,
                                               style: textTheme.bodyText1!
                                                   .copyWith(
-                                                      fontSize: 11.sp,
-                                                      color: colorScheme
-                                                          .background),
+                                                  fontSize: 11.sp,
+                                                  color:
+                                                  colorScheme.background),
                                             ),
                                           ],
                                         ),
@@ -337,91 +386,19 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                           ),
                           onTap: () async {
-                            Get.back();
-
-                            if (Helpers.isLoginTypeIn() ==
-                                AppConstants.FOOD_APP) {
+                            if (Helpers.isLoginTypeIn() ==AppConstants.FOOD_APP) {
                               databaseService.saveToDisk(
                                   DatabaseKeys.isLoginTypeIn,
                                   AppConstants.TAXI_APP);
-
-                              String order = databaseService
-                                      .getFromDisk(DatabaseKeys.order) ??
-                                  "";
-                              var currentCity = databaseService
-                                  .getFromDisk(DatabaseKeys.currentCity);
-                              var arrivalAddress = databaseService
-                                  .getFromDisk(DatabaseKeys.arrivalAddress);
-                              var destinationAddress = databaseService
-                                  .getFromDisk(DatabaseKeys.destinationAddress);
-                              var kGooglePlex = databaseService
-                                  .getFromDisk(DatabaseKeys.kGooglePlex);
-                              var kLake = databaseService
-                                  .getFromDisk(DatabaseKeys.kLake);
-                              var repeatOrder = databaseService
-                                  .getFromDisk(DatabaseKeys.repeatOrder);
-                              log("order model stored changed in prefs is :: ${order}");
-
-                              if (order != "") {
-                                // Navigator.pushNamedAndRemoveUntil(
-                                //   context,
-                                //   Routes.homeScreen,
-                                //   ModalRoute.withName('/'),
-                                // );
-
-                                // await Get.toNamed(Routes.tarrifSelectionView,
-                                //     arguments: {
-                                //       "currentCity": currentCity,
-                                //       "arrivalAddress": arrivalAddress,
-                                //       "destinationAddress": destinationAddress,
-                                //       "kGooglePlex": kGooglePlex,
-                                //       "kLake": kLake,
-                                //       "repeatOrder": repeatOrder,
-                                //     });
-
-                                await Get.toNamed(Routes.searchView);
-
-                                // .whenComplete(() async {
-                                //   await Get.toNamed(Routes.tarrifSelectionView,
-                                //           arguments: {
-                                //         "currentCity": currentCity,
-                                //         "arrivalAddress": arrivalAddress,
-                                //         "destinationAddress":
-                                //             destinationAddress,
-                                //         "kGooglePlex": kGooglePlex,
-                                //         "kLake": kLake,
-                                //         "repeatOrder": repeatOrder,
-                                //       })!
-                                //       .whenComplete(() async {
-                                //     await Get.toNamed(Routes.searchView);
-                                //   });
-                                // });
-
-                                // await Get.toNamed(Routes.tarrifSelectionView);
-                                // await Get.toNamed(Routes.searchView);
-                              } else {
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  Routes.homeScreen,
-                                  ModalRoute.withName('/'),
-                                );
-                              }
-
-                              // Navigator.pushNamedAndRemoveUntil(
-                              //   context,
-                              //   Routes.homeScreen,
-                              //   ModalRoute.withName('/'),
-                              // );
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  Routes.homeScreen, ModalRoute.withName('/'));
                             } else {
                               //open food screen
                               databaseService.saveToDisk(
                                   DatabaseKeys.isLoginTypeIn,
                                   AppConstants.FOOD_APP);
                               // Navigator.pop(context);
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  Routes.foodHomeScreen,
-                                  ModalRoute.withName('/'));
+                              Navigator.pushNamedAndRemoveUntil(context,Routes.foodHomeScreen,ModalRoute.withName('/'));
                               // Navigator.pushNamedAndRemoveUntil(
                               //     context, Routes.foodHomeScreen, (route) => false);
                             }
@@ -461,8 +438,6 @@ class _MyDrawerState extends State<MyDrawer> {
                       children: [
                         Expanded(
                           child: Container(
-                            // color: Colors.yellow,
-
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -525,8 +500,7 @@ class DrawerItem extends StatelessWidget {
   int readCount;
   Function onPressed;
 
-  DrawerItem(
-      {required this.icon,
+  DrawerItem({required this.icon,
       required this.title,
       this.isReadCount = false,
       this.readCount = 0,

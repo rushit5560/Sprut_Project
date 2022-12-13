@@ -107,8 +107,7 @@ class EstablishmentController extends GetxController {
   }
 
   fetchingItemList(BuildContext context, String catID) {
-    if (databaseService.getFromDisk(DatabaseKeys.saveDeliverAddress).toString() !="null" &&
-        databaseService.getFromDisk(DatabaseKeys.saveDeliverAddress).toString().isNotEmpty) {
+    if (databaseService.getFromDisk(DatabaseKeys.saveDeliverAddress).toString() !="null" && databaseService.getFromDisk(DatabaseKeys.saveDeliverAddress).toString().isNotEmpty) {
 
       debugPrint("---------------Save Delivery Lat and Lon call---------------");
 
@@ -177,8 +176,7 @@ class EstablishmentController extends GetxController {
     List<String> typeOfFoodArray = [];
     if (lsEstablishmentsData.isNotEmpty) {
       for (int i = 0; i < lsEstablishmentsData[index].types!.length; i++) {
-        typeOfFoodArray
-            .add("${lsEstablishmentsData[index].types![i].type?.name}");
+        typeOfFoodArray.add("${lsEstablishmentsData[index].types![i].type?.name}");
       }
     }
     typesOdFood = typeOfFoodArray.join(",");

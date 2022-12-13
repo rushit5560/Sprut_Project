@@ -1,13 +1,18 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/presentation/pages/delivery_home/controller/address_food_suggestion_controller.dart';
 import 'package:sprut/resources/app_constants/app_constants.dart';
 import 'package:sprut/resources/app_themes/app_themes.dart';
 import 'package:sprut/resources/assets_path/assets_path.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../no_internet/no_internet.dart';
 import '../address_food_suggestion_view/address_food_suggestion_view.dart';
 
 class SearchBottomSheetView extends StatefulWidget {
@@ -42,6 +47,16 @@ class _SearchBottomSheetViewState extends State<SearchBottomSheetView> {
     var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
+
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+      return NoInternetScreen(onPressed: () async {});
+    }
+    if (connectionState is ConnectedSucessState) {}
 
     return GetBuilder<AddressFoodSuggestionController>(
       builder: (_) => Scaffold(
@@ -154,15 +169,9 @@ class _SearchBottomSheetViewState extends State<SearchBottomSheetView> {
                           Column(
                             children: [
                               Container(
-                                margin: EdgeInsets.only(
-                                    top: 8.0, left: 8.0, right: 8.0),
+                                margin: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
                                 padding: EdgeInsets.only(right: 8.0),
-                                decoration: BoxDecoration(
-                                    color: AppThemes.foodBgColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    border: Border.all(
-                                        color: Color(0xffA4A4A4), width: 1.5)),
+                                decoration: BoxDecoration(color: AppThemes.foodBgColor,borderRadius:BorderRadius.all(Radius.circular(8)),border: Border.all(color: Color(0xffA4A4A4), width: 1.5)),
                                 constraints: BoxConstraints(maxHeight: 66),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,11 +193,7 @@ class _SearchBottomSheetViewState extends State<SearchBottomSheetView> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 4.0,
-                                                    top: 6.0,
-                                                    right: 4.0,
-                                                    bottom: 6.0),
+                                                padding: const EdgeInsets.only(left: 4.0, top: 6.0, right: 4.0, bottom: 6.0),
                                                 child: TextField(
                                                   cursorHeight: 23,
                                                   cursorColor: colorScheme.primary,
@@ -475,6 +480,8 @@ class _SearchBottomSheetViewState extends State<SearchBottomSheetView> {
         )
 
     );
+  },
+);
   }
 
   @override

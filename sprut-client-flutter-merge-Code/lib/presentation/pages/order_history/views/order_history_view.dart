@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/data/models/tariff_screen_model/order_model.dart';
 import 'package:sprut/presentation/pages/order_history/views/order_history_detail_view.dart';
 
@@ -11,6 +15,7 @@ import '../../../../resources/assets_path/assets_path.dart';
 import '../../../widgets/primary_elevated_btn/primary_elevated_back_btn.dart';
 import '../../../widgets/primary_elevated_btn/primary_elevated_btn.dart';
 import '../../home_screen/controllers/home_controller.dart';
+import '../../no_internet/no_internet.dart';
 import '../controllers/order_history_controller.dart';
 
 class OrderHistoryView extends GetView<OrderHistoryController> {
@@ -26,6 +31,18 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var size = MediaQuery.of(context).size;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
+
     return GetBuilder<OrderHistoryController>(
       init: OrderHistoryController(),
       initState: (_) {},
@@ -593,5 +610,7 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
         );
       },
     );
+  },
+);
   }
 }

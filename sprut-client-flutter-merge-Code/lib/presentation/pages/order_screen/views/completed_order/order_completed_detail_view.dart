@@ -28,7 +28,7 @@ class OrderCompletedDetailView extends GetView<OrderController> {
     Helpers.systemStatusBar1();
 
     var language = AppLocalizations.of(context)!;
-    var colorScheme = Theme.of(context).colorScheme;
+    Locale appLocale = Localizations.localeOf(context);
     var textTheme = Theme.of(context).textTheme;
     return GetBuilder<OrderController>(
       initState: (_) {
@@ -52,7 +52,17 @@ class OrderCompletedDetailView extends GetView<OrderController> {
               children: [
                 SizedBox(height: 10.h),
                 Text(
-                  "${controller.orderInfoDetails.value?.establishment?.name.toString()}",
+                  ('${controller.orderInfoDetails.value?.establishment?.name}' ==
+                      language.all)
+                      ? '${language.all}'
+                      : (appLocale == Locale('en'))
+                      ? '${controller.orderInfoDetails.value?.establishment?.nameEn}'
+                      : (appLocale == Locale('uk'))
+                      ? '${controller.orderInfoDetails.value?.establishment?.nameUk}'
+                      : (appLocale == Locale('ru'))
+                      ? '${controller.orderInfoDetails.value?.establishment?.nameRu}'
+                      : '${controller.orderInfoDetails.value?.establishment?.name}',
+                  // "${controller.orderInfoDetails.value?.establishment?.name.toString()}",
                   style: textTheme.bodyText1!.copyWith(
                     fontSize: 18.sp,
                     color: Colors.white,
@@ -855,8 +865,8 @@ class OrderCompletedDetailView extends GetView<OrderController> {
 
   Widget _buildOrder(BuildContext context) {
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var textTheme = Theme.of(context).textTheme;
-    var colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Align(
@@ -891,7 +901,17 @@ class OrderCompletedDetailView extends GetView<OrderController> {
                           children: [
                             Expanded(
                               child: Text(
-                                "${controller.orderInfoDetails.value?.products![index].quantity}x ${controller.orderInfoDetails.value?.products![index].productData?.name}",
+                                ('${controller.orderInfoDetails.value?.products![index].productData?.name}' ==
+                                    language.all)
+                                    ? '${controller.orderInfoDetails.value?.products![index].quantity}x ${language.all}'
+                                    : (appLocale == Locale('en'))
+                                    ? '${controller.orderInfoDetails.value?.products![index].quantity}x ${controller.orderInfoDetails.value?.products![index].productData?.nameEn}'
+                                    : (appLocale == Locale('uk'))
+                                    ? '${controller.orderInfoDetails.value?.products![index].quantity}x ${controller.orderInfoDetails.value?.products![index].productData?.nameUk}'
+                                    : (appLocale == Locale('ru'))
+                                    ? '${controller.orderInfoDetails.value?.products![index].quantity}x ${controller.orderInfoDetails.value?.products![index].productData?.nameRu}'
+                                    : '${controller.orderInfoDetails.value?.products![index].quantity}x ${controller.orderInfoDetails.value?.products![index].productData?.name}',
+                                // "${controller.orderInfoDetails.value?.products![index].quantity}x ${controller.orderInfoDetails.value?.products![index].productData?.name}",
                                 style: textTheme.bodySmall!.copyWith(
                                     fontSize: 10.sp, color: Color(0xff838383)),
                                 textAlign: TextAlign.start,

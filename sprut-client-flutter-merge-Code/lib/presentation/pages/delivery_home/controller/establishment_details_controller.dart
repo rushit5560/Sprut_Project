@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:sprut/data/models/tariff_screen_model/order_model.dart';
+
 import '../../../../business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
 import '../../../../business_logic/blocs/authentication_bloc/auth_event/auth_event.dart';
 import '../../../../data/models/establishments_all_screen_models/all_sstablishments_list_models.dart';
@@ -115,10 +118,10 @@ class EstablishmentDetailsController extends GetxController {
     cartItemList?.clear();
   }
 
-  fetchingItemList(BuildContext context, String _brandID) {
+  fetchingItemList(BuildContext context, String _brandID, String _establishmentID, String _placeID) {
     context
         .read<AuthBloc>()
-        .add(AuthEstablishmentProductListEvent(brandID: _brandID));
+        .add(AuthEstablishmentProductListEvent(brandID: _brandID, establishmentId: _establishmentID, placeId: _placeID));
   }
 
   filterSection() {
@@ -144,6 +147,15 @@ class EstablishmentDetailsController extends GetxController {
       cartItemList?.add(ItemsCartModels(
         id: item.id,
         name: item.name,
+        nameEn: item.nameEn,
+        nameUk: item.nameUk,
+        nameRu: item.nameRu,
+        shortDescriptionEn: item.shortDescriptionEn,
+        shortDescriptionUk: item.shortDescriptionUk,
+        shortDescriptionRu: item.shortDescriptionRu,
+        detailedDescriptionEn: item.detailedDescriptionEn,
+        detailedDescriptionUk: item.detailedDescriptionUk,
+        detailedDescriptionRu: item.detailedDescriptionRu,
         weight: item.weight,
         price: item.price,
         imgUrl: item.imgUrl,
@@ -190,6 +202,15 @@ class EstablishmentDetailsController extends GetxController {
         cartItemList?.add(ItemsCartModels(
           id: item.id,
           name: item.name,
+          nameEn: item.nameEn,
+          nameUk: item.nameUk,
+          nameRu: item.nameRu,
+          shortDescriptionEn: item.shortDescriptionEn,
+          shortDescriptionUk: item.shortDescriptionUk,
+          shortDescriptionRu: item.shortDescriptionRu,
+          detailedDescriptionEn: item.detailedDescriptionEn,
+          detailedDescriptionUk: item.detailedDescriptionUk,
+          detailedDescriptionRu: item.detailedDescriptionRu,
           weight: item.weight,
           price: item.price,
           imgUrl: item.imgUrl,
@@ -220,6 +241,15 @@ class EstablishmentDetailsController extends GetxController {
       cartItemList?.add(ItemsCartModels(
         id: item.id,
         name: item.name,
+        nameEn: item.nameEn,
+        nameUk: item.nameUk,
+        nameRu: item.nameRu,
+        shortDescriptionEn: item.shortDescriptionEn,
+        shortDescriptionUk: item.shortDescriptionUk,
+        shortDescriptionRu: item.shortDescriptionRu,
+        detailedDescriptionEn: item.detailedDescriptionEn,
+        detailedDescriptionUk: item.detailedDescriptionUk,
+        detailedDescriptionRu: item.detailedDescriptionRu,
         weight: item.weight,
         price: item.price,
         imgUrl: item.imgUrl,
@@ -258,6 +288,15 @@ class EstablishmentDetailsController extends GetxController {
         cartItemList?.add(ItemsCartModels(
           id: item.id,
           name: item.name,
+          nameEn: item.nameEn,
+          nameUk: item.nameUk,
+          nameRu: item.nameRu,
+          shortDescriptionEn: item.shortDescriptionEn,
+          shortDescriptionUk: item.shortDescriptionUk,
+          shortDescriptionRu: item.shortDescriptionRu,
+          detailedDescriptionEn: item.detailedDescriptionEn,
+          detailedDescriptionUk: item.detailedDescriptionUk,
+          detailedDescriptionRu: item.detailedDescriptionRu,
           weight: item.weight,
           price: item.price,
           imgUrl: item.imgUrl,

@@ -11,7 +11,8 @@ class OtpTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? prefixIcon;
   final Widget suffixIcon;
-Function(String) onChanged;
+  Function(String) onChanged;
+
   OtpTextField({required this.controller, this.prefixIcon, this.validator,required this.onChanged,required this.suffixIcon});
 
   @override
@@ -37,7 +38,6 @@ Function(String) onChanged;
               ),
               Expanded(
                 child: PinCodeTextField(
-                  
                   validator: validator,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -76,7 +76,7 @@ Function(String) onChanged;
                 ),
               ),
               SizedBox(
-                width: 35.w,
+                width: 30.w,
               ),
             suffixIcon
             ],

@@ -42,6 +42,7 @@ class ProductsSearchStateView extends State<ProductsSearchView> {
     Helpers.systemStatusBar1();
 
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
 
@@ -56,9 +57,6 @@ class ProductsSearchStateView extends State<ProductsSearchView> {
         builder: (context) {
           return BlocConsumer<ConnectedBloc, ConnectedState>(
             listener: (context, state) {
-              if (state is ConnectedFailureState) {
-              }
-
               if (state is ConnectedInitialState) {
                 debugPrint("ConnectedInitialState:::");
               }
@@ -68,6 +66,7 @@ class ProductsSearchStateView extends State<ProductsSearchView> {
                 print("BlocConsumer 2");
                 return NoInternetScreen(onPressed: () async {});
               }
+              if (connectionState is ConnectedSucessState) {}
               return SafeArea(
                 child: Scaffold(
                   resizeToAvoidBottomInset: true,
@@ -124,7 +123,9 @@ class ProductsSearchStateView extends State<ProductsSearchView> {
                                       controller.isSearchView = true;
                                     } else {
                                       controller.isSearchView = false;
-                                      controller.searchEstablishmentEditingController.clear();
+                                      controller
+                                          .searchEstablishmentEditingController
+                                          .clear();
                                       controller.onSearchTextChanged("");
                                       controller.isNoDataFound = false;
                                       controller.update();
@@ -152,14 +153,19 @@ class ProductsSearchStateView extends State<ProductsSearchView> {
                                                 controller
                                                     .searchEstablishmentEditingController
                                                     .clear();
-                                                controller.onSearchTextChanged("");
-                                                controller.isNoDataFound = false;
+                                                controller
+                                                    .onSearchTextChanged("");
+                                                controller.isNoDataFound =
+                                                    false;
                                                 controller.update();
                                               },
                                               icon: Icon(
                                                 Icons.close,
                                                 color: Colors.white,
-                                              ),padding: EdgeInsets.only(bottom: 0.0),)
+                                              ),
+                                              padding:
+                                                  EdgeInsets.only(bottom: 0.0),
+                                            )
                                           : null),
                                   textAlignVertical: TextAlignVertical.center,
                                 ),
@@ -188,295 +194,304 @@ class ProductsSearchStateView extends State<ProductsSearchView> {
                     setState(() {});
                   },
                   key: _scaffoldKey,
-                  body: GetBuilder<EstablishmentDetailsController>(
-                    builder: (_) {
-                      return Stack(
-                        children: [
-                          SingleChildScrollView(
-                            keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                            physics: BouncingScrollPhysics(),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, right: 5.0, top: 20),
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode());
-                                        if (controller
+                  body:
+                      GetBuilder<EstablishmentDetailsController>(builder: (_) {
+                    return Stack(
+                      children: [
+                        SingleChildScrollView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          physics: BouncingScrollPhysics(),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 5.0, top: 20),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      if (controller
+                                          .searchEstablishmentEditingController
+                                          .text
+                                          .isNotEmpty) {
+                                        controller.onSearchTextChanged(controller
                                             .searchEstablishmentEditingController
                                             .text
-                                            .isNotEmpty) {
-                                          controller.onSearchTextChanged(controller.searchEstablishmentEditingController.text.toString());
-                                          // controller.isNoDataFound = true;
-                                          // controller.update();
-                                        }
-                                      },
-                                      child: Text(
-                                        language.simple_search,
-                                        style: TextStyle(
-                                            color: AppThemes.colorWhite,
-                                            fontSize: 12.sp,
-                                            fontFamily: AppConstants.fontFamily,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      style: ButtonStyle(
-                                        minimumSize:
-                                        MaterialStateProperty.all(Size(107.0, 6.h)),
-                                        elevation: MaterialStateProperty.all(0),
-                                        backgroundColor: MaterialStateProperty.all(
-                                            colorScheme.primary),
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8.0),
-                                            side: BorderSide(
-                                                color: AppThemes.darkGrey
-                                                    .withOpacity(0.3)),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Align(
-                                    child: Text(
-                                      language.placeholder_message_of_product_search,
-                                      style: textTheme.bodyText1!.copyWith(
-                                          fontSize: 10.sp,
-                                          color: Helpers.secondaryTextColor(),
-                                          fontWeight: FontWeight.w400),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    alignment: Alignment.center,
-                                  ),
-                                ),
-                                if(controller.searchProductList?.isNotEmpty == true)...[
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 66.0),
-                                    child: GroupedListView<ProductItems, String>(
-                                      shrinkWrap: true,
-                                      key: Key("List"),
-                                      elements: controller.searchProductList ?? [],
-                                      groupBy: (element) => (element.section?.id ?? 0).toString(),
-                                      groupHeaderBuilder: (item) {
-                                        var count = controller.searchProductList
-                                            ?.where(
-                                                (element) => element.section?.id == item.section?.id)
-                                            .length ??
-                                            0;
-                                        return Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
-                                            child: Text(
-                                              (item.section?.name ?? "") + " ($count)",
-                                              style: textTheme.bodyText2!.copyWith(
-                                                  color: AppThemes.colorWhite,
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w400),
-                                              textAlign: TextAlign.left,
-                                              softWrap: true,
-                                              maxLines: 2,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      itemBuilder: (context, dynamic element) => Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 16.0, right: 16.0, bottom: 8.0, top: 8.0),
-                                        child: GestureDetector(
-                                          child: ProductItemUi(element, false),
-                                          onTap: () async {
-                                            print("Go To Details");
-                                            controller.tempItems = element;
-                                            Navigator.pushNamed(
-                                                context, Routes.foodDeliveryProductItemDetailsView,
-                                                arguments: element);
-
-                                          },
-                                        ),
-                                      ),
-                                      floatingHeader: true,
-                                    ),
-                                  ),
-                                ]else...[
-                                  if (controller.isNoDataFound) ...[
-                                    Container(
-                                      height: MediaQuery.of(context).size.height - 22.h,
-                                      child: Center(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              height: 40,
-                                              width: 40,
-                                              child: SvgPicture.asset(
-                                                AssetsPath.saidSmileFaceWhite,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0,
-                                                  bottom: 8.0,
-                                                  left: 24.0,
-                                                  right: 24.0),
-                                              child: controller.textMaker(
-                                                  context,
-                                                  language
-                                                      .empty_find_products_search,
-                                                  " ${controller.searchEstablishmentEditingController.text} ",
-                                                  "",
-                                                  "primary"),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ]
-                                ],
-                              ],
-                            ),
-                          ),
-                          if (controller
-                              .cartItemList?.isNotEmpty ==
-                              true) ...[
-                            Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SafeArea(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      Navigator.of(context).pushNamed(
-                                          Routes
-                                              .foodDeliveryShoppingCartView);
-                                      // _onViewCart();
+                                            .toString());
+                                        // controller.isNoDataFound = true;
+                                        // controller.update();
+                                      }
                                     },
-                                    child: Container(
-                                      margin: EdgeInsets.only(
+                                    child: Text(
+                                      language.simple_search,
+                                      style: TextStyle(
+                                          color: AppThemes.colorWhite,
+                                          fontSize: 12.sp,
+                                          fontFamily: AppConstants.fontFamily,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    style: ButtonStyle(
+                                      minimumSize: MaterialStateProperty.all(
+                                          Size(107.0, 6.h)),
+                                      elevation: MaterialStateProperty.all(0),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              colorScheme.primary),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          side: BorderSide(
+                                              color: AppThemes.darkGrey
+                                                  .withOpacity(0.3)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Align(
+                                  child: Text(
+                                    language
+                                        .placeholder_message_of_product_search,
+                                    style: textTheme.bodyText1!.copyWith(
+                                        fontSize: 10.sp,
+                                        color: Helpers.secondaryTextColor(),
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  alignment: Alignment.center,
+                                ),
+                              ),
+                              if (controller.searchProductList?.isNotEmpty ==
+                                  true) ...[
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 66.0),
+                                  child: GroupedListView<ProductItems, String>(
+                                    shrinkWrap: true,
+                                    key: Key("List"),
+                                    elements:
+                                        controller.searchProductList ?? [],
+                                    groupBy: (element) =>
+                                        (element.section?.id ?? 0).toString(),
+                                    groupHeaderBuilder: (item) {
+                                      var count = controller.searchProductList
+                                              ?.where((element) =>
+                                                  element.section?.id ==
+                                                  item.section?.id)
+                                              .length ??
+                                          0;
+                                      return Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 16.0,
+                                              right: 16.0,
+                                              bottom: 8.0,
+                                              top: 8.0),
+                                          child: Text(
+                                            ('${item.section?.name}' == language.all)
+                                                ? '${language.all}'
+                                                : (appLocale == Locale('en'))
+                                                    ? '${item.section?.nameEn}' +
+                                                        " ($count)"
+                                                    : (appLocale ==
+                                                            Locale('uk'))
+                                                        ? '${item.section?.nameUk}' +
+                                                            " ($count)"
+                                                        : (appLocale ==
+                                                                Locale('ru'))
+                                                            ? '${item.section?.nameRu}' +
+                                                                " ($count)"
+                                                            : '${item.section?.name}' +
+                                                                " ($count)",
+                                            // (item.section?.name ?? "") + " ($count)",
+                                            style: textTheme.bodyText2!
+                                                .copyWith(
+                                                    color: AppThemes.colorWhite,
+                                                    fontSize: 14.sp,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                            textAlign: TextAlign.left,
+                                            softWrap: true,
+                                            maxLines: 2,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    itemBuilder: (context, dynamic element) =>
+                                        Padding(
+                                      padding: const EdgeInsets.only(
                                           left: 16.0,
                                           right: 16.0,
-                                          bottom: 16.0),
-                                      height: 56.0,
-                                      padding: EdgeInsets.only(
-                                          left: 16.0,
-                                          right: 12.0,
                                           bottom: 8.0,
                                           top: 8.0),
-                                      decoration: BoxDecoration(
-                                          color: colorScheme.primary,
-                                          borderRadius:
-                                          BorderRadius.all(
-                                            Radius.circular(8.0),
-                                          )),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
+                                      child: GestureDetector(
+                                        child: ProductItemUi(element, false),
+                                        onTap: () async {
+                                          print("Go To Details");
+                                          controller.tempItems = element;
+                                          Navigator.pushNamed(
+                                              context,
+                                              Routes
+                                                  .foodDeliveryProductItemDetailsView,
+                                              arguments: element);
+                                        },
+                                      ),
+                                    ),
+                                    floatingHeader: true,
+                                  ),
+                                ),
+                              ] else ...[
+                                if (controller.isNoDataFound) ...[
+                                  Container(
+                                    height: MediaQuery.of(context).size.height -
+                                        22.h,
+                                    child: Center(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                  "${controller.getTotalCartItem()}",
-                                                  style: textTheme.bodyText1!.copyWith(
-                                                      fontSize: 11.sp,
-                                                      color: AppThemes
-                                                          .colorWhite,
-                                                      fontFamily:
-                                                      AppConstants
-                                                          .fontFamily,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .w400)),
-                                              Text(
-                                                  " ${language.items}",
-                                                  style: textTheme.bodyText1!.copyWith(
-                                                      fontSize: 11.sp,
-                                                      color: AppThemes
-                                                          .colorWhite
-                                                          .withOpacity(
-                                                          0.5),
-                                                      fontFamily:
-                                                      AppConstants
-                                                          .fontFamily,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .w400)),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          Align(
-                                            alignment:
-                                            Alignment.centerRight,
-                                            child: Text(
-                                                language.view_cart,
-                                                style: textTheme
-                                                    .bodyText1!
-                                                    .copyWith(
-                                                    fontSize:
-                                                    11.sp,
-                                                    color: AppThemes
-                                                        .colorWhite,
-                                                    fontFamily:
-                                                    AppConstants
-                                                        .fontFamily,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w400)),
-                                          ),
-                                          SizedBox(),
                                           Container(
-                                            padding:
-                                            EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                                color: AppThemes
-                                                    .colorWhite
-                                                    .withOpacity(0.1),
-                                                borderRadius:
-                                                BorderRadius.all(
-                                                  Radius.circular(
-                                                      8.0),
-                                                )),
-                                            alignment:
-                                            Alignment.center,
-                                            constraints:
-                                            BoxConstraints(
-                                                minWidth: 75),
-                                            child: Text(
-                                                '${controller.getCartItemTotalAmount()} ${language.currency_symbol}',
-                                                style: textTheme
-                                                    .bodyText1!
-                                                    .copyWith(
-                                                    fontSize:
-                                                    11.sp,
-                                                    color: AppThemes
-                                                        .colorWhite,
-                                                    fontFamily:
-                                                    AppConstants
-                                                        .fontFamily,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w400)),
+                                            height: 40,
+                                            width: 40,
+                                            child: SvgPicture.asset(
+                                              AssetsPath.saidSmileFaceWhite,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 8.0,
+                                                bottom: 8.0,
+                                                left: 24.0,
+                                                right: 24.0),
+                                            child: controller.textMaker(
+                                                context,
+                                                language
+                                                    .empty_find_products_search,
+                                                " ${controller.searchEstablishmentEditingController.text} ",
+                                                "",
+                                                "primary"),
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                ))
-                          ],
+                                ]
+                              ],
+                            ],
+                          ),
+                        ),
+                        if (controller.cartItemList?.isNotEmpty == true) ...[
+                          Align(
+                              alignment: Alignment.bottomCenter,
+                              child: SafeArea(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    Navigator.of(context).pushNamed(
+                                        Routes.foodDeliveryShoppingCartView);
+                                    // _onViewCart();
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: 16.0, right: 16.0, bottom: 16.0),
+                                    height: 56.0,
+                                    padding: EdgeInsets.only(
+                                        left: 16.0,
+                                        right: 12.0,
+                                        bottom: 8.0,
+                                        top: 8.0),
+                                    decoration: BoxDecoration(
+                                        color: colorScheme.primary,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(8.0),
+                                        )),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${controller.getTotalCartItem()}",
+                                                style: textTheme.bodyText1!
+                                                    .copyWith(
+                                                        fontSize: 11.sp,
+                                                        color: AppThemes
+                                                            .colorWhite,
+                                                        fontFamily: AppConstants
+                                                            .fontFamily,
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                            Text(" ${language.items}",
+                                                style: textTheme.bodyText1!
+                                                    .copyWith(
+                                                        fontSize: 11.sp,
+                                                        color: AppThemes
+                                                            .colorWhite
+                                                            .withOpacity(0.5),
+                                                        fontFamily: AppConstants
+                                                            .fontFamily,
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 25,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Text(language.view_cart,
+                                              style: textTheme.bodyText1!
+                                                  .copyWith(
+                                                      fontSize: 11.sp,
+                                                      color:
+                                                          AppThemes.colorWhite,
+                                                      fontFamily: AppConstants
+                                                          .fontFamily,
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                        ),
+                                        SizedBox(),
+                                        Container(
+                                          padding: EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                              color: AppThemes.colorWhite
+                                                  .withOpacity(0.1),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(8.0),
+                                              )),
+                                          alignment: Alignment.center,
+                                          constraints:
+                                              BoxConstraints(minWidth: 75),
+                                          child: Text(
+                                              '${controller.getCartItemTotalAmount()} ${language.currency_symbol}',
+                                              style: textTheme.bodyText1!
+                                                  .copyWith(
+                                                      fontSize: 11.sp,
+                                                      color:
+                                                          AppThemes.colorWhite,
+                                                      fontFamily: AppConstants
+                                                          .fontFamily,
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ))
                         ],
-                      );
-                    }
-                  ),
+                      ],
+                    );
+                  }),
                   backgroundColor: Helpers.primaryBackgroundColor(colorScheme),
                 ),
               );

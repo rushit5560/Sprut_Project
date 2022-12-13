@@ -19,7 +19,7 @@
 
 "whereLive":  "Виберіть місто, де ви живете:",
 "welcome": "Ласкаво просимо до",
-"welcomeHeadline": "Безпечний високоякісний комфортний",
+"welcomeHeadline": "Безпечно, якісно, комфортно!",
 "getStarted": "Розпочати",
 
 "issueWithVerification": "Виникли проблеми з\nотриманням коду підтвердження?",
@@ -236,6 +236,9 @@
   "details": "Детальний опис:",
   "your_orders": "Деталі замовлення:",
   "gram": "г",
+  "mili": "мл",
+  "pieces": "шт",
+  "kilogram": "кг",
   "okay": "Зрозуміло",
   "cart_lower_than_minimum_title": "Мінімальна сума замовлення ",
   "cart_lower_than_minimum_subtitle": ".\nЯкщо в кошику сума менша - Ви все одно сплатите ",
@@ -245,7 +248,7 @@
   "balance_amount_alert_message": "Поповніть особистий баланс, щоб підтвердити замовлення",
   "select": "Обрати",
   "top_up": "Поповнити",
-  "order_processing_title_message": "Ваше замовлення в обробці. Зачекайте, будь ласка, хвилину\n",
+  "order_processing_title_message": "Ваше замовлення в обробці. Будь ласка, зачекайте хвилинку\n",
   "order_processing_sub_message": "\nЗамовлення незабаром буде прийнято",
   "simple_search": "Пошук",
   "empty_find_establishment_search": "На жаль, ми не знайшли відповідних замовлень або продуктів",

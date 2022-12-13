@@ -198,6 +198,7 @@ class SearchViewOld extends GetView<SearchController> {
                           ),
                         ),
                       ),
+
                       if (!controller.isBottomSheetExpanded)
                         Positioned(
                           top: 10,

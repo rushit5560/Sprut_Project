@@ -22,6 +22,7 @@ import '../../../../resources/app_themes/app_themes.dart';
 import '../../../../resources/assets_path/assets_path.dart';
 import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/services/database/database_keys.dart';
+import '../../../widgets/custom_dialog/custom_dialog.dart';
 import '../../../widgets/my_drawer/my_drawer.dart';
 import '../../home_screen/controllers/home_controller.dart';
 import '../../no_internet/no_internet.dart';
@@ -36,11 +37,9 @@ class ItemsListScreenView extends StatefulWidget {
 class _ItemsListScreenViewState extends State<ItemsListScreenView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  HomeViewController controller =
-      Get.put(HomeViewController(), permanent: true);
+  HomeViewController controller = Get.put(HomeViewController(), permanent: true);
 
-  EstablishmentController establishmentController =
-      Get.put(EstablishmentController(), permanent: true);
+  EstablishmentController establishmentController = Get.put(EstablishmentController(), permanent: true);
 
   bool isdNoData = false;
 
@@ -66,6 +65,8 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
   @override
   Widget build(BuildContext context) {
     Helpers.systemStatusBar1();
+    Locale appLocale = Localizations.localeOf(context);
+
 
     // Extract the arguments from the current ModalRoute
     // settings and cast them as ScreenArguments.
@@ -77,56 +78,35 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
     return GetBuilder<EstablishmentController>(
         init: EstablishmentController(),
         initState: (_) {
-            establishmentController.establishmentsData.clear();
-            establishmentController.lsEstablishmentsData.clear();
+          establishmentController.establishmentsData.clear();
+          establishmentController.lsEstablishmentsData.clear();
         },
         builder: (context) {
           return BlocConsumer<ConnectedBloc, ConnectedState>(
             listener: (context, state) {
-              // if (state is ConnectedFailureState) {
-              //   showDialog(
-              //       context: context,
-              //       builder: (context) => MyCustomDialog(
-              //             message: language.networkError,
-              //           ));
-              // }
 
-              if (state is ConnectedInitialState) {
-                debugPrint("ConnectedInitialState:::");
-              }
-
-              if (state is ConnectedSucessState) {
-                print(
-                    "--------------Delivery establishment screen ConnectedSucessState--------------");
-                // Helpers.showCircularProgressDialog(context: context);
-                // establishmentController.fetchingItemList(context, widget._foodCategoryData.id.toString());
-              }
             },
             builder: (context, connectionState) {
               if (connectionState is ConnectedFailureState) {
-                print(
-                    "--------------Delivery establishment screen ConnectedFailureState--------------");
+                print("--------------Delivery establishment screen ConnectedFailureState--------------");
                 return NoInternetScreen(onPressed: () async {
-                  // establishmentController.fetchingItemList(context, widget._foodCategoryData.id.toString());
                 });
               }
+              if (connectionState is ConnectedSucessState) {}
 
               return BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, authState) {
                 if (authState is FetchingEstablishmentsListProgress) {
                   isdNoData = false;
-                  debugPrint(
-                      "FetchingEstablishmentsListProgress Loading Progress!");
+                  debugPrint("FetchingEstablishmentsListProgress Loading Progress!");
                   // Helpers.showCircularProgressDialog(context: context);
                 }
 
                 if (authState is FetchingEstablishmentsListSucceed) {
                   // Navigator.pop(context);
-                  debugPrint(
-                      "FetchingEstablishmentsListSucceed Response Success!");
+                  debugPrint("FetchingEstablishmentsListSucceed Response Success!");
 
-                  if (authState.availableEstablishmentsList!.isNotEmpty ==
-                      true) {
+                  if (authState.availableEstablishmentsList!.isNotEmpty ==true) {
                     isdNoData = false;
                     debugPrint("List Data Load!");
                     //add data
@@ -180,8 +160,7 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                   bottom: false,
                   child: GetBuilder<HomeViewController>(
                       initState: (_) {
-                        if (establishmentController
-                            .establishmentsData.isNotEmpty) {
+                        if (establishmentController.establishmentsData.isNotEmpty) {
                           establishmentController.establishmentsData.clear();
                           establishmentController.lsEstablishmentsData.clear();
                         }
@@ -202,10 +181,8 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                           key: _scaffoldKey,
                           body: GetBuilder<EstablishmentController>(
                               initState: (_) {
-                                print(
-                                    "Cat------------------->${args.id.toString()}");
-                                establishmentController.fetchingItemList(
-                                    context, args.id.toString());
+                                print("Cat------------------->${args.id.toString()}");
+                                establishmentController.fetchingItemList(context, args.id.toString());
                               },
                               builder:
                                   (_) => Stack(
@@ -218,18 +195,19 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.only(
-                                                      top: GetPlatform.isAndroid
-                                                          ? 11.h
-                                                          : 12.h,
+                                                      top: GetPlatform.isAndroid ? 11.h : 12.h,
                                                       left: 8.0,
                                                       right: 8.0),
-                                                  alignment:
-                                                      Alignment.centerLeft,
+                                                  alignment: Alignment.centerLeft,
                                                   child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 4.0, top: 8.0),
+                                                    padding: EdgeInsets.only(left: 4.0, top: 8.0),
                                                     child: Text(
-                                                      '${args.name}',
+                                                      // '${args.name}',
+                                                      (appLocale!=null)?
+                                                      (appLocale==Locale('en'))? '${args.nameEn}':
+                                                      (appLocale==Locale('uk'))?'${args.nameUk}':
+                                                      (appLocale==Locale('ru'))?'${args.nameRu}':'${args.name}'
+                                                          :"${args.name}",
                                                       style: textTheme
                                                           .bodyText1!
                                                           .copyWith(
@@ -245,9 +223,7 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                 GestureDetector(
                                                   onTap: () {
                                                     //open establishment search view
-                                                    Navigator.of(context)
-                                                        .pushNamed(Routes
-                                                            .foodEstablishmentSearchView);
+                                                    Navigator.of(context).pushNamed(Routes.foodEstablishmentSearchView);
                                                   },
                                                   child: Container(
                                                     margin: EdgeInsets.only(
@@ -345,20 +321,25 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                   ),
                                                 ),
                                                 // if(establishmentController.lsFoodTypeData.isNotEmpty)...[
-                                                  //filter view
-                                                  SizedBox(
-                                                    height: 8.0,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8.0,
-                                                        right: 8.0),
-                                                    child: SizedBox(
-                                                        height: establishmentController.lsFoodTypeData.isNotEmpty ? 95 : 0,
-                                                        child:
-                                                        ItemFilterTypeList()),
-                                                  ),
+                                                //filter view
+                                                SizedBox(
+                                                  height: 8.0,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: SizedBox(
+                                                      height:
+                                                          establishmentController
+                                                                  .lsFoodTypeData
+                                                                  .isNotEmpty
+                                                              ? 95
+                                                              : 0,
+                                                      child:
+                                                          ItemFilterTypeList()),
+                                                ),
                                                 // ],
                                                 if (establishmentController
                                                     .lsEstablishmentsData
@@ -370,19 +351,13 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                               horizontal: 8.0),
                                                       child: ListView.builder(
                                                           shrinkWrap: true,
-                                                          physics:
-                                                              BouncingScrollPhysics(),
-                                                          padding:
-                                                              EdgeInsets.only(
+                                                          physics:BouncingScrollPhysics(),
+                                                          padding:EdgeInsets.only(
                                                                   top: 8.0,
                                                                   bottom: 8.0),
                                                           itemCount:
-                                                              establishmentController
-                                                                  .lsEstablishmentsData
-                                                                  .length,
-                                                          itemBuilder:
-                                                              (BuildContext ctx,
-                                                                  index) {
+                                                              establishmentController.lsEstablishmentsData.length,
+                                                          itemBuilder: (BuildContext ctx, index) {
                                                             return GestureDetector(
                                                               onTap: () async {
                                                                 debugPrint(
@@ -414,12 +389,8 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                                             16.0),
                                                                     child:
                                                                         Column(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .min,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                                       children: [
                                                                         Row(
                                                                           children: [
@@ -427,7 +398,14 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                                               child: Padding(
                                                                                 padding: const EdgeInsets.only(top: 16.0, right: 8.0, left: 16.0),
                                                                                 child: Text(
-                                                                                  '${establishmentController.lsEstablishmentsData[index].name}',
+                                                                                  // '${establishmentController.lsEstablishmentsData[index].name}',
+                                                                                  (appLocale!=null)?
+                                                                                  (appLocale==Locale('en'))? '${establishmentController.lsEstablishmentsData[index].nameEn}':
+                                                                                  (appLocale==Locale('uk'))?'${establishmentController.lsEstablishmentsData[index].nameUk}':
+                                                                                  (appLocale==Locale('ru'))?'${establishmentController.lsEstablishmentsData[index].nameRu}':'${establishmentController.lsEstablishmentsData[index].name}'
+                                                                                      :"${establishmentController.lsEstablishmentsData[index].name}",
+
+
                                                                                   style: textTheme.bodyText1!.copyWith(fontSize: 13.sp, color: Colors.white),
                                                                                   textAlign: TextAlign.start,
                                                                                   maxLines: 2,
@@ -507,7 +485,7 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                                                 child: Image.network(
                                                                                   '${establishmentController.lsEstablishmentsData[index].imgUrl}',
                                                                                   width: double.infinity,
-                                                                                  height: 159,
+                                                                                  height: 185,
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 borderRadius: BorderRadius.all(
@@ -545,8 +523,11 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                                     ),
                                                                   ),
                                                                   Positioned(
-                                                                    child:
-                                                                        Container(
+                                                                    bottom: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+
+                                                                    child: Container(
                                                                       decoration: BoxDecoration(
                                                                           color: AppThemes
                                                                               .foodBgColor,
@@ -798,15 +779,11 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                                                             ),
                                                                           )
                                                                         ],
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceAround,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                                       ),
                                                                     ),
-                                                                    bottom: 0,
-                                                                    left: 0,
-                                                                    right: 0,
+
                                                                   ),
                                                                   // Positioned(
                                                                   //   child:
@@ -982,15 +959,15 @@ class _ItemsListScreenViewState extends State<ItemsListScreenView> {
                                               ),
                                             ),
                                             if (authState
-                                            is FetchingEstablishmentsListProgress) ...[
+                                                is FetchingEstablishmentsListProgress) ...[
                                               Center(
                                                 child: SizedBox(
                                                     height: 150,
                                                     width: 150,
-                                                    child:
-                                                    Lottie.asset('assets/images/loading1.json')),
+                                                    child: Lottie.asset(
+                                                        'assets/images/loading1.json')),
                                               )
-                                            ],//back button
+                                            ], //back button
                                           ])),
                           backgroundColor: Colors.black)),
                 );

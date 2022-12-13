@@ -27,8 +27,7 @@ void main() async {
   //   AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
   // }
 
-  runApp(
-    MultiBlocProvider(
+  runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ConnectedBloc()),
         BlocProvider(create: (context) => AuthBloc()),
@@ -43,10 +42,9 @@ void main() async {
             theme: AppThemes.primaryMaterialTheme,
             supportedLocales: L10n.all,
           );
+
         },
-      ),
-    ),
-  );
+      )));
 }
 
 /*class Sprut extends StatefulWidget {

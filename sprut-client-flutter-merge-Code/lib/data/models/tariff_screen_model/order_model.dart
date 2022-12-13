@@ -140,7 +140,7 @@ class OrderModel {
         "paymentType": paymentType,
         "paymentCardMask": paymentCardMask,
         "preOrderTime": preOrderTime,
-        "establishment": establishment?.toJson(),//Food Delivery
+        "establishment": establishment?.toJson(), //Food Delivery
       };
 }
 
@@ -316,6 +316,12 @@ class Establishment {
   Establishment({
     this.id,
     this.name,
+    this.nameUk,
+    this.nameRu,
+    this.nameEn,
+    this.descriptionUk,
+    this.descriptionRu,
+    this.descriptionEn,
     this.imgUrl,
     this.enabled,
     this.description,
@@ -332,6 +338,12 @@ class Establishment {
 
   int? id;
   String? name;
+  String? nameUk;
+  String? nameRu;
+  String? nameEn;
+  String? descriptionUk;
+  String? descriptionRu;
+  String? descriptionEn;
   String? imgUrl;
   bool? enabled;
   dynamic description;
@@ -348,6 +360,12 @@ class Establishment {
   factory Establishment.fromJson(Map<String, dynamic> json) => Establishment(
         id: json["id"],
         name: json["name"],
+        nameUk: json['name:uk'],
+        nameRu: json['name:ru'],
+        nameEn: json['name:en'],
+        descriptionUk: json['description:uk'],
+        descriptionRu: json['description:ru'],
+        descriptionEn: json['description:en'],
         imgUrl: json["imgUrl"],
         enabled: json["enabled"],
         description: json["description"],
@@ -366,6 +384,12 @@ class Establishment {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "name:uk": nameUk,
+        "name:ru": nameRu,
+        "name:en": nameEn,
+        "description:uk": descriptionUk,
+        "description:ru": descriptionRu,
+        "description:en": descriptionEn,
         "imgUrl": imgUrl,
         "enabled": enabled,
         "description": description,
@@ -632,10 +656,20 @@ class ProductProduct {
     this.id,
     this.name,
     this.weight,
+    this.quantityType,
     this.price,
     this.imgUrl,
     this.shortDescription,
     this.detailedDescription,
+    this.nameUk,
+    this.nameRu,
+    this.nameEn,
+    this.shortDescriptionUk,
+    this.shortDescriptionRu,
+    this.shortDescriptionEn,
+    this.detailedDescriptionUk,
+    this.detailedDescriptionRu,
+    this.detailedDescriptionEn,
     this.status,
     this.removed,
     this.createdAt,
@@ -647,8 +681,18 @@ class ProductProduct {
   int? id;
   String? name;
   String? weight;
+  String? quantityType;
   String? price;
   String? imgUrl;
+  String? nameUk;
+  String? nameRu;
+  String? nameEn;
+  String? shortDescriptionUk;
+  String? shortDescriptionRu;
+  String? shortDescriptionEn;
+  String? detailedDescriptionUk;
+  String? detailedDescriptionRu;
+  String? detailedDescriptionEn;
   String? shortDescription;
   String? detailedDescription;
   String? status;
@@ -662,10 +706,20 @@ class ProductProduct {
         id: json["id"],
         name: json["name"],
         weight: json["weight"],
+        quantityType : json['quantityType'],
         price: json["price"],
         imgUrl: json["imgUrl"],
         shortDescription: json["shortDescription"],
         detailedDescription: json["detailedDescription"],
+        nameUk: json['name:uk'],
+        nameRu: json['name:ru'],
+        nameEn: json['name:en'],
+        shortDescriptionUk: json['shortDescription:uk'],
+        shortDescriptionRu: json['shortDescription:ru'],
+        shortDescriptionEn: json['shortDescription:en'],
+        detailedDescriptionUk: json['detailedDescription:uk'],
+        detailedDescriptionRu: json['detailedDescription:ru'],
+        detailedDescriptionEn: json['detailedDescription:en'],
         status: json["status"],
         removed: json["removed"],
         createdAt: DateTime.parse(json["createdAt"]),
@@ -678,10 +732,20 @@ class ProductProduct {
         "id": id,
         "name": name,
         "weight": weight,
+        "quantityType,": quantityType,
         "price": price,
         "imgUrl": imgUrl,
         "shortDescription": shortDescription,
         "detailedDescription": detailedDescription,
+        "name:uk": nameUk,
+        "name:ru": nameRu,
+        "name:en": nameEn,
+        "shortDescription:uk": shortDescriptionUk,
+        "shortDescription:ru": shortDescriptionRu,
+        "shortDescription:en": shortDescriptionEn,
+        "detailedDescription:uk": detailedDescriptionUk,
+        "detailedDescription:ru": detailedDescriptionRu,
+        "detailedDescription:en": detailedDescriptionEn,
         "status": status,
         "removed": removed,
         "createdAt": createdAt?.toIso8601String(),

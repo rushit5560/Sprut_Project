@@ -18,7 +18,7 @@
 
 "whereLive":"Выберите город, в котором вы живете:",
 "welcome":"Добро пожаловать в",
-"welcomeHeadline": "Безопасно качественно удобно",
+"welcomeHeadline": "Безопасно, качественно, удобно!",
 "getStarted":"Начать",
 
 "issueWithVerification": "Проблемы с получением\nпроверочного кода",
@@ -236,6 +236,9 @@
   "leaveEstablishmentMessage": "Если Вы выйдете, корзина очистится.\nВы действительно хотите выйти?",
   "details": "Детали:",
   "gram": "г",
+  "mili": "мл",
+  "pieces": "шт",
+  "kilogram": "кг",
   "okay": "Понятно",
   "cart_lower_than_minimum_title": "Минимальная сумма заказа ",
   "cart_lower_than_minimum_subtitle": ".\nЕсли в корзине сумма меньше - Вы всё равно оплатите ",

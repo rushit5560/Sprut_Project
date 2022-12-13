@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../../../../../data/models/tariff_screen_model/card_model.dart';
 import '../../../../../../resources/app_constants/app_constants.dart';
 import '../../../../../../resources/app_themes/app_themes.dart';
@@ -10,8 +11,7 @@ import '../../../../widgets/primary_elevated_btn/primary_elevated_btn.dart';
 import '../../controllers/tariff_controller.dart';
 
 class TariffPaymentView extends GetView<TariffController> {
-
-   TariffPaymentView({Key? key}) : super(key: key);
+  const TariffPaymentView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,9 @@ class TariffPaymentView extends GetView<TariffController> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10.0),
+              SizedBox(
+                height: 10.0,
+              ),
               Center(
                 child: Container(
                   width: 14.w,
@@ -148,7 +150,9 @@ class TariffPaymentView extends GetView<TariffController> {
                       map["icon"]!,
                     ),
                   ),
-                  SizedBox(width: 4),
+                  SizedBox(
+                    width: 4,
+                  ),
                   Text(
                     map["title"]!,
                     overflow: TextOverflow.ellipsis,
@@ -158,7 +162,9 @@ class TariffPaymentView extends GetView<TariffController> {
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp),
                   ),
-                  SizedBox(width: 2),
+                  SizedBox(
+                    width: 2,
+                  ),
                   Expanded(
                     child: Text(
                       "(${controller.balance} \₴)",
@@ -170,7 +176,9 @@ class TariffPaymentView extends GetView<TariffController> {
                           fontSize: 10.sp),
                     ),
                   ),
-                  SizedBox(width: 4),
+                  SizedBox(
+                    width: 4,
+                  ),
                   Container(
                     height: 2.5.h,
                     width: 8.w,

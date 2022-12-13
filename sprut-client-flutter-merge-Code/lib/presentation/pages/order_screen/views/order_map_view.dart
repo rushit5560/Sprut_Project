@@ -10,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:sprut/presentation/pages/order_screen/controllers/order_controller.dart';
 import 'package:sprut/presentation/pages/order_screen/views/order_detail_bottom_sheet_view.dart';
+import 'package:sprut/resources/app_constants/app_constants.dart';
 
 import '../../../../business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
 import '../../../../business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
@@ -19,8 +20,10 @@ import '../../../../resources/app_themes/app_themes.dart';
 import '../../../../resources/assets_path/assets_path.dart';
 import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/configs/routes/routes.dart';
+import '../../../widgets/custom_dialog/custom_dialog.dart';
 import '../../../widgets/custom_dialog/widget_dialog.dart';
 import '../../../widgets/primary_container/primary_container.dart';
+import '../../home_screen/controllers/home_controller.dart';
 import '../../no_internet/no_internet.dart';
 
 class OrderMapView extends StatefulWidget{
@@ -38,11 +41,27 @@ class OrderMapViewState extends State<OrderMapView> {
     dynamic object = ModalRoute.of(context)!.settings.arguments;
     Map<String,dynamic> mapData = jsonDecode(object);
 
-    var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
     return BlocConsumer<ConnectedBloc, ConnectedState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ConnectedInitialState) {}
+        if (state is ConnectedSucessState) {}
+
+        // if (state is ConnectedFailureState) {
+        //   showDialog(
+        //       context: context,
+        //       builder: (context) => MyCustomDialog(
+        //         message: language.networkError,
+        //       ));
+        // }
+      },
       builder: (context, connectionState) {
+
+        if (connectionState is ConnectedFailureState) {
+          return NoInternetScreen(onPressed: () async {});
+        }
+        if (connectionState is ConnectedSucessState) {}
+
         return BlocConsumer<AuthBloc, AuthState>(
             builder: (context, authState) {
               if (connectionState is ConnectedFailureState) {
@@ -66,7 +85,7 @@ class OrderMapViewState extends State<OrderMapView> {
                     toolbarHeight: 15.h,
                     backgroundColor: Colors.transparent,
                     leading: Obx(() {
-                      if (controller.isExpanded.isTrue) {
+                      if (controller.isExpanded.value) {
                         return SizedBox();
                       }
                       return Column(
@@ -93,19 +112,21 @@ class OrderMapViewState extends State<OrderMapView> {
                               children: [
                                 GestureDetector(
                                   onTap: () async {
-                                    // if (locationData == null) {
-                                    //   // Helpers.showCircularProgressDialog(context: context);
-                                    //   await fetchUserLocation();
-                                    //   // Navigator.pop(context);
-                                    //
-                                    //   // gMapController.animateCamera(cameraUpdate)
-                                    //   await updateCurrentLocationMarker();
-                                    //   animateToCurrent();
-                                    // } else {
-                                    //   await updateCurrentLocationMarker();
-                                    //   // ProgressLoader().dismiss();
-                                    //   animateToCurrent();
-                                    // }
+                                    print("Click Location ");
+                                    if (controller.locationData == null) {
+                                      print("Click Location enter");
+                                      // Helpers.showCircularProgressDialog(context: context);
+                                      await controller.fetchUserLocation();
+                                      // Navigator.pop(context);
+
+                                      // gMapController.animateCamera(cameraUpdate)
+                                      await controller.updateCurrentLocationMarker();
+                                      controller.animateToCurrent();
+                                    } else {
+                                      await controller.updateCurrentLocationMarker();
+                                      // ProgressLoader().dismiss();
+                                      controller.animateToCurrent();
+                                    }
                                   },
                                   child: Container(
                                     // margin: EdgeInsets.only(right: 10),
@@ -148,18 +169,6 @@ class OrderMapViewState extends State<OrderMapView> {
                                     "from": "orderCompleted",
                                     "order_id": "${controller.orderInfoDetails.value?.orderId}"
                                   }));
-                            } else {
-                              //order move to back screen
-                              if(controller.orderInfoDetails.value?.car == null){
-                                controller.timer?.cancel();
-                                controller.orderCurrentStatus = Helpers.getOrderStatusByDeliveryStatusDefault(context, "${controller.orderInfoDetails.value?.status}", language).toString();
-
-                                Get.offNamed(Routes.orderDetailsView,
-                                    arguments: jsonEncode({
-                                      "from": "orderListing",
-                                      "order_id": "${controller.orderInfoDetails.value?.orderId}"
-                                    }));
-                              }
                             }
                             if (controller.isShowCancelDialog) {
                               controller.timer?.cancel();
@@ -203,7 +212,7 @@ class OrderMapViewState extends State<OrderMapView> {
                                   controller.isExpanded.value = false;
                                 },
                                 minHeight:
-                                    controller.isExpanded.isTrue ? 375 : 355,
+                                    controller.isExpanded.value ? 375 : 355,
                                 maxHeight: MediaQuery.of(context).size.height,
                                 panelBuilder: (ScrollController sc) =>
                                     OrderDetailBottomSheetView(sc),
@@ -227,6 +236,7 @@ class OrderMapViewState extends State<OrderMapView> {
                                     mapType: MapType.normal,
                                     zoomGesturesEnabled: true,
                                     zoomControlsEnabled: false,
+                                    // myLocationEnabled: true,
                                     polylines: Set<Polyline>.of(
                                         controller.polylines.values),
                                     onMapCreated: controller.onMapsCreated,
@@ -234,6 +244,7 @@ class OrderMapViewState extends State<OrderMapView> {
                                       // controller.customInfoWindowController.hideInfoWindow!();
                                     },
                                     onCameraMove: (position) {
+                                      print("onCameraMove");
                                       // controller.customInfoWindowController.onCameraMove!();
                                     },
                                     onCameraIdle: () {

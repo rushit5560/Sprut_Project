@@ -55,11 +55,11 @@ class FoodCategoryProvider{
   }
 
   /// For [Food Type Listing]
-  Future<dynamic> getEstablishmentProductListing(String brandId) async {
+  Future<dynamic> getEstablishmentProductListing(String brandId,String establishmentId,String placeId) async {
     try {
 
       String endPoint = networkProvider.getApiName(apiName: ApiNames.GET_PRODUCT_LIST);
-      final Response response = await networkProvider.get(url: endPoint+"?brandId=$brandId");
+      final Response response = await networkProvider.get(url: endPoint+"?brandId=$brandId&establishmentId=$establishmentId&placeId=$placeId");
       return response;
     } catch (e) {
       return Future.error(e);

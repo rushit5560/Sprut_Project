@@ -233,7 +233,7 @@ class ChooseOnMapController extends GetxController {
     }
     if (screen == null) {
       log("screen null");
-
+      
       if (Get.find<HomeViewController>().locationData != null) {
         Future.delayed(Duration(microseconds: 500), () {
           googleMapControllerTwo!.moveCamera(

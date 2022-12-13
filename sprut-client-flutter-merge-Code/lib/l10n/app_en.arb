@@ -238,7 +238,11 @@
   "leaveEstablishmentTitle": "Leave this establishment?",
   "leaveEstablishmentMessage": "If you exit now, you will lose all the products you have selected. Do you really want to leave?",
   "details": "Details",
+
   "gram": "g",
+  "mili": "ml",
+  "pieces": "pc",
+  "kilogram": "kg",
   "okay": "Okay",
   "cart_lower_than_minimum_title": "The minimum order amount is ",
   "cart_lower_than_minimum_subtitle": ".\nIf the amount in the cart is less - you will still pay ",

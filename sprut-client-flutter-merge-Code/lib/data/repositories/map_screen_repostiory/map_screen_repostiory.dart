@@ -27,8 +27,7 @@ class MainScreenRepostory {
       {required double latitude, longitude, required String cityCode}) async {
     log("reverse");
     try {
-      final Response response = await mainScreenProvider.reverseGeoCoding(
-          latitude: latitude, longitude: longitude, cityCode: cityCode);
+      final Response response = await mainScreenProvider.reverseGeoCoding(latitude: latitude, longitude: longitude, cityCode: cityCode);
       // print('hereresponse  ${response.statusCode}');
       //print('hereresponse  $response');
       if(response.statusCode == 200) {

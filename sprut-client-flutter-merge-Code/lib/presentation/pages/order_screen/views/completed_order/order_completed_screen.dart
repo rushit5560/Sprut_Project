@@ -8,7 +8,10 @@ import 'package:sprut/presentation/pages/order_screen/views/completed_order/orde
 import '../../../../../business_logic/blocs/connection_bloc/connection_bloc.dart';
 import '../../../../../business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import '../../../../../resources/configs/helpers/helpers.dart';
+import '../../../../widgets/custom_dialog/custom_dialog.dart';
 import '../../../no_internet/no_internet.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../controllers/order_controller.dart';
 
 class OrderCompletedScreen extends StatefulWidget {
@@ -17,8 +20,10 @@ class OrderCompletedScreen extends StatefulWidget {
 }
 
 class OrderCompletedScreenState extends State<OrderCompletedScreen> {
+
   @override
   Widget build(BuildContext context) {
+    var language = AppLocalizations.of(context)!;
     print("OrderCompletedScreen::");
     Helpers.systemStatusBar1();
     var colorScheme = Theme.of(context).colorScheme;
@@ -30,7 +35,6 @@ class OrderCompletedScreenState extends State<OrderCompletedScreen> {
         if (state is ConnectedInitialState) {}
         if (state is ConnectedSucessState) {}
 
-        if (state is ConnectedFailureState) {}
       },
       builder: (context, connectionState) {
         return connectionState is ConnectedFailureState
@@ -47,8 +51,7 @@ class OrderCompletedScreenState extends State<OrderCompletedScreen> {
                     child: Column(
                       children: [
                         Expanded(
-                            child: OrderCompletedDetailView(
-                                mapData['order_id'], mapData['from']))
+                            child: OrderCompletedDetailView(mapData['order_id'], mapData['from']))
                       ],
                     ),
                   ),

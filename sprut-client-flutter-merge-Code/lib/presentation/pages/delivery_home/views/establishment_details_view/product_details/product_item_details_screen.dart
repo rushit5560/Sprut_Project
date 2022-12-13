@@ -21,10 +21,10 @@ import '../../../../../widgets/cash_back_dialog/cash_back_dialog.dart';
 import '../../../../home_screen/controllers/home_controller.dart';
 import '../../../../no_internet/no_internet.dart';
 
+
 class ProductItemDetailsScreenView extends StatefulWidget {
   @override
-  State<ProductItemDetailsScreenView> createState() =>
-      _ProductItemDetailsScreenViewState();
+  State<ProductItemDetailsScreenView> createState() => _ProductItemDetailsScreenViewState();
 }
 
 class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenView> {
@@ -41,8 +41,7 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
     // TODO: implement initState
     Future.delayed(Duration.zero, () {
       setState(() {
-        productData =
-            ModalRoute.of(context)!.settings.arguments as ProductItems;
+        productData = ModalRoute.of(context)!.settings.arguments as ProductItems;
         pastQty = productData.quantity;
         productData.quantity = 1;
 
@@ -60,6 +59,7 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
     Helpers.systemStatusBar1();
 
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     double height = MediaQuery.of(context).size.height;
@@ -73,18 +73,6 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
           builder: (context) {
             return BlocConsumer<ConnectedBloc, ConnectedState>(
               listener: (context, state) {
-                if (state is ConnectedFailureState) {
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (context) => MyCustomDialog(
-                  //           message: language.networkError,
-                  //         ));
-                }
-
-                if (state is ConnectedInitialState) {
-                  debugPrint("ConnectedInitialState:::");
-                }
-
                 if (state is ConnectedSucessState) {
                   _controller.isShowItemDetails = true;
                   _controller.update();
@@ -97,6 +85,7 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
                     _controller.update();
                   });
                 }
+                if (connectionState is ConnectedSucessState) {}
 
                 return BlocConsumer<AuthBloc, AuthState>(
                     listener: (context, authState) {},
@@ -173,7 +162,31 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
                                                                               Alignment.center,
                                                                           child:
                                                                               Text(
-                                                                            '${productData.name} ${productData.weight}${language.gram}',
+                                                                                (productData.quantityType=='g')?'${
+                                                                                    // productData.name
+                                                                                    (appLocale==Locale('en'))? '${productData.nameEn}':
+                                                                                    (appLocale==Locale('uk'))?'${productData.nameUk}':
+                                                                                    (appLocale==Locale('ru'))?'${productData.nameRu}':'${productData.name}'
+
+                                                                                } ${productData.weight}${language.gram}':
+                                                                                (productData.quantityType=='ml')?'${
+                                                                                    // productData.name
+                                                                                    (appLocale==Locale('en'))? '${productData.nameEn}':
+                                                                                    (appLocale==Locale('uk'))?'${productData.nameUk}':
+                                                                                    (appLocale==Locale('ru'))?'${productData.nameRu}':'${productData.name}'
+                                                                                } ${productData.weight}${language.mili}':
+                                                                                (productData.quantityType=='pc')?'${
+                                                                                    // productData.name
+                                                                                    (appLocale==Locale('en'))? '${productData.nameEn}':
+                                                                                    (appLocale==Locale('uk'))?'${productData.nameUk}':
+                                                                                    (appLocale==Locale('ru'))?'${productData.nameRu}':'${productData.name}'
+                                                                                } ${productData.weight}${language.pieces}':
+                                                                                (productData.quantityType=='kg')?'${
+                                                                                    // productData.name
+                                                                                    (appLocale==Locale('en'))? '${productData.nameEn}':
+                                                                                    (appLocale==Locale('uk'))?'${productData.nameUk}':
+                                                                                    (appLocale==Locale('ru'))?'${productData.nameRu}':'${productData.name}'
+                                                                                } ${productData.weight}${language.kilogram}':'',
                                                                             //${productData.name}
                                                                             style: textTheme.bodyText2!.copyWith(
                                                                                 color: AppThemes.colorWhite,
@@ -197,12 +210,12 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
                                                                           child:
                                                                               Container(
                                                                             constraints:
-                                                                                BoxConstraints(maxHeight: 95, maxWidth: 95),
+                                                                                BoxConstraints(minHeight: 95, minWidth: 95),
                                                                             alignment:
                                                                                 Alignment.center,
                                                                             child: Text("${productData.price} ${language.currency_symbol}",
                                                                                 //${productData!.price}
-                                                                                style: textTheme.bodyText1!.copyWith(color: AppThemes.colorWhite, fontFamily: AppConstants.fontFamily, fontWeight: FontWeight.w800, fontSize: 13.sp)),
+                                                                                style: textTheme.bodyText1!.copyWith(color: AppThemes.colorWhite, fontFamily: AppConstants.fontFamily, fontWeight: FontWeight.w800, fontSize: 12.sp)),
                                                                             decoration: BoxDecoration(
                                                                                 color: Colors.transparent,
                                                                                 border: Border.all(color: Color(0xffffffff), width: 1.5),
@@ -216,7 +229,6 @@ class _ProductItemDetailsScreenViewState extends State<ProductItemDetailsScreenV
                                                           .isNotEmpty) ...[
                                                         //'${productData.detailedDescription}' != "null" &&
                                                         Container(
-
                                                           width: double.infinity,
                                                           child: Padding(
                                                             padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.12),

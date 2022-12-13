@@ -4,6 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/presentation/pages/settings/views/choose_cities.dart';
 import 'package:sprut/presentation/pages/settings/views/reminder_view.dart';
 import 'package:sprut/resources/assets_path/assets_path.dart';
@@ -17,6 +20,7 @@ import '../../choose_on_map/controller/choose_on_map_controller.dart';
 import '../../home_screen/select_cities/select_cities.dart';
 import '../../home_screen/views/add_addresses_views/add_home_address_view.dart';
 import '../../home_screen/views/add_addresses_views/add_work_address_view.dart';
+import '../../no_internet/no_internet.dart';
 import '../controllers/settings_controller.dart';
 import 'fare_view.dart';
 
@@ -34,6 +38,18 @@ class SettingsView extends GetView<SettingsController> {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var size = MediaQuery.of(context).size;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
+
     return GetBuilder<SettingsController>(
       init: SettingsController(),
       initState: (_) {},
@@ -180,6 +196,8 @@ class SettingsView extends GetView<SettingsController> {
         );
       },
     );
+  },
+);
   }
 
   Widget buildItem(BuildContext context, AppLocalizations language, String icon,

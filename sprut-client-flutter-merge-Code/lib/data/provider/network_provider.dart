@@ -18,8 +18,10 @@ class NetworkProviderRest {
   }
 
   final Duration defaultTimeout = Duration(seconds: 100);
+  // https://fp-test.altertaxi.com.ua/v1/ukrvin/orders/8247893
 
   static final baseUrl = "https://fp-test.altertaxi.com.ua/v1";
+  // Taxi
   static final apiKey = "b20b86bc-bbd1-70ca-6535-451d2d7e5922";
 
   //Food Delivery
@@ -189,7 +191,6 @@ class NetworkProviderRest {
     required String url,required Map<String, dynamic>? query
   }) async {
     prepareBaseRestWithSessionTokenRequest();
-
     try {
       final response = await _dioSecured.get(url, queryParameters: query);
       return response;

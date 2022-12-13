@@ -69,8 +69,7 @@ class SearchDriverView extends GetView<SearchController> {
                         Obx(
                           () {
                             return Text(
-                              language.searching_driver +
-                                  '${controller.orderCreateTime}',
+                              language.searching_driver +'${controller.orderCreateTime}',
                               style: textTheme.bodyText1!.copyWith(
                                 fontSize: 14.sp,
                                 color: AppThemes.darkGrey,
@@ -235,7 +234,6 @@ class SearchDriverView extends GetView<SearchController> {
                   SizedBox(
                     height: 16,
                   ),
-                  //todo--highlight cancel order button
                   TextButton(
                     onPressed: () {
                       showDialog(

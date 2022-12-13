@@ -47,24 +47,21 @@ class AuthAllEstablishmentsListEvent extends AuthEvent {
   final double latitude;
   final double longitude;
 
-  AuthAllEstablishmentsListEvent(
-      {required this.categoryID,
-        required this.latitude,
-        required this.longitude});
+  AuthAllEstablishmentsListEvent({required this.categoryID,required this.latitude,required this.longitude});
 }
 
 ///[Establishments GET TYPE LIST]
 class AuthTypeEstablishmentsListEvent extends AuthEvent {
   final String categoryID;
-
   AuthTypeEstablishmentsListEvent({required this.categoryID});
 }
 
 ///[Establishments Product LIST]
 class AuthEstablishmentProductListEvent extends AuthEvent {
   final String brandID;
-
-  AuthEstablishmentProductListEvent({required this.brandID});
+  final String establishmentId;
+  final String placeId;
+  AuthEstablishmentProductListEvent({required this.brandID, required this.establishmentId, required this.placeId});
 }
 
 

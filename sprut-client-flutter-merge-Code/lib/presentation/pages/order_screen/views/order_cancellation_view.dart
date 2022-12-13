@@ -16,6 +16,7 @@ import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/configs/routes/routes.dart';
 import '../../../widgets/cash_back_dialog/cash_back_dialog.dart';
 import '../../../widgets/common_dialog/common_dialog.dart';
+import '../../../widgets/custom_dialog/custom_dialog.dart';
 import '../../../widgets/custom_dialog/widget_dialog.dart';
 import '../../../widgets/primary_container/primary_container.dart';
 import '../../no_internet/no_internet.dart';
@@ -35,7 +36,7 @@ class OrderCancellationView extends GetView<OrderController> {
         if (state is ConnectedInitialState) {}
         if (state is ConnectedSucessState) {}
 
-        if (state is ConnectedFailureState) {}
+
       },
       builder: (context, connectionState) {
         return connectionState is ConnectedFailureState

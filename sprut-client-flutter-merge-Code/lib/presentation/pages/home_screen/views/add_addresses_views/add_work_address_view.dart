@@ -1,8 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/presentation/pages/choose_on_map/controller/choose_on_map_controller.dart';
 import 'package:sprut/presentation/pages/home_screen/controllers/home_controller.dart';
 import 'package:sprut/presentation/pages/home_screen/views/address_suggestion_view/address_suggestion_view.dart';
@@ -16,14 +20,15 @@ import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../no_internet/no_internet.dart';
+
 class AddWorkAddress extends StatefulWidget {
   @override
   State<AddWorkAddress> createState() => _AddWorkAddressState();
 }
 
 class _AddWorkAddressState extends State<AddWorkAddress> {
-  ChooseOnMapController chooseOnMapController =
-      Get.put(ChooseOnMapController());
+  ChooseOnMapController chooseOnMapController = Get.put(ChooseOnMapController());
   HomeViewController homeViewController = Get.find<HomeViewController>();
 
   DatabaseService databaseService = serviceLocator.get<DatabaseService>();
@@ -38,6 +43,19 @@ class _AddWorkAddressState extends State<AddWorkAddress> {
 
     print(
         'herework1  ${homeViewController.cacheAddress["workAddress"].toString().isEmpty}');
+
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
 
     return GestureDetector(
       onTap: () {
@@ -261,5 +279,7 @@ class _AddWorkAddressState extends State<AddWorkAddress> {
         backgroundColor: colorScheme.onBackground,
       ),
     );
+  },
+);
   }
 }

@@ -95,7 +95,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         ),
                         Text(language.verification,
                             style:
-                                textTheme.headline1!.copyWith(fontSize: 15.sp)),
+                            textTheme.headline1!.copyWith(fontSize: 15.sp)),
                         SizedBox(
                           height: 1.h,
                         ),
@@ -116,7 +116,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           controller: otpEditingController,
                           onChanged: (String) async {
                             bool isConnected =
-                                await Helpers.checkInternetConnectivity();
+                            await Helpers.checkInternetConnectivity();
 
                             if (!isConnected) {
                               Helpers.internetDialog(context);
@@ -134,16 +134,16 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           },
                           suffixIcon: otpEditingController.text.isNotEmpty
                               ? IconButton(
-                                  onPressed: () {
-                                    otpEditingController.clear();
+                            onPressed: () {
+                              otpEditingController.clear();
 
-                                    setState(() {});
-                                  },
-                                  icon: Icon(Icons.close),
-                                )
+                              setState(() {});
+                            },
+                            icon: Icon(Icons.close),
+                          )
                               : Container(
-                                  width: 0,
-                                ),
+                            width: 0,
+                          ),
                         ),
                         SizedBox(
                           height: 3.h,
@@ -156,7 +156,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                   builder: (context) => Dialog(
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(10)),
+                                          BorderRadius.circular(10)),
                                       child: OtpVerificationDialog(
                                         userPhoneNumber: arguments["userPhone"],
                                       )));

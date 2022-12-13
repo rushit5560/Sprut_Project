@@ -5,16 +5,20 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:sprut/resources/app_constants/app_constants.dart';
 import 'package:sprut/resources/app_themes/app_themes.dart';
 
+import '../../../../data/models/available_cities_model/available_cities_model.dart';
 import '../../../../data/models/oder_delivery/oder_delivery_response.dart';
 import '../../../../data/models/tariff_screen_model/order_model.dart';
+import '../../../../data/repositories/map_screen_repostiory/map_screen_repostiory.dart';
 import '../../../../data/repositories/order_repository/order_repository.dart';
 import 'package:fl_location/fl_location.dart' as fl;
 
@@ -36,7 +40,18 @@ class OrderController extends GetxController {
   GoogleMapController? googleMapController;
   bool isMapView = false;
   fl.LocationServicesStatus? locationServiceStatus;
+  List<AvailableCitiesModel?>? allCities;
+  AvailableCitiesModel? currentCity;
+  CameraPosition? currentCamPosition;
 
+  MainScreenRepostory mainScreenRepostory = MainScreenRepostory();
+
+
+  /// [Location Fields]
+  PermissionStatus? permissionGranted;
+  LocationData? locationData;
+  Location location = new Location();
+  String selectedCityCode = "";
   /// Is Location Service Enabled
   bool serviceEnabled = false;
 
@@ -87,6 +102,8 @@ class OrderController extends GetxController {
     Helpers.comment = value;
   }
 
+  var tempCarData;
+
   //load more
 
   // At the beginning, we fetch the first 20 posts
@@ -134,9 +151,14 @@ class OrderController extends GetxController {
     if (isMapView) {
       calculateDistance();
     }
+
+    if(orderInfoDetails.value?.car != null ){
+      tempCarData = orderInfoDetails.value?.car;
+    }
+
+    //orderInfoDetails.value?.deliveryStatus ==
+    //             AppConstants.ORDER_STATUS_CANCELED_CLIENT ||
     if (orderInfoDetails.value?.deliveryStatus ==
-            AppConstants.ORDER_STATUS_CANCELED_CLIENT ||
-        orderInfoDetails.value?.deliveryStatus ==
             AppConstants.ORDER_STATUS_CANCELED_KITCHEN) {
       isShowCancelDialog = true;
       update();
@@ -182,6 +204,12 @@ class OrderController extends GetxController {
     googleMapController = controller;
     customInfoWindowController.googleMapController = controller;
     //gMapCompleter.complete(controller);
+
+    currentCamPosition = CameraPosition(
+      target: LatLng(Get.find<HomeViewController>().locationData!.latitude!,
+          Get.find<HomeViewController>().locationData!.longitude!),
+    );
+
     calculateDistance();
   }
 
@@ -827,4 +855,100 @@ class OrderController extends GetxController {
       // });
     }
   }
+
+  updateCurrentLocationMarker() async {
+    if (locationData != null) {
+      MarkerId markerId = MarkerId("currentlocation");
+      centerMarkerID = markerId;
+      LatLng position = LatLng(
+          Get.find<HomeViewController>().locationData!.latitude!,
+          Get.find<HomeViewController>().locationData!.longitude!);
+
+      if (mapMarkers.keys.contains(markerId)) {
+        Marker marker = mapMarkers[markerId]!.copyWith(positionParam: position);
+        mapMarkers[markerId] = marker;
+      } else {
+        Marker marker = Marker(
+          markerId: markerId,
+          position: position,
+          icon: await Helpers.bitmapDescriptorFromSvgAsset(
+              Get.context!, AssetsPath.locationMarkerSvg),
+          draggable: false,
+        );
+        mapMarkers[markerId] = marker;
+      }
+
+      // mapMarkers.add(marker);
+      update();
+    }
+  }
+
+
+
+  fetchUserLocation() async {
+    serviceEnabled = await location.serviceEnabled();
+    print("Locationn data 5");
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      print("Locationn data 4");
+      locationServiceStatus = serviceEnabled
+          ? fl.LocationServicesStatus.enabled
+          : fl.LocationServicesStatus.disabled;
+      if (!serviceEnabled) {
+        permissionGranted = await location.hasPermission();
+
+        update();
+        return;
+      }
+    }
+    print("Locationn data 3");
+    locationServiceStatus = serviceEnabled
+        ? fl.LocationServicesStatus.enabled
+        : fl.LocationServicesStatus.disabled;
+
+    print("Locationn data 2");
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    print("Locationn data 1 $locationServiceStatus");
+    print("Locationn data 1 $permissionGranted");
+
+    if ((permissionGranted == PermissionStatus.granted ||
+        permissionGranted == PermissionStatus.grantedLimited) &&
+        locationServiceStatus == fl.LocationServicesStatus.enabled) {
+      Position a = await Geolocator.getCurrentPosition();
+      if (a != null) {
+        googleMapController!.moveCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(a.latitude, a.longitude),
+              zoom: 17.0,
+            ),
+          ),
+        );
+      }
+      {}
+    }
+  }
+
+
+  animateToCurrent() async {
+    if (locationData != null) {
+      googleMapController!.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+                locationData!.latitude!,
+                locationData!.longitude!),
+            zoom: 17.0,
+          ),
+        ),
+      );
+    }
+  }
+
 }

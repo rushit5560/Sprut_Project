@@ -158,8 +158,7 @@ class SearchFoundView extends GetView<SearchController> {
                           child: Container(
                             height: 8.h,
                             width: 17.w,
-                            padding: EdgeInsets.only(
-                                left: 5, right: 5, top: 2, bottom: 14),
+                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 14),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.all(
@@ -227,6 +226,7 @@ class SearchFoundView extends GetView<SearchController> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: Colors.grey.shade400,
+                                      // color: Colors.red,
                                       fontSize: 8,
                                     ),
                                   ),
@@ -291,8 +291,7 @@ class SearchFoundView extends GetView<SearchController> {
                                             cursorHeight: 23,
                                             cursorColor: colorScheme.primary,
                                             onTap: () {},
-                                            controller: controller
-                                                .whereToAriveEdtingController,
+                                            controller: controller.whereToAriveEdtingController,
                                             readOnly: true,
                                             onSubmitted: (v) {},
                                             style: TextStyle(
@@ -300,8 +299,7 @@ class SearchFoundView extends GetView<SearchController> {
                                                 fontFamily: "SF-Pro Display"),
                                             onChanged: (text) {},
                                             decoration: InputDecoration(
-                                              contentPadding:
-                                                  EdgeInsets.only(bottom: 8.0),
+                                              contentPadding: EdgeInsets.only(bottom: 8.0),
                                               suffixIconConstraints:
                                                   BoxConstraints(
                                                 maxWidth: 30,
@@ -325,8 +323,7 @@ class SearchFoundView extends GetView<SearchController> {
                                                       .isBottomSheetExpanded
                                                   ? 0
                                                   : 0),
-                                          width:
-                                              MediaQuery.of(context).size.width,
+                                          width: MediaQuery.of(context).size.width,
                                           height: 0.5,
                                           decoration: BoxDecoration(
                                             color: Colors.grey,

@@ -19,154 +19,178 @@ import '../../../widgets/primary_container/primary_container.dart';
 import '../../no_internet/no_internet.dart';
 
 class OrderView extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => OrderViewState();
-
 }
-class OrderViewState extends State<OrderView> {
 
+class OrderViewState extends State<OrderView> {
   OrderController controller = Get.put(OrderController(), permanent: true);
+
   @override
   Widget build(BuildContext context) {
     Helpers.systemStatusBar1();
 
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
-    return  BlocConsumer<ConnectedBloc, ConnectedState>(
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
       listener: (context, state) {
+        if (state is ConnectedInitialState) {}
         if (state is ConnectedSucessState) {
           controller.getOrders(context);
         }
       },
       builder: (context, connectionState) {
         return connectionState is ConnectedFailureState
-            ? NoInternetScreen(onPressed: () async {
-
-        }) : WillPopScope(
-          onWillPop: () {
-            // controller.timer?.cancel();
-            Navigator.pop(context);
-            FocusScope.of(context).unfocus();
-            return Future.value(true);
-          },
-          child: Scaffold(
-            appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Helpers.primaryBackgroundColor(colorScheme),
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PrimaryContainer(
-                      child: IconButton(
-                          onPressed: () {
-                            // controller.timer?.cancel();
-                            Navigator.pop(context);
-                            FocusScope.of(context).unfocus();
-                          },
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: colorScheme.background,
-                          ))),
-                )),
-            body: GetBuilder<OrderController>(
-              initState: (_) {
-                controller.data.value?.clear();
-                controller.getOrders(context);
-                controller.listController.addListener(() {
-                  controller.loadMore();
-                });
-                updateOrderStart(context);
-              },
-              builder: (_) {
-                return BlocConsumer<ConnectedBloc, ConnectedState>(
-                  listener: (context, state) {
-                    if (state is ConnectedSucessState) {
+            ? NoInternetScreen(onPressed: () async {})
+            : WillPopScope(
+                onWillPop: () {
+                  // controller.timer?.cancel();
+                  Navigator.pop(context);
+                  FocusScope.of(context).unfocus();
+                  return Future.value(true);
+                },
+                child: Scaffold(
+                  appBar: AppBar(
+                      elevation: 0,
+                      backgroundColor:
+                          Helpers.primaryBackgroundColor(colorScheme),
+                      leading: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PrimaryContainer(
+                            child: IconButton(
+                                onPressed: () {
+                                  // controller.timer?.cancel();
+                                  Navigator.pop(context);
+                                  FocusScope.of(context).unfocus();
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: colorScheme.background,
+                                ))),
+                      )),
+                  body: GetBuilder<OrderController>(
+                    initState: (_) {
+                      controller.data.value?.clear();
                       controller.getOrders(context);
-                    }
-                  },
-                  builder: (context, connectionState) {
-                    return connectionState is ConnectedFailureState
-                        ? NoInternetScreen(onPressed: () async {
+                      controller.listController.addListener(() {
+                        controller.loadMore();
+                      });
+                      updateOrderStart(context);
+                    },
+                    builder: (_) {
+                      return BlocConsumer<ConnectedBloc, ConnectedState>(
+                        listener: (context, state) {
+                          if (state is ConnectedSucessState) {
+                            controller.getOrders(context);
+                          }
+                          if (state is ConnectedInitialState) {}
 
-                    }) : SafeArea(
-                      top: false,
-                      bottom: false,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(language.your_orders,
-                                  style: textTheme.headline1!.copyWith(
-                                      fontSize: 15.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Helpers.primaryTextColor())),
-                              SizedBox(height: 10),
-                              if (controller.isLoading == false) ...[
-                                if (controller.data.value?.isNotEmpty == true) ...[
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: controller.data.value?.length,
-                                      controller: controller.listController,
-                                      shrinkWrap: true,
-                                      itemBuilder: (ctx, index) {
-                                        return _buildItem(ctx, index);
-                                      },
-                                    ),
-                                  ),
-                                ] else ...[
-                                  Expanded(
-                                    child: Container(
-                                      child: Center(
-                                        child: Text(
-                                          language.no_order_message,
-                                          style: TextStyle(
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w500),
-                                        ),
+                          // if (state is ConnectedFailureState) {
+                          //   showDialog(
+                          //       context: context,
+                          //       builder: (context) => MyCustomDialog(
+                          //         message: language.networkError,
+                          //       ));
+                          // }
+                        },
+                        builder: (context, connectionState) {
+                          return connectionState is ConnectedFailureState
+                              ? NoInternetScreen(onPressed: () async {})
+                              : SafeArea(
+                                  top: false,
+                                  bottom: false,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(language.your_orders,
+                                              style: textTheme.headline1!
+                                                  .copyWith(
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: Helpers
+                                                          .primaryTextColor())),
+                                          SizedBox(height: 10),
+                                          if (controller.isLoading ==
+                                              false) ...[
+                                            if (controller
+                                                    .data.value?.isNotEmpty ==
+                                                true) ...[
+                                              Expanded(
+                                                child: ListView.builder(
+                                                  itemCount: controller
+                                                      .data.value?.length,
+                                                  controller:
+                                                      controller.listController,
+                                                  shrinkWrap: true,
+                                                  itemBuilder: (ctx, index) {
+                                                    return _buildItem(
+                                                        ctx, index, appLocale);
+                                                  },
+                                                ),
+                                              ),
+                                            ] else ...[
+                                              Expanded(
+                                                child: Container(
+                                                  child: Center(
+                                                    child: Text(
+                                                      language.no_order_message,
+                                                      style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]
+                                          ] else ...[
+                                            Expanded(
+                                              child: Container(
+                                                child: Center(
+                                                  child: SizedBox(
+                                                    child: Lottie.asset(
+                                                        'assets/images/loading1.json'),
+                                                    height: 100,
+                                                    width: 95,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                          if (controller.isLoadMoreRunning) ...[
+                                            Center(
+                                              child: SizedBox(
+                                                child: Lottie.asset(
+                                                    'assets/images/loading1.json'),
+                                                height: 100,
+                                                width: 95,
+                                              ),
+                                            )
+                                          ]
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ]
-                              ] else ...[
-                                Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: SizedBox(
-                                        child:
-                                        Lottie.asset('assets/images/loading1.json'),
-                                        height: 100,
-                                        width: 95,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                              if (controller.isLoadMoreRunning) ...[
-                                Center(
-                                  child: SizedBox(
-                                    child: Lottie.asset('assets/images/loading1.json'),
-                                    height: 100,
-                                    width: 95,
-                                  ),
-                                )
-                              ]
-                            ],
-                          ),
-                        ),
-                      ),
-                    );;
-                  },
-                );
-              },
-            ),
-            backgroundColor: Helpers.primaryBackgroundColor(colorScheme),
-          ),
-        );
+                                );
+                          ;
+                        },
+                      );
+                    },
+                  ),
+                  backgroundColor: Helpers.primaryBackgroundColor(colorScheme),
+                ),
+              );
       },
     );
   }
@@ -179,7 +203,7 @@ class OrderViewState extends State<OrderView> {
     // });
   }
 
-  Widget _buildItem(BuildContext context, int index) {
+  Widget _buildItem(BuildContext context, int index, Locale appLocale) {
     var language = AppLocalizations.of(context)!;
     var textTheme = Theme.of(context).textTheme;
     String? orderStatus;
@@ -193,9 +217,9 @@ class OrderViewState extends State<OrderView> {
           context, controller.data.value![index].deliveryStatus, language);
     }
 
-     //print("Delivery Status ---> ${controller.data.value![index].deliveryStatus}");
+    //print("Delivery Status ---> ${controller.data.value![index].deliveryStatus}");
     // var driverStatus = controller.data.value![index].status;
-     //print("driverStatus Status ---> ${controller.data.value![index].status}");
+    //print("driverStatus Status ---> ${controller.data.value![index].status}");
 
     return Card(
       color: Helpers.secondaryBackground(),
@@ -278,6 +302,11 @@ class OrderViewState extends State<OrderView> {
                     "from": "orderListing",
                     "order_id": "${controller.data.value![index].orderId}"
                   }));
+              // await Get.toNamed(Routes.orderMapView,
+              //     arguments: jsonEncode({
+              //       "from": "orderListing",
+              //       "order_id": "${controller.data.value![index].orderId}"
+              //     }));
               break;
             default:
               print("Order default::");
@@ -317,8 +346,23 @@ class OrderViewState extends State<OrderView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      /*
+                      ('${establishmentController.lsFoodTypeData[index].name}' == language.all)?'${language.all}' :
+                                (appLocale==Locale('en'))? '${establishmentController.lsFoodTypeData[index].nameEn}':
+                                (appLocale==Locale('uk'))?'${establishmentController.lsFoodTypeData[index].nameUk}':
+                                (appLocale==Locale('ru'))?'${establishmentController.lsFoodTypeData[index].nameRu}':'${establishmentController.lsFoodTypeData[index].name}',
+                      * */
                       Text(
-                        "${controller.data.value![index].establishment?.name}",
+                        ('${controller.data.value![index].establishment?.name}' ==
+                                language.all)
+                            ? '${language.all}'
+                            : (appLocale == Locale('en'))
+                                ? '${controller.data.value![index].establishment?.nameEn}'
+                                : (appLocale == Locale('uk'))
+                                    ? '${controller.data.value![index].establishment?.nameUk}'
+                                    : (appLocale == Locale('ru'))
+                                        ? '${controller.data.value![index].establishment?.nameRu}'
+                                        : '${controller.data.value![index].establishment?.name}',
                         style: textTheme.bodyText1!
                             .copyWith(fontSize: 13.sp, color: Colors.white),
                         overflow: TextOverflow.ellipsis,
@@ -326,7 +370,7 @@ class OrderViewState extends State<OrderView> {
                       ),
                       if (controller.data.value![index].createdAt != null) ...[
                         Text(
-                          "${language.order_date} ${Helpers.orderStringCreatedDate(context, "${controller.data.value![index].createdAt}",language.today_at)}",
+                          "${language.order_date} ${Helpers.orderStringCreatedDate(context, "${controller.data.value![index].createdAt}", language.today_at)}",
                           style: textTheme.bodySmall!.copyWith(
                               fontSize: 8.sp, color: Color(0xff838383)),
                           textAlign: TextAlign.start,
@@ -343,10 +387,27 @@ class OrderViewState extends State<OrderView> {
                               itemBuilder: (context, position) {
                                 return productList(
                                     context,
-                                    controller.data.value![index]
-                                        .products![position].productData?.name,
+                                    ('${controller.data.value![index].products![position].productData?.name}' ==
+                                            language.all)
+                                        ? '${language.all}'
+                                        : (appLocale == Locale('en'))
+                                            ? '${controller.data.value![index].products![position].productData?.nameEn}'
+                                            : (appLocale == Locale('uk'))
+                                                ? '${controller.data.value![index].products![position].productData?.nameUk}'
+                                                : (appLocale == Locale('ru'))
+                                                    ? '${controller.data.value![index].products![position].productData?.nameRu}'
+                                                    : '${controller.data.value![index].products![position].productData?.name}',
                                     '${controller.data.value![index].products![position].quantity}',
-                                    '${controller.data.value![index].products![position].productData?.weight}');
+                                    (controller.data.value![index].products![position].productData?.quantityType == 'g')
+                                        ? '(${controller.data.value![index].products![position].productData?.weight}${language.gram})'
+                                        : (controller.data.value![index].products![position].productData?.quantityType == 'ml')
+                                        ? '(${controller.data.value![index].products![position].productData?.weight}${language.mili})'
+                                        : (controller.data.value![index].products![position].productData?.quantityType == 'pc')
+                                        ? '(${controller.data.value![index].products![position].productData?.weight}${language.pieces})'
+                                        : (controller.data.value![index].products![position].productData?.quantityType == 'kg')
+                                        ? '(${controller.data.value![index].products![position].productData?.weight}${language.kilogram})'
+                                        : '');
+                                //'${controller.data.value![index].products![position].productData?.weight}'
                               },
                               itemCount: controller
                                           .data.value![index].products!.length >
@@ -421,7 +482,7 @@ class OrderViewState extends State<OrderView> {
       BuildContext context, String? name, String? qty, String weight) {
     var textTheme = Theme.of(context).textTheme;
     return Text(
-      "${qty}x ${name} (${weight} g) ",
+      "${qty}x ${name} ${weight} ",
       style: textTheme.bodySmall!
           .copyWith(fontSize: 11.sp, color: Color(0xff838383)),
       textAlign: TextAlign.start,

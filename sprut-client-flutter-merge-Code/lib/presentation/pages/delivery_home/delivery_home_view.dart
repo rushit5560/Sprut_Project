@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
@@ -50,6 +48,7 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // appLocale = Localizations.localeOf(context);
     context.read<AuthBloc>().add(AuthFoodDeliveryCategoryListEvent());
     controller.checkLocationIfNeeded();
     if (mounted) {
@@ -64,6 +63,8 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
   Widget build(BuildContext context) {
     controller.databaseService
         .saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+    Locale appLocale = Localizations.localeOf(context);
+
     Helpers.systemStatusBar1();
     //print("Delivery cat Screen3--> ${controller.databaseService.getFromDisk(DatabaseKeys.isLoginTypeIn)}");
     //print("Delivery cat Screen4--> ${Helpers.isLoginTypeIn()}");
@@ -73,13 +74,11 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
     var textTheme = Theme.of(context).textTheme;
     return BlocConsumer<ConnectedBloc, ConnectedState>(
       listener: (context, state) {
-        // if (state is ConnectedFailureState) {
-        //   showDialog(
-        //       context: context,
-        //       builder: (context) => MyCustomDialog(
-        //             message: language.networkError,
-        //           ));
-        // }
+        if (state is ConnectedFailureState) {
+          // showDialog(
+          //     context: context,
+          //     builder: (context) => MyCustomDialog(message: language.networkError,));
+        }
       },
       builder: (context, connectionState) {
         if (connectionState is ConnectedFailureState) {
@@ -119,6 +118,9 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                 //add static cab item
                 FoodCategoryData extraCabItem = FoodCategoryData();
                 extraCabItem.name = language.call_a_cab;
+                extraCabItem.nameEn = language.call_a_cab;
+                extraCabItem.nameUk = language.call_a_cab;
+                extraCabItem.nameRu = language.call_a_cab;
                 extraCabItem.imgUrl = "gps_system_smart_car.png";
                 lsCategoryData.insert(0, extraCabItem);
                 if (mounted) {
@@ -149,25 +151,25 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                     jsonData.map<ItemsCartModels>((jsonItem) {
                   return ItemsCartModels.fromJson(jsonItem);
                 }).toList();
+
+                // cartItemList[0].status==
                 Get.put(EstablishmentDetailsController())
                     .cartItemList
                     ?.addAll(cartItemList);
                 // print("data :: ${data.orderId}");
                 // print("data :: ${data.deliveryStatus}");
-                if (data != null) {
-                  if (data.deliveryStatus == "new" ||
-                      data.deliveryStatus == "accepted" ||
-                      data.deliveryStatus == "paymentWait" ||
-                      data.deliveryStatus == "notAccepted" ||
-                      data.deliveryStatus == "canceledKitchen" ||
-                      data.deliveryStatus == "cancelled" ||
-                      data.deliveryStatus == "paid") {
-                    Navigator.of(context)
-                        .pushNamed(Routes.foodDeliveryShoppingCartView);
-                  } else {
-                    controller.databaseService
-                        .saveToDisk(DatabaseKeys.deliveryOrder, "");
-                  }
+                if (data.deliveryStatus == "new" ||
+                    data.deliveryStatus == "accepted" ||
+                    data.deliveryStatus == "paymentWait" ||
+                    data.deliveryStatus == "notAccepted" ||
+                    data.deliveryStatus == "canceledKitchen" ||
+                    data.deliveryStatus == "cancelled" ||
+                    data.deliveryStatus == "paid") {
+                  Navigator.of(context)
+                      .pushNamed(Routes.foodDeliveryShoppingCartView);
+                } else {
+                  controller.databaseService
+                      .saveToDisk(DatabaseKeys.deliveryOrder, "");
                 }
               }
               // controller.foodDeliveryOrder(context);
@@ -398,7 +400,20 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                                                           right: 8.0,
                                                           left: 8.0),
                                                   child: Text(
-                                                    "${lsCategoryData[index].name}",
+                                                    (appLocale != null)
+                                                        ? (appLocale ==
+                                                                Locale('en'))
+                                                            ? '${lsCategoryData[index].nameEn}'
+                                                            : (appLocale ==
+                                                                    Locale(
+                                                                        'uk'))
+                                                                ? '${lsCategoryData[index].nameUk}'
+                                                                : (appLocale ==
+                                                                        Locale(
+                                                                            'ru'))
+                                                                    ? '${lsCategoryData[index].nameRu}'
+                                                                    : '${lsCategoryData[index].name}'
+                                                        : "${lsCategoryData[index].name}",
                                                     style: textTheme.bodyText1!
                                                         .copyWith(
                                                             fontSize: 13.sp,
@@ -548,10 +563,8 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
 
   @override
   void dispose() {
-    if (controller != null) {
-      controller.databaseService
-          .saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-    }
+    controller.databaseService
+        .saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
     Helpers.systemStatusBar();
     debugPrint("dispose()");
     super.dispose();

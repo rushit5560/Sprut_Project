@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
 import 'package:sprut/data/models/available_cities_model/available_cities_model.dart';
 import 'package:sprut/presentation/widgets/circular_progress_bar/circular_progress_bar.dart';
 import 'package:sprut/presentation/widgets/primary_elevated_btn/primary_elevated_btn.dart';
@@ -13,7 +15,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sprut/resources/app_themes/app_themes.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
 
+import '../../../../business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import '../../../../resources/configs/routes/routes.dart';
+import '../../no_internet/no_internet.dart';
 
 class CityLogin extends StatefulWidget {
   @override
@@ -26,34 +30,28 @@ class _CityLoginState extends State<CityLogin> {
   @override
   void initState() {
     super.initState();
-
     Helpers.submitCity(
-        city: AvailableCitiesModel(
-            code: "vin",
-            name: "Vinnytsia",
-            localizedName: "Ukraine.Vinnytsia",
-            comment: "",
-            defaultZoom: 13,
-            defaultZoomOnMobile: 13,
-            coatOfArmsUrl: null,
-            wikipediaArticleUrl:
-                "https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BD%D0%BD%D0%B8%D1%86%D1%8F",
-            officialWebsiteUrl: "http://vmr.gov.ua/",
-            population: 372,
-            phoneAreaCode: "43",
-            trivia: null,
-            lat: 49.2372,
-            lon: 28.46722));
+        city: AvailableCitiesModel(code: "vin", name: "Vinnytsia", localizedName: "Ukraine.Vinnytsia", comment: "", defaultZoom: 13, defaultZoomOnMobile: 13, coatOfArmsUrl: null, wikipediaArticleUrl:
+        "https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BD%D0%BD%D0%B8%D1%86%D1%8F", officialWebsiteUrl: "http://vmr.gov.ua/", population: 372, phoneAreaCode: "43", trivia: null, lat: 49.2372, lon: 28.46722));
   }
 
   AvailableCitiesModel? selectedCityName;
   @override
   Widget build(BuildContext context) {
     Helpers.systemStatusBar();
-
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var language = AppLocalizations.of(context)!;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+      return NoInternetScreen(onPressed: () async {});
+    }
+    if (connectionState is ConnectedSucessState) {}
+
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(
@@ -62,10 +60,24 @@ class _CityLoginState extends State<CityLogin> {
         child: PrimaryElevatedBtn(
             buttonText: language.confirm,
             onPressed: () async {
-              bool isConnected = await Helpers.checkInternetConnectivity();
+              // bool isConnected = await Helpers.checkInternetConnectivity();
 
+              // if (!isConnected) {
+              //   Helpers.internetDialog(context);
+              //   return;
+              // }
+
+              bool isConnected = await Helpers.checkInternetConnectivity();
               if (!isConnected) {
-                Helpers.internetDialog(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> NoInternetScreen(onPressed: () async {
+                  bool isConnected = await Helpers.checkInternetConnectivity();
+                  if(isConnected){
+                    Navigator.pop(context);
+                  }
+
+                },)));
+
+                // Helpers.internetDialog(context);
                 return;
               }
 
@@ -206,6 +218,8 @@ class _CityLoginState extends State<CityLogin> {
       ),
       backgroundColor: colorScheme.onBackground,
     );
+  },
+);
   }
 
   SizedBox _sizedBox() {

@@ -267,11 +267,8 @@ class Helpers {
     dataBaseService.saveToDisk(DatabaseKeys.saveCurrentLang, "");
     dataBaseService.saveToDisk(DatabaseKeys.saveCard, "");
     dataBaseService.saveToDisk(DatabaseKeys.isLocationStatus, false);
-    dataBaseService.saveToDisk(
-        DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-    dataBaseService.saveToDisk(
-        DatabaseKeys.isLoginTypeSelected, AppConstants.TAXI_APP);
-
+    dataBaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+    dataBaseService.saveToDisk(DatabaseKeys.isLoginTypeSelected, AppConstants.TAXI_APP);
     dataBaseService.saveToDisk(DatabaseKeys.deliveryOrder, "");
     dataBaseService.saveToDisk(DatabaseKeys.cartObject, "");
     dataBaseService.saveToDisk(DatabaseKeys.establishmentObject, "");

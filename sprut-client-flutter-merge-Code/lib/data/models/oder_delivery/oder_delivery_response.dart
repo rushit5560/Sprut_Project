@@ -180,6 +180,7 @@ class Establishment {
   Establishment({
     this.id,
     this.name,
+    this.nameEn,
     this.nameUk,
     this.nameRu,
     this.imgUrl,
@@ -204,6 +205,7 @@ class Establishment {
 
   int? id;
   // String? name;
+  String? nameEn;
   String? nameUk;
   String? nameRu;
   String? name;
@@ -242,6 +244,7 @@ class Establishment {
   factory Establishment.fromJson(Map<String, dynamic> json) => Establishment(
     id: json["id"],
     name: json["name"],
+    nameEn: json["name:en"],
     nameUk: json["name:uk"],
     nameRu: json["name:ru"],
     descriptionUk: json["description:uk"],
@@ -267,6 +270,7 @@ class Establishment {
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
+    "name:en": nameEn,
     "name:uk": nameUk,
     "name:ru": nameRu,
     "description:uk": descriptionUk,
@@ -573,6 +577,15 @@ class ProductProduct {
   ProductProduct({
     this.id,
     this.name,
+    this.nameUk,
+    this.nameRu,
+    this.nameEn,
+    this.shortDescriptionUk,
+    this.shortDescriptionRu,
+    this.shortDescriptionEn,
+    this.detailedDescriptionUk,
+    this.detailedDescriptionRu,
+    this.detailedDescriptionEn,
     this.weight,
     this.price,
     this.imgUrl,
@@ -593,6 +606,15 @@ class ProductProduct {
   String? imgUrl;
   String? shortDescription;
   String? detailedDescription;
+  String? nameUk;
+  String? nameRu;
+  String? nameEn;
+  String? shortDescriptionUk;
+  String? shortDescriptionRu;
+  String? shortDescriptionEn;
+  String? detailedDescriptionUk;
+  String? detailedDescriptionRu;
+  String? detailedDescriptionEn;
   String? status;
   dynamic removed;
   DateTime? createdAt;
@@ -608,6 +630,15 @@ class ProductProduct {
     imgUrl: json["imgUrl"],
     shortDescription: json["shortDescription"],
     detailedDescription: json["detailedDescription"],
+    nameUk: json['name:uk'],
+    nameRu: json['name:ru'],
+    nameEn: json['name:en'],
+    shortDescriptionUk: json['shortDescription:uk'],
+    shortDescriptionRu: json['shortDescription:ru'],
+    shortDescriptionEn: json['shortDescription:en'],
+    detailedDescriptionUk: json['detailedDescription:uk'],
+    detailedDescriptionRu: json['detailedDescription:ru'],
+    detailedDescriptionEn: json['detailedDescription:en'],
     status: json["status"],
     removed: json["removed"],
     createdAt: DateTime.parse(json["createdAt"]),
@@ -624,6 +655,15 @@ class ProductProduct {
     "imgUrl": imgUrl,
     "shortDescription": shortDescription,
     "detailedDescription": detailedDescription,
+    "name:uk": nameUk,
+    "name:ru": nameRu,
+    "name:en": nameEn,
+    "shortDescription:uk": shortDescriptionUk,
+    "shortDescription:ru": shortDescriptionRu,
+    "shortDescription:en": shortDescriptionEn,
+    "detailedDescription:uk": detailedDescriptionUk,
+    "detailedDescription:ru": detailedDescriptionRu,
+    "detailedDescription:en": detailedDescriptionEn,
     "status": status,
     "removed": removed,
     "createdAt": createdAt?.toIso8601String(),

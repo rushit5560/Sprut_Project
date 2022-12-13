@@ -100,8 +100,7 @@ class Routes {
     foodHomeScreen: (_) => DeliveryHomeView(),
     foodDeliveryItemsScreen: (_) => ItemsListScreenView(),
     foodDeliveryAddressView: (_) => SearchBottomSheetView(),
-    foodDeliveryEstablishmentDetailsView: (_) =>
-        EstablishmentDetailsScreenView(),
+    foodDeliveryEstablishmentDetailsView: (_) => EstablishmentDetailsScreenView(),
     foodDeliveryProductItemDetailsView: (_) => ProductItemDetailsScreenView(),
     foodDeliveryShoppingCartView: (_) => ShoppingCartView(),
     foodEstablishmentSearchView: (_) => EstablishmentSearchView(),

@@ -18,6 +18,7 @@ import '../../../../../resources/configs/helpers/helpers.dart';
 import '../../../../../resources/configs/routes/routes.dart';
 import '../../../../../resources/services/database/database_keys.dart';
 import '../../../home_screen/controllers/home_controller.dart';
+import '../../../no_internet/no_internet.dart';
 
 class ItemFilterTypeList extends StatefulWidget {
   FoodCategoryData _foodCategoryData = FoodCategoryData();
@@ -56,17 +57,32 @@ class _ItemFilterTypeListState extends State<ItemFilterTypeList> {
     // TODO: implement build
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
-    var language = AppLocalizations.of(context)!;
+     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
+
 
     return BlocConsumer<ConnectedBloc, ConnectedState>(
       listener: (context, state) {
-        if (state is ConnectedFailureState) {}
-
-        if (state is ConnectedInitialState) {
-          debugPrint("ConnectedInitialState:::");
-        }
+        // if (state is ConnectedFailureState) {
+        //   showDialog(
+        //       context: context,
+        //       builder: (context) => MyCustomDialog(
+        //         message: language.networkError,
+        //       ));
+        // }
+        //
+        // if (state is ConnectedInitialState) {
+        //   debugPrint("ConnectedInitialState:::");
+        // }
       },
       builder: (context, connectionState) {
+        if (connectionState is ConnectedFailureState) {
+
+          return NoInternetScreen(onPressed: () async {});
+        }
+
+        if (connectionState is ConnectedSucessState) {}
+
         return BlocConsumer<AuthBloc, AuthState>(
           listener: (context, authState) {
             if (authState is FetchingFoodTypeEstablishmentsListProgress) {
@@ -76,9 +92,9 @@ class _ItemFilterTypeListState extends State<ItemFilterTypeList> {
 
             if (authState is FetchingFoodTypeEstablishmentsListSucceed) {
               // Navigator.pop(context);
-              debugPrint("Response Success!");
+              // debugPrint("Response Success!");
               if (authState.allFoodType!.isNotEmpty == true) {
-                debugPrint("List Food Type Success");
+                // debugPrint("List Food Type Success");
                 if (establishmentController.lsFoodTypeData.isNotEmpty) {
                   establishmentController.lsFoodTypeData.clear();
                 }
@@ -92,21 +108,20 @@ class _ItemFilterTypeListState extends State<ItemFilterTypeList> {
                     isFiltered: true);
 
                 establishmentController.lsFoodTypeData.add(firstIndexAdd);
-                authState.allFoodType!
-                    .forEach((data) => {establishmentController.lsFoodTypeData.add(data)});
-                debugPrint("Length ::" + establishmentController.lsFoodTypeData.length.toString());
+                authState.allFoodType!.forEach((data) => {establishmentController.lsFoodTypeData.add(data)});
+                // debugPrint("Length ::" + establishmentController.lsFoodTypeData.length.toString());
                 setState(() {});
                 establishmentController.update();
               }else{
-                debugPrint("Size Of establishment:: "+establishmentController.lsEstablishmentsData.length.toString());
-                debugPrint("Size Of type:: "+establishmentController.lsFoodTypeData.length.toString());
+                // debugPrint("Size Of establishment:: "+establishmentController.lsEstablishmentsData.length.toString());
+                // debugPrint("Size Of type:: "+establishmentController.lsFoodTypeData.length.toString());
                 setState((){});
                 establishmentController.update();
               }
             }
 
             if (authState is FetchingFoodTypeEstablishmentsListFailed) {
-              debugPrint("FetchingFoodTypeEstablishmentsListFailed ");
+              // debugPrint("FetchingFoodTypeEstablishmentsListFailed ");
               // Navigator.pop(context);
               //check is session expired
               if (authState.message.toString() == "Session expired") {
@@ -204,7 +219,10 @@ class _ItemFilterTypeListState extends State<ItemFilterTypeList> {
                             //     ),
                             //   ),
                             // ],
-                            Text('${establishmentController.lsFoodTypeData[index].name}',
+                            Text(('${establishmentController.lsFoodTypeData[index].name}' == language.all)?'${language.all}' :
+                                (appLocale==Locale('en'))? '${establishmentController.lsFoodTypeData[index].nameEn}':
+                                (appLocale==Locale('uk'))?'${establishmentController.lsFoodTypeData[index].nameUk}':
+                                (appLocale==Locale('ru'))?'${establishmentController.lsFoodTypeData[index].nameRu}':'${establishmentController.lsFoodTypeData[index].name}',
                                 style: textTheme.bodySmall!.copyWith(
                                     fontSize: 8.sp,
                                     color: AppThemes.colorWhite))

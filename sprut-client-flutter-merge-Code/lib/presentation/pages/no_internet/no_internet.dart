@@ -23,9 +23,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
     }else {
       Helpers.systemStatusBar1();
     }
-
     var language = AppLocalizations.of(context)!;
-
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
 

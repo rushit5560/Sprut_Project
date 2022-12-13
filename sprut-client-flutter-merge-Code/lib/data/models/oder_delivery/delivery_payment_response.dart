@@ -9,9 +9,7 @@ DeliveryPaymentResponse deliveryPaymentResponseFromJson(String str) => DeliveryP
 String deliveryPaymentResponseToJson(DeliveryPaymentResponse data) => json.encode(data.toJson());
 
 class DeliveryPaymentResponse {
-  DeliveryPaymentResponse({
-    this.taxiOrder,
-  });
+  DeliveryPaymentResponse({this.taxiOrder,});
 
   TaxiOrder? taxiOrder;
 

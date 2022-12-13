@@ -13,6 +13,7 @@ import '../../../../../resources/assets_path/assets_path.dart';
 import '../../../../../resources/configs/helpers/helpers.dart';
 import '../../../../../resources/configs/routes/routes.dart';
 import '../../../../widgets/cash_back_dialog/cash_back_dialog.dart';
+import '../../../../widgets/custom_dialog/custom_dialog.dart';
 import '../../../../widgets/primary_container/primary_container.dart';
 import '../../../no_internet/no_internet.dart';
 import '../../controller/establishment_controller.dart';
@@ -39,6 +40,7 @@ class EstablishmentSearchStateView extends State<EstablishmentSearchView> {
     Helpers.systemStatusBar1();
 
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
 
@@ -51,15 +53,6 @@ class EstablishmentSearchStateView extends State<EstablishmentSearchView> {
         builder: (context) {
           return BlocConsumer<ConnectedBloc, ConnectedState>(
             listener: (context, state) {
-              if (state is ConnectedFailureState) {
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => MyCustomDialog(
-                //     message: language.networkError,
-                //   ),
-                // );
-              }
-
               if (state is ConnectedInitialState) {
                 debugPrint("ConnectedInitialState:::");
               }
@@ -69,6 +62,8 @@ class EstablishmentSearchStateView extends State<EstablishmentSearchView> {
                 print("BlocConsumer 2");
                 return NoInternetScreen(onPressed: () async {});
               }
+              if (connectionState is ConnectedSucessState) {}
+
               return WillPopScope(
                 onWillPop: () {
                   controller.emptySearchData();
@@ -316,7 +311,13 @@ class EstablishmentSearchStateView extends State<EstablishmentSearchView> {
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(top: 16.0, right: 8.0, left: 16.0),
                                                         child: Text(
-                                                          '${controller.searchListData[index].name}',
+                                                          (appLocale == Locale('en'))
+                                                              ? '${controller.searchListData[index].name}'
+                                                              : (appLocale == Locale('uk'))
+                                                              ? '${controller.searchListData[index].nameUk}'
+                                                              : (appLocale == Locale('ru'))
+                                                              ? '${controller.searchListData[index].nameRu}'
+                                                              : '${controller.searchListData[index].name}',
                                                           style: textTheme.bodyText1!.copyWith(fontSize: 13.sp, color: Colors.white),
                                                           textAlign: TextAlign.start,
                                                           maxLines: 2,

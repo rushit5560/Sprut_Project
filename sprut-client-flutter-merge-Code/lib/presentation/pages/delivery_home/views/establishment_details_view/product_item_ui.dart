@@ -21,6 +21,8 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
+
     return Container(
       decoration: BoxDecoration(
           color: AppThemes.cashBackCardBgColor,
@@ -46,35 +48,39 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                       child: SizedBox(
                         height: 136,
                         width: 121,
-                        child: Image.network(item == null ? "": item.imgUrl ?? "",
+                        child: Image.network(
+                          item == null ? "" : item.imgUrl ?? "",
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
-                    if (controller.storeDetailsData.cashbackPercent != 0) Positioned(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: colorScheme.primary.withOpacity(0.9),
-                                  borderRadius: BorderRadius.only(
-                                      bottomRight: Radius.circular(16.0),
-                                      bottomLeft: Radius.circular(7.0),
-                                      topRight: Radius.circular(16.0))),
-                              constraints: BoxConstraints(
-                                  minWidth: 88, maxHeight: 31.63),
-                              padding: EdgeInsets.all(4.0),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "${controller.storeDetailsData.cashbackPercent ?? 0}% ",
-                                style: textTheme.bodyText2!.copyWith(
-                                    color: AppThemes.colorWhite,
-                                    fontFamily: AppConstants.fontFamily,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 11.sp),
-                              ),
-                            ),
-                            bottom: 0,
-                          ) else SizedBox(),
-                    if(item.status == "not-available")...[
+                    if (controller.storeDetailsData.cashbackPercent != 0)
+                      Positioned(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: colorScheme.primary.withOpacity(0.9),
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(16.0),
+                                  bottomLeft: Radius.circular(7.0),
+                                  topRight: Radius.circular(16.0))),
+                          constraints:
+                              BoxConstraints(minWidth: 88, maxHeight: 31.63),
+                          padding: EdgeInsets.all(4.0),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "${controller.storeDetailsData.cashbackPercent ?? 0}% ",
+                            style: textTheme.bodyText2!.copyWith(
+                                color: AppThemes.colorWhite,
+                                fontFamily: AppConstants.fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 11.sp),
+                          ),
+                        ),
+                        bottom: 0,
+                      )
+                    else
+                      SizedBox(),
+                    if (item.status == "not-available") ...[
                       Positioned(
                         top: 0,
                         child: Container(
@@ -90,13 +96,16 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                               children: [
                                 Text(
                                   "${language.out_of_stock}",
-                                  style: textTheme.bodyText2!.copyWith(color: colorScheme.error, fontSize: 11.sp),
+                                  style: textTheme.bodyText2!.copyWith(
+                                      color: colorScheme.error,
+                                      fontSize: 11.sp),
                                 ),
                               ],
                             ),
                             onTap: () {},
                           ),
-                          padding: EdgeInsets.only(left: 4.0, right: 4.0, top: 8.0, bottom: 8.0),
+                          padding: EdgeInsets.only(
+                              left: 4.0, right: 4.0, top: 8.0, bottom: 8.0),
                           margin: const EdgeInsets.only(top: 8.0),
                         ),
                       ),
@@ -120,7 +129,14 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                     children: [
                       Expanded(
                         child: Text(
-                          '${item.name}',
+                          // '${item.name}',
+                          (appLocale == Locale('en'))
+                              ? '${item.name}'
+                              : (appLocale == Locale('uk'))
+                                  ? '${item.nameUk}'
+                                  : (appLocale == Locale('ru'))
+                                      ? '${item.nameRu}'
+                                      : '${item.name}',
                           style: textTheme.bodyText1!.copyWith(
                               fontSize: 12.sp,
                               color: Colors.white,
@@ -149,7 +165,16 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
-                      '(${item.weight}${language.gram})',
+                      // (productData.quantityType=='g')?'${productData.name} ${productData.weight}${language.gram}':
+                      (item.quantityType == 'g')
+                          ? '(${item.weight}${language.gram})'
+                          : (item.quantityType == 'ml')
+                              ? '(${item.weight}${language.mili})'
+                              : (item.quantityType == 'pc')
+                                  ? '(${item.weight}${language.pieces})'
+                                  : (item.quantityType == 'kg')
+                                      ? '(${item.weight}${language.kilogram})'
+                                      : '',
                       style: textTheme.bodyText1!.copyWith(
                           fontSize: 12.sp,
                           color: Colors.white,
@@ -164,7 +189,15 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
                       item.shortDescription?.isNotEmpty == true
-                          ? '${item.shortDescription}'
+                          ?
+                          // '${item.shortDescription}'
+                          (appLocale == Locale('en'))
+                              ? '${item.shortDescriptionEn}'
+                              : (appLocale == Locale('uk'))
+                                  ? '${item.shortDescriptionUk}'
+                                  : (appLocale == Locale('ru'))
+                                      ? '${item.shortDescriptionRu}'
+                                      : '${item.shortDescription}'
                           : "",
                       style: textTheme.bodySmall!.copyWith(
                           fontSize: 10.sp,
@@ -200,10 +233,10 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                               maxLines: 2,
                             ),
                           ),
-                          if(item.status != "not-available")...[
+                          if (item.status != "not-available") ...[
                             Row(
                               children: [
-                                if(item.status != "not-available")...[
+                                if (item.status != "not-available") ...[
                                   if (item.quantity! > 0) ...[
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -214,7 +247,8 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                                             controller.update();
                                             controller.removeItemInCart(item);
                                             if (isRemovable) {
-                                              if (controller.getTotalCartItem() ==
+                                              if (controller
+                                                      .getTotalCartItem() ==
                                                   0) {
                                                 print("Empty Cart!");
                                                 Navigator.of(context).pop();
@@ -249,13 +283,16 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                                                   Radius.circular(6.0))),
                                           padding: EdgeInsets.all(4.0),
                                           alignment: Alignment.center,
-                                          child: Text('${item.quantity.toString()}',
-                                              style: textTheme.bodyText2!.copyWith(
-                                                  color: AppThemes.dark,
-                                                  fontFamily:
-                                                  AppConstants.fontFamily,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 12.sp)),
+                                          child: Text(
+                                              '${item.quantity.toString()}',
+                                              style: textTheme.bodyText2!
+                                                  .copyWith(
+                                                      color: AppThemes.dark,
+                                                      fontFamily: AppConstants
+                                                          .fontFamily,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 12.sp)),
                                         ),
                                       ],
                                     ),
@@ -272,7 +309,8 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                                           minHeight: 21, minWidth: 21),
                                       margin: EdgeInsets.only(left: 4.0),
                                       decoration: BoxDecoration(
-                                          color: colorScheme.primary.withOpacity(1),
+                                          color: colorScheme.primary
+                                              .withOpacity(1),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(6.0))),
                                       padding: EdgeInsets.all(4.0),
@@ -293,11 +331,12 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                       ),
                     ),
                   ),
-                  if (controller.storeDetailsData.cashbackPercent != 0)...[
-                    if(controller.storeDetailsData.getCashBack(controller.getSingleItemTotal(item)) > 0.0)...[
+                  if (controller.storeDetailsData.cashbackPercent != 0) ...[
+                    if (controller.storeDetailsData
+                            .getCashBack(controller.getSingleItemTotal(item)) >
+                        0.0) ...[
                       Padding(
-                        padding:
-                        const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                        padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
                         child: Text(
                           '${language.cashback} ${controller.storeDetailsData.cashbackPercent ?? 0}%: ${controller.storeDetailsData.getCashBack(controller.getSingleItemTotal(item))} ${language.currency_symbol}',
                           style: textTheme.bodyText1!.copyWith(
@@ -309,10 +348,9 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                           maxLines: 2,
                         ),
                       )
-                    ]else...[
+                    ] else ...[
                       Padding(
-                        padding:
-                        const EdgeInsets.only(right: 8.0, bottom: 8.0),
+                        padding: const EdgeInsets.only(right: 8.0, bottom: 8.0),
                         child: Text(
                           '${language.cashback} ${controller.storeDetailsData.cashbackPercent ?? 0}%: ${controller.storeDetailsData.getCashBack(double.parse(item.price.toString()))} ${language.currency_symbol}',
                           style: textTheme.bodyText1!.copyWith(
@@ -325,7 +363,7 @@ class ProductItemUi extends GetView<EstablishmentDetailsController> {
                         ),
                       )
                     ]
-                  ]else...[
+                  ] else ...[
                     SizedBox()
                   ]
                 ],

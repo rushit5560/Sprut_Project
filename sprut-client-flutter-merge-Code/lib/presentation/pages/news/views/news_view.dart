@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/data/models/news_model/news_model.dart';
 
 import '../../../../../../resources/app_themes/app_themes.dart';
 import '../../../../../resources/configs/helpers/helpers.dart';
+import '../../no_internet/no_internet.dart';
 import '../controllers/news_controller.dart';
 
 class NewsView extends GetView<NewsController> {
@@ -19,6 +24,17 @@ class NewsView extends GetView<NewsController> {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var size = MediaQuery.of(context).size;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
     return GetBuilder<NewsController>(
       init: NewsController(),
       initState: (_) {},
@@ -182,5 +198,7 @@ class NewsView extends GetView<NewsController> {
         );
       },
     );
+  },
+);
   }
 }

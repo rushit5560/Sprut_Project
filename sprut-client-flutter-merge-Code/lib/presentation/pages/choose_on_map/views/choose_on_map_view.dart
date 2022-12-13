@@ -1,9 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/presentation/pages/choose_on_map/controller/choose_on_map_controller.dart';
 import 'package:sprut/presentation/pages/home_screen/controllers/home_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +15,8 @@ import 'package:sprut/resources/assets_path/assets_path.dart';
 import 'package:sprut/resources/configs/service_locator/service_locator.dart';
 import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
+
+import '../../no_internet/no_internet.dart';
 
 class ChooseOnMapView extends GetView {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -24,6 +30,17 @@ class ChooseOnMapView extends GetView {
     var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
     return SafeArea(
       child: GetBuilder<ChooseOnMapController>(
           builder: (_) => Scaffold(
@@ -199,5 +216,7 @@ class ChooseOnMapView extends GetView {
               ]),
               backgroundColor: colorScheme.onBackground)),
     );
+  },
+);
   }
 }

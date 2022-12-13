@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart' as lottie;
@@ -8,10 +9,14 @@ import 'package:sizer/sizer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 
 import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/configs/responsive/responsive.dart';
 import '../../home_screen/controllers/home_controller.dart';
+import '../../no_internet/no_internet.dart';
 import '../controllers/tariff_controller.dart';
 import 'tariff_bottom/tariff_bottom_view.dart';
 
@@ -25,6 +30,17 @@ class TariffView extends GetView<TariffController> {
     var language = AppLocalizations.of(context)!;
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
+    return BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
     return SafeArea(
       top: false,
       bottom: false,
@@ -184,5 +200,7 @@ class TariffView extends GetView<TariffController> {
                     backgroundColor: colorScheme.onBackground),
               )),
     );
+  },
+);
   }
 }

@@ -56,17 +56,15 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
     Helpers.systemStatusBar1();
 
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     return GetBuilder<EstablishmentDetailsController>(
         init: EstablishmentDetailsController(),
         initState: (_) {
           // controller.isConfirmButton = true;
-          if (controller.databaseService
-                      .getFromDisk(DatabaseKeys.deliveryOrder) !=
-                  null &&
-              controller.databaseService
-                      .getFromDisk(DatabaseKeys.deliveryOrder) != "") {
+          if (controller.databaseService.getFromDisk(DatabaseKeys.deliveryOrder) !=null &&
+              controller.databaseService.getFromDisk(DatabaseKeys.deliveryOrder) != "") {
             debugPrint("reCallOrderStatusFetch IF");
             controller.reCallOrderStatusFetch(context);
           } else {
@@ -82,9 +80,6 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
         builder: (context) {
           return BlocConsumer<ConnectedBloc, ConnectedState>(
             listener: (context, state) {
-              if (state is ConnectedInitialState) {
-
-              }
               if (state is ConnectedSucessState) {
                 // debugPrint("ConnectedSucessState::: call api");
                 if (controller.deliveryOrderId.isNotEmpty) {
@@ -96,7 +91,6 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
                 paymentController.getCards();
                 paymentController.update();
               }
-
               if (state is ConnectedFailureState) {
                 // print("Pop Up close1 ${controller.isPopUp}");
                 if (controller.isPopUp) {
@@ -167,7 +161,7 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
                                       SizedBox(height: 20),
                                       _buildHeader(),
                                       SizedBox(height: 20),
-                                      _buildProductItems(),
+                                      _buildProductItems(language, appLocale),
                                       SizedBox(height: 10),
                                       Align(
                                         child: Text(
@@ -234,22 +228,31 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
         });
   }
 
-  Widget _buildProductItems() {
+  Widget _buildProductItems(AppLocalizations language,Locale appLocale) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: controller.cartItemList?.length ?? 0,
       itemBuilder: (context, index) {
         // print("Image Url ----> ${controller.cartItemList![index].imgUrl}");
+
         ProductItems productItems = ProductItems(
           id: controller.cartItemList![index].id,
           name: controller.cartItemList![index].name,
+          nameEn: controller.cartItemList![index].nameEn,
+          nameUk: controller.cartItemList![index].nameUk,
+          nameRu: controller.cartItemList![index].nameRu,
+          shortDescriptionEn: controller.cartItemList![index].shortDescriptionEn,
+          shortDescriptionUk: controller.cartItemList![index].shortDescriptionUk,
+          shortDescriptionRu: controller.cartItemList![index].shortDescriptionRu,
+          detailedDescriptionEn: controller.cartItemList![index].detailedDescriptionEn,
+          detailedDescriptionUk: controller.cartItemList![index].detailedDescriptionUk,
+          detailedDescriptionRu: controller.cartItemList![index].detailedDescriptionRu,
           weight: controller.cartItemList![index].weight,
           price: controller.cartItemList![index].price,
           imgUrl: controller.cartItemList![index].imgUrl,
           shortDescription: controller.cartItemList![index].shortDescription,
-          detailedDescription:
-              controller.cartItemList![index].detailedDescription,
+          detailedDescription: controller.cartItemList![index].detailedDescription,
           status: controller.cartItemList![index].status,
           removed: controller.cartItemList![index].removed,
           createdAt: controller.cartItemList![index].createdAt,
@@ -278,6 +281,7 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
 
   Widget _buildHeader() {
     var language = AppLocalizations.of(context)!;
+    Locale appLocale = Localizations.localeOf(context);
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     return Container(
@@ -309,7 +313,17 @@ class _ShoppingCartViewState extends State<ShoppingCartView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${language.order_in} ${controller.storeDetailsData.name}',
+                    ('${controller.storeDetailsData.name}' ==
+                        language.all)
+                        ? '${language.order_in} ${language.all}'
+                        : (appLocale == Locale('en'))
+                        ? '${language.order_in} ${controller.storeDetailsData.nameEn}'
+                        : (appLocale == Locale('uk'))
+                        ? '${language.order_in} ${controller.storeDetailsData.nameUk}'
+                        : (appLocale == Locale('ru'))
+                        ? '${language.order_in} ${controller.storeDetailsData.nameRu}'
+                        : '${language.order_in} ${controller.storeDetailsData.name}',
+                    // '${language.order_in} ${controller.storeDetailsData.name}',
                     style: textTheme.bodyText1!.copyWith(
                         fontSize: 15,
                         color: Colors.white,

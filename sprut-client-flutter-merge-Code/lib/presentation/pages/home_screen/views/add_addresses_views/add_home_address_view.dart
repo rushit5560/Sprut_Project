@@ -1,9 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/presentation/pages/choose_on_map/controller/choose_on_map_controller.dart';
 import 'package:sprut/presentation/pages/home_screen/controllers/home_controller.dart';
 import 'package:sprut/presentation/pages/home_screen/views/address_suggestion_view/address_suggestion_view.dart';
@@ -16,6 +20,8 @@ import 'package:sprut/resources/configs/service_locator/service_locator.dart';
 import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../no_internet/no_internet.dart';
 
 class AddHomeAddress extends StatefulWidget {
   @override
@@ -39,7 +45,19 @@ class _AddHomeAddressState extends State<AddHomeAddress> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
+      child: BlocConsumer<ConnectedBloc, ConnectedState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, connectionState) {
+    if (connectionState is ConnectedFailureState) {
+
+      return NoInternetScreen(onPressed: () async {});
+    }
+
+    if (connectionState is ConnectedSucessState) {}
+
+    return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Stack(
@@ -47,14 +65,12 @@ class _AddHomeAddressState extends State<AddHomeAddress> {
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(language.homeAddress,
-                    style: textTheme.bodyText1!
-                        .copyWith(fontSize: 12.sp, color: AppThemes.dark)),
+                    style: textTheme.bodyText1!.copyWith(fontSize: 12.sp, color: AppThemes.dark)),
                 SizedBox(
                   height: 2,
                 ),
                 Text(language.enterHomeLocation,
-                    style: textTheme.bodyText1!.copyWith(
-                        fontSize: 8.sp, color: colorScheme.secondary)),
+                    style: textTheme.bodyText1!.copyWith(fontSize: 8.sp, color: colorScheme.secondary)),
                 SizedBox(
                   height: 10,
                 ),
@@ -63,10 +79,8 @@ class _AddHomeAddressState extends State<AddHomeAddress> {
                   isOther: false,
                   textInputType: TextInputType.name,
                   onChanged: (value) {
-                    homeViewController.updateSearchTerm(chooseOnMapController
-                        .addHomeAddressEditingController.text);
-                    homeViewController.osmSuggestionsFuture =
-                        homeViewController.getSuggestions();
+                    homeViewController.updateSearchTerm(chooseOnMapController.addHomeAddressEditingController.text);
+                    homeViewController.osmSuggestionsFuture = homeViewController.getSuggestions();
                     homeViewController.update();
                     setState(() {});
                   },
@@ -74,9 +88,7 @@ class _AddHomeAddressState extends State<AddHomeAddress> {
                           .addHomeAddressEditingController.text.isNotEmpty
                       ? IconButton(
                           onPressed: () {
-                            chooseOnMapController
-                                .addHomeAddressEditingController
-                                .clear();
+                            chooseOnMapController.addHomeAddressEditingController.clear();
                             homeViewController.suggestions = [];
                             homeViewController.osmSuggestionsFuture = null;
                             homeViewController.update();
@@ -153,39 +165,15 @@ class _AddHomeAddressState extends State<AddHomeAddress> {
                         fontSize: 10.sp,
                         
                         buttonText: language.save,
-                        color: chooseOnMapController
-                                    .addHomeAddressEditingController
-                                    .text
-                                    .isEmpty ||
-                                (chooseOnMapController
-                                        .addHomeAddressEditingController
-                                        .text
-                                        .isNotEmpty &&
-                                    homeViewController
-                                        .cacheAddress["homeAddress"]
-                                        .toString()
-                                        .isEmpty) ||
-                                (chooseOnMapController
-                                        .addHomeAddressEditingController
-                                        .text
-                                        .isNotEmpty &&
-                                    homeViewController
-                                        .cacheAddress["homeAddress"]
-                                        .toString()
-                                        .isNotEmpty &&
-                                    (chooseOnMapController
-                                            .addHomeAddressEditingController
-                                            .text !=
-                                        homeViewController
-                                            .cacheAddress["homeAddress"]
-                                            .toString()))
+                        color: chooseOnMapController.addHomeAddressEditingController.text.isEmpty ||
+                                (chooseOnMapController.addHomeAddressEditingController.text.isNotEmpty &&homeViewController.cacheAddress["homeAddress"].toString().isEmpty) ||
+                                (chooseOnMapController.addHomeAddressEditingController.text.isNotEmpty &&homeViewController.cacheAddress["homeAddress"].toString().isNotEmpty &&
+                                    (chooseOnMapController.addHomeAddressEditingController.text !=homeViewController.cacheAddress["homeAddress"].toString()))
                             ? Colors.grey
                             : null,
                         onPressed: () {
-                          if (chooseOnMapController
-                                  .addHomeAddressEditingController.text.isEmpty ||
-                              (chooseOnMapController.addHomeAddressEditingController
-                                      .text.isNotEmpty &&
+                          if (chooseOnMapController.addHomeAddressEditingController.text.isEmpty ||
+                              (chooseOnMapController.addHomeAddressEditingController.text.isNotEmpty &&
                                   homeViewController.cacheAddress["homeAddress"]
                                       .toString()
                                       .isEmpty) ||
@@ -262,7 +250,9 @@ class _AddHomeAddressState extends State<AddHomeAddress> {
                       ))),
             )),
         backgroundColor: colorScheme.onBackground,
-      ),
+      );
+  },
+),
     );
   }
 }

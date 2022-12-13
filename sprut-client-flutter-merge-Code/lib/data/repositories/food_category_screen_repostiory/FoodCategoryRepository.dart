@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:sprut/data/models/establishments_all_screen_models/all_sstablishments_list_models.dart';
 import 'package:sprut/data/models/establishments_all_screen_models/establishment_product_list/product_list_response.dart';
 import 'package:sprut/data/models/establishments_all_screen_models/types/food_type_list_models.dart';
+
 import '../../models/food_category_models/food_category_list_models.dart';
 import '../../provider/food_category_screen_provider/food_category_provider.dart';
 
@@ -77,9 +79,9 @@ class FoodCategoryRepository {
   }
 
   ///[Establishment Product List]
-  Future<dynamic> getProductList(String brandID) async {
+  Future<dynamic> getProductList(String brandID,String establishmentId,String placeId) async {
     try {
-      Response response = await foodCategoryProvider.getEstablishmentProductListing(brandID);
+      Response response = await foodCategoryProvider.getEstablishmentProductListing(brandID, establishmentId, placeId);
       log("StatusCode:: "+response.statusCode.toString());
       if(response.statusCode == 403 || response.statusCode == 401){
         log("Call error Cat Data");
