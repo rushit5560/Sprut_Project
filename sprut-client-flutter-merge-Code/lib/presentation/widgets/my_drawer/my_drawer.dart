@@ -348,18 +348,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               String order = databaseService
                                       .getFromDisk(DatabaseKeys.order) ??
                                   "";
-                              var currentCity = databaseService
-                                  .getFromDisk(DatabaseKeys.currentCity);
-                              var arrivalAddress = databaseService
-                                  .getFromDisk(DatabaseKeys.arrivalAddress);
-                              var destinationAddress = databaseService
-                                  .getFromDisk(DatabaseKeys.destinationAddress);
-                              var kGooglePlex = databaseService
-                                  .getFromDisk(DatabaseKeys.kGooglePlex);
-                              var kLake = databaseService
-                                  .getFromDisk(DatabaseKeys.kLake);
-                              var repeatOrder = databaseService
-                                  .getFromDisk(DatabaseKeys.repeatOrder);
+                             
                               log("order model stored changed in prefs is :: ${order}");
 
                               if (order != "") {

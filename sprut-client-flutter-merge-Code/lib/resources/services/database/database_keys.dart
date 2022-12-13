@@ -41,9 +41,9 @@ class DatabaseKeys {
   static String currentCity = "currentCity";
   static String arrivalAddress = "arrival_address";
   static String destinationAddress = "destination_address";
-  static String kGooglePlex = "kGooglePlex";
-  static String kLake = "kLake";
-  static String repeatOrder = "repeatOrder";
+  // static String kGooglePlex = "kGooglePlex";
+  // static String kLake = "kLake";
+  // static String repeatOrder = "repeatOrder";
   //end
 
   static String preorder = "preorder";
@@ -57,7 +57,6 @@ class DatabaseKeys {
   static String crashlytics = "crashlytics";
 
   static String readNews = "read_news";
-
 
   //FOOD DELIVERY
   static String isLoginTypeSelected = "isLoginTypeSelected";

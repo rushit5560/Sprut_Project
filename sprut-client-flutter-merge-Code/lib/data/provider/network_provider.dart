@@ -19,8 +19,11 @@ class NetworkProviderRest {
 
   final Duration defaultTimeout = Duration(seconds: 100);
 
-  static final baseUrl = "https://fp-test.altertaxi.com.ua/v1";
-  static final apiKey = "b20b86bc-bbd1-70ca-6535-451d2d7e5922";
+  static  String prodUrl = "https://fp-test.altertaxi.com.ua/v1";
+  static  String releaseUrl = "https://client-api.sprut.mobi/v1";
+  // static final baseUrl = "https://fp-test.altertaxi.com.ua/v1";
+  static  String baseUrl = releaseUrl;
+  static  String apiKey = "b20b86bc-bbd1-70ca-6535-451d2d7e5922";
 
   //Food Delivery
   static final apiKey1 = "9e7af99a-60f8-496b-a2fc-f31b267f79c3";
@@ -182,12 +185,9 @@ class NetworkProviderRest {
     }
   }
 
-
-
   //Food delivery
-  Future<dynamic> getWithParam({
-    required String url,required Map<String, dynamic>? query
-  }) async {
+  Future<dynamic> getWithParam(
+      {required String url, required Map<String, dynamic>? query}) async {
     prepareBaseRestWithSessionTokenRequest();
 
     try {
@@ -228,6 +228,7 @@ class NetworkProviderRest {
       return response;
     }
   }
+
   //new session with token
   Future<dynamic> postWithNewSessionToken({
     required String url,
@@ -300,7 +301,7 @@ class NetworkProviderRest {
     }
   }
 
-    Future<dynamic> deleteRes({
+  Future<dynamic> deleteRes({
     required String path,
     Map<String, dynamic>? query,
     Map<String, dynamic>? data,
@@ -324,7 +325,7 @@ class NetworkProviderRest {
       case ApiNames.GET_CITIES:
         return baseUrl + ApiConstants.getCities;
 
-        //Food Delivery
+      //Food Delivery
       case ApiNames.GET_FOOD_CATEGORY:
         return baseUrl + ApiConstants.getFoodCategory;
       case ApiNames.GET_ALL_ESTABLISHMENT_LIST:
@@ -332,15 +333,15 @@ class NetworkProviderRest {
       case ApiNames.GET_FOOD_TYPE_LIST:
         return baseUrl + ApiConstants.getFoodTypesList;
       case ApiNames.GET_PRODUCT_LIST:
-        return baseUrl +ApiConstants.getProductList;
+        return baseUrl + ApiConstants.getProductList;
       case ApiNames.ORDER_DELIVERY:
-        return baseUrl +ApiConstants.orderDelivery;
+        return baseUrl + ApiConstants.orderDelivery;
       case ApiNames.ORDER_STATUS_CHECHED:
-        return baseUrl +ApiConstants.orderStatusChecked;
+        return baseUrl + ApiConstants.orderStatusChecked;
       case ApiNames.FOOD_ORDER_LISTINGS:
-        return baseUrl +ApiConstants.orderStatusChecked;
+        return baseUrl + ApiConstants.orderStatusChecked;
       case ApiNames.ACTIVE_COUNTS:
-        return baseUrl +ApiConstants.orderActiveCounts;
+        return baseUrl + ApiConstants.orderActiveCounts;
     }
   }
 }

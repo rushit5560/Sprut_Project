@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_event/auth_event.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
+import 'package:sprut/data/provider/network_provider.dart';
 import 'package:sprut/presentation/widgets/app_logo/app_logo.dart';
 import 'package:sprut/presentation/widgets/custom_text_field/custom_text_field.dart';
 import 'package:sprut/presentation/widgets/primary_elevated_btn/primary_elevated_btn.dart';
@@ -33,10 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final FocusNode focusNode = FocusNode();
 
+  //increment var for changing apiurl between production and live
+  //on appicon tapped 7 times
+  int tapIncreament = 0;
+
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -108,8 +112,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             return;
                           }
                           //save default
-                          DatabaseService databaseService = serviceLocator.get<DatabaseService>();
-                          databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+                          DatabaseService databaseService =
+                              serviceLocator.get<DatabaseService>();
+                          databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn,
+                              AppConstants.TAXI_APP);
+
                           /// If Internet Connection state is Connected Then Adding Event to [Auth Bloc] to start sign using Mobile
                           context.read<AuthBloc>().add(AuthLoginUsingMobile(
                               mobileNumber: textEditingController.text));
@@ -134,7 +141,35 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   height: 16.h,
                                 ),
-                                Center(child: AppLogo()),
+                                Center(
+                                    child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      tapIncreament++;
+                                    });
+                                    if (tapIncreament == 7) {
+                                      if (NetworkProviderRest.baseUrl ==
+                                          NetworkProviderRest.prodUrl) {
+                                        NetworkProviderRest.baseUrl =
+                                            NetworkProviderRest.releaseUrl;
+                                      } else if (NetworkProviderRest.baseUrl ==
+                                          NetworkProviderRest.releaseUrl) {
+                                        NetworkProviderRest.baseUrl =
+                                            NetworkProviderRest.prodUrl;
+                                      }
+
+                                      setState(() {
+                                        tapIncreament = 0;
+                                      });
+                                    }
+                                    log("tapIncreament is :: ${tapIncreament}");
+                                    log("base api url is :: ${NetworkProviderRest.baseUrl}");
+                                  },
+                                  child: Image.asset(
+                                    AssetsPath.logo,
+                                    height: 14.h,
+                                  ),
+                                )),
                                 SizedBox(
                                   height: 10.h,
                                 ),

@@ -937,9 +937,9 @@ class HomeViewController extends GetxController {
       databaseService.saveToDisk(DatabaseKeys.arrivalAddress, arrivalAddress);
       databaseService.saveToDisk(
           DatabaseKeys.destinationAddress, destinationAddress);
-      databaseService.saveToDisk(DatabaseKeys.kGooglePlex, kGooglePlex);
-      databaseService.saveToDisk(DatabaseKeys.kLake, kLake);
-      databaseService.saveToDisk(DatabaseKeys.repeatOrder, true);
+      // databaseService.saveToDisk(DatabaseKeys.kGooglePlex, kGooglePlex);
+      // databaseService.saveToDisk(DatabaseKeys.kLake, kLake);
+      // databaseService.saveToDisk(DatabaseKeys.repeatOrder, true);
 
       await Get.toNamed(Routes.tarrifSelectionView, arguments: {
         "currentCity": currentCity,
