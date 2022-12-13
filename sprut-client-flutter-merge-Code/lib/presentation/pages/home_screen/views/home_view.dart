@@ -27,7 +27,6 @@ import '../../../../resources/services/database/database.dart';
 import '../../../../resources/services/database/database_keys.dart';
 import '../../news/controllers/news_controller.dart';
 
-
 class HomeView extends StatefulWidget {
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -158,7 +157,8 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+    controller.databaseService
+        .saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
     Future.delayed(Duration(seconds: 5), () async {
       await controller.updateCurrentLocationMarker();
       await controller.updateCurrentLocationMarker();
@@ -447,7 +447,7 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                       //Food delivery
-                      if(controller.selectCityName.value == "Vinnytsia")...[
+                      if (controller.selectCityName.value == "Vinnytsia") ...[
                         Positioned(
                           top: 10,
                           right: 10,
@@ -467,7 +467,8 @@ class _HomeViewState extends State<HomeView> {
                                 decoration: BoxDecoration(
                                   // color:
                                   // colorScheme.primary.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(8),),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                                 height: 5.h,
                                 width: 27.w,
                               ),

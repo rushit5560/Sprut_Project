@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +62,8 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
 
   @override
   Widget build(BuildContext context) {
-    controller.databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+    controller.databaseService
+        .saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
     Helpers.systemStatusBar1();
     //print("Delivery cat Screen3--> ${controller.databaseService.getFromDisk(DatabaseKeys.isLoginTypeIn)}");
     //print("Delivery cat Screen4--> ${Helpers.isLoginTypeIn()}");
@@ -133,7 +134,8 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                   controller.databaseService
                           .getFromDisk(DatabaseKeys.deliveryOrder) !=
                       "") {
-                OrderModel data =  await controller.reCallOrderStatusFetch(context);
+                OrderModel data =
+                    await controller.reCallOrderStatusFetch(context);
                 Get.put(EstablishmentDetailsController()).storeDetailsData =
                     Establishments.fromJson(jsonDecode(controller
                         .databaseService
@@ -152,13 +154,19 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                     ?.addAll(cartItemList);
                 // print("data :: ${data.orderId}");
                 // print("data :: ${data.deliveryStatus}");
-                if(data != null) {
-                  if(data.deliveryStatus == "new" || data.deliveryStatus == "accepted" || data.deliveryStatus == "paymentWait"
-                      || data.deliveryStatus == "notAccepted" || data.deliveryStatus == "canceledKitchen" || data.deliveryStatus == "cancelled" || data.deliveryStatus == "paid") {
+                if (data != null) {
+                  if (data.deliveryStatus == "new" ||
+                      data.deliveryStatus == "accepted" ||
+                      data.deliveryStatus == "paymentWait" ||
+                      data.deliveryStatus == "notAccepted" ||
+                      data.deliveryStatus == "canceledKitchen" ||
+                      data.deliveryStatus == "cancelled" ||
+                      data.deliveryStatus == "paid") {
                     Navigator.of(context)
                         .pushNamed(Routes.foodDeliveryShoppingCartView);
-                  }else {
-                    controller.databaseService.saveToDisk(DatabaseKeys.deliveryOrder, "");
+                  } else {
+                    controller.databaseService
+                        .saveToDisk(DatabaseKeys.deliveryOrder, "");
                   }
                 }
               }
@@ -167,7 +175,6 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
           }
 
           if (authState is FetchingFoodDeliveryCategoryFailed) {
-
             if (authState.message.toString() == "Session expired") {
               Helpers.clearUser();
 
@@ -350,7 +357,8 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            if(lsCategoryData[index].imgUrl == "gps_system_smart_car.png")...[
+                                            if (lsCategoryData[index].imgUrl ==
+                                                "gps_system_smart_car.png") ...[
                                               ClipRRect(
                                                 child: Image.asset(
                                                   AssetsPath.callACabIcon,
@@ -360,11 +368,11 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                                                 ),
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
-                                                    Radius.circular(15.0),
+                                                        Radius.circular(15.0),
                                                     topRight:
-                                                    Radius.circular(15.0)),
+                                                        Radius.circular(15.0)),
                                               ),
-                                            ]else...[
+                                            ] else ...[
                                               ClipRRect(
                                                 child: Image.network(
                                                   '${lsCategoryData[index].imgUrl}',
@@ -374,9 +382,9 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                                                 ),
                                                 borderRadius: BorderRadius.only(
                                                     topLeft:
-                                                    Radius.circular(15.0),
+                                                        Radius.circular(15.0),
                                                     topRight:
-                                                    Radius.circular(15.0)),
+                                                        Radius.circular(15.0)),
                                               ),
                                             ],
                                             Flexible(
@@ -454,10 +462,10 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                         )
                       ],
                       if (controller.databaseService.getFromDisk(
-                          DatabaseKeys.activeOrderCounts) !=
-                          null &&
+                                  DatabaseKeys.activeOrderCounts) !=
+                              null &&
                           controller.databaseService.getFromDisk(
-                              DatabaseKeys.activeOrderCounts) !=
+                                  DatabaseKeys.activeOrderCounts) !=
                               "0") ...[
                         Positioned(
                           top: 0,
@@ -465,7 +473,7 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                           child: SafeArea(
                             child: ClipRRect(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
+                                  BorderRadius.all(Radius.circular(12.0)),
                               child: Container(
                                   height: 2.5.h,
                                   width: 2.5.h,
@@ -474,8 +482,7 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Text(
-                                    "${controller.databaseService.getFromDisk(
-                                        DatabaseKeys.activeOrderCounts)}",
+                                    "${controller.databaseService.getFromDisk(DatabaseKeys.activeOrderCounts)}",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 8.sp,
@@ -494,19 +501,16 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
   }
 
   void _onTapped(int index) async {
-
-    if(index == 0){
-      controller.databaseService.saveToDisk(
-          DatabaseKeys.isLoginTypeIn,
-          AppConstants.TAXI_APP);
-      Navigator.pushNamedAndRemoveUntil(context,
-          Routes.homeScreen, ModalRoute.withName('/'));
-    }else {
-
+    if (index == 0) {
+      controller.databaseService
+          .saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+      Navigator.pushNamedAndRemoveUntil(
+          context, Routes.homeScreen, ModalRoute.withName('/'));
+    } else {
       if (controller.databaseService
-          .getFromDisk(DatabaseKeys.saveDeliverAddress)
-          .toString() !=
-          "null" &&
+                  .getFromDisk(DatabaseKeys.saveDeliverAddress)
+                  .toString() !=
+              "null" &&
           controller.databaseService
               .getFromDisk(DatabaseKeys.saveDeliverAddress)
               .toString()
@@ -526,9 +530,9 @@ class _DeliveryHomeViewState extends State<DeliveryHomeView> {
         return;
       }
       if (controller.databaseService
-          .getFromDisk(DatabaseKeys.saveCurrentLat)
-          .toString() !=
-          "null" &&
+                  .getFromDisk(DatabaseKeys.saveCurrentLat)
+                  .toString() !=
+              "null" &&
           controller.databaseService
               .getFromDisk(DatabaseKeys.saveCurrentLat)
               .toString()

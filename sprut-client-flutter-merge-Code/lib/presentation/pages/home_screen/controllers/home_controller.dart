@@ -908,6 +908,7 @@ class HomeViewController extends GetxController {
       return;
     }
 
+    //todo--going to tariff screen with search cityy data
     if (whereToAriveEdtingController.text.isNotEmpty ||
         wheretoGoController.text.isNotEmpty) {
       await Get.toNamed(Routes.tarrifSelectionView, arguments: {
@@ -932,6 +933,14 @@ class HomeViewController extends GetxController {
 
     if (whereToAriveEdtingController.text.isNotEmpty ||
         wheretoGoController.text.isNotEmpty) {
+      databaseService.saveToDisk(DatabaseKeys.currentCity, currentCity);
+      databaseService.saveToDisk(DatabaseKeys.arrivalAddress, arrivalAddress);
+      databaseService.saveToDisk(
+          DatabaseKeys.destinationAddress, destinationAddress);
+      databaseService.saveToDisk(DatabaseKeys.kGooglePlex, kGooglePlex);
+      databaseService.saveToDisk(DatabaseKeys.kLake, kLake);
+      databaseService.saveToDisk(DatabaseKeys.repeatOrder, true);
+
       await Get.toNamed(Routes.tarrifSelectionView, arguments: {
         "currentCity": currentCity,
         "arrivalAddress": arrivalAddress,
@@ -1632,6 +1641,7 @@ class HomeViewController extends GetxController {
     // Navigator.pushNamedAndRemoveUntil(
     //     context, Routes.foodHomeScreen, (route) => true);
   }
+
 //food delivery address return
   String getDeliveryAddress() {
     var data = databaseService.getFromDisk(DatabaseKeys.saveDeliverAddress);
@@ -1666,12 +1676,13 @@ class HomeViewController extends GetxController {
     permissionGranted = await location.hasPermission();
     update();
   }
+
 //Delivery address
   String displayDefaultAddress(AppLocalizations language) {
     if (databaseService
-        .getFromDisk(DatabaseKeys.saveDeliverAddress)
-        .toString() !=
-        "null" &&
+                .getFromDisk(DatabaseKeys.saveDeliverAddress)
+                .toString() !=
+            "null" &&
         databaseService
             .getFromDisk(DatabaseKeys.saveDeliverAddress)
             .toString()
@@ -1679,8 +1690,8 @@ class HomeViewController extends GetxController {
       return getDeliveryAddress();
     } else if (isLocationEnable()) {
       LocationUtil.checkAndRequestPermission().then((value) => {
-        if (value) {this.updateLocationIfNeeded()}
-      });
+            if (value) {this.updateLocationIfNeeded()}
+          });
       return language.select_address_or_turn_on_gps;
     } else {
       return getCurrentLocationAddress();
@@ -1689,7 +1700,7 @@ class HomeViewController extends GetxController {
 
   bool isLocationEnable() {
     return (permissionGranted != PermissionStatus.granted &&
-        permissionGranted != PermissionStatus.grantedLimited) ||
+            permissionGranted != PermissionStatus.grantedLimited) ||
         locationServiceStatus == fl.LocationServicesStatus.disabled;
   }
 
@@ -1698,9 +1709,9 @@ class HomeViewController extends GetxController {
     String currentAddressString = "";
 
     if (databaseService
-        .getFromDisk(DatabaseKeys.saveCurrentAddress)
-        .toString() !=
-        "null" &&
+                .getFromDisk(DatabaseKeys.saveCurrentAddress)
+                .toString() !=
+            "null" &&
         databaseService
             .getFromDisk(DatabaseKeys.saveCurrentAddress)
             .toString()
@@ -1710,14 +1721,14 @@ class HomeViewController extends GetxController {
           .toString();
     }
 
-    if(currentAddressString.isEmpty){
-      if(arrivalAddress != null){
-        if(arrivalAddress.name?.isNotEmpty == true){
+    if (currentAddressString.isEmpty) {
+      if (arrivalAddress != null) {
+        if (arrivalAddress.name?.isNotEmpty == true) {
           //print("getCurrentLocationAddress-------> ${arrivalAddress.name}");
           databaseService.saveToDisk(
               DatabaseKeys.saveCurrentAddress, arrivalAddress.name);
-          databaseService.saveToDisk(
-              DatabaseKeys.saveCurrentObjectAddress, jsonEncode(arrivalAddress).toString());
+          databaseService.saveToDisk(DatabaseKeys.saveCurrentObjectAddress,
+              jsonEncode(arrivalAddress).toString());
           databaseService.saveToDisk(
               DatabaseKeys.saveCurrentLat, arrivalAddress.lat);
           databaseService.saveToDisk(
@@ -1739,9 +1750,10 @@ class HomeViewController extends GetxController {
   activeCounts() async {
     var response = await mainScreenRepostory.getActiveCounts(selectedCityCode);
     print("Response-----> $response");
-    Map<String,dynamic> mapData = jsonDecode(response.toString());
+    Map<String, dynamic> mapData = jsonDecode(response.toString());
     var counts = mapData['count'];
-    databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, counts.toString());
+    databaseService.saveToDisk(
+        DatabaseKeys.activeOrderCounts, counts.toString());
     update();
   }
 
@@ -1762,6 +1774,7 @@ class HomeViewController extends GetxController {
 }
 
 enum pageState { Home, TariffSelection }
+
 enum locationState {
   Uknown,
   NoPermission_NoService,

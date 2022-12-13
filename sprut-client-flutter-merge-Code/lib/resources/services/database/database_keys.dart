@@ -36,8 +36,15 @@ class DatabaseKeys {
   static String comments = "comments";
 
   static String order = "order";
+
+  //data passing from homeview to tariffview
+  static String currentCity = "currentCity";
   static String arrivalAddress = "arrival_address";
   static String destinationAddress = "destination_address";
+  static String kGooglePlex = "kGooglePlex";
+  static String kLake = "kLake";
+  static String repeatOrder = "repeatOrder";
+  //end
 
   static String preorder = "preorder";
 

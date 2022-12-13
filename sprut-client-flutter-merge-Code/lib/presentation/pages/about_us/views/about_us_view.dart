@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sprut/resources/assets_path/assets_path.dart';
-
 import '../../../../../../resources/app_constants/app_constants.dart';
 import '../../../../../../resources/app_themes/app_themes.dart';
 import '../../../../../resources/configs/helpers/helpers.dart';
@@ -33,9 +31,7 @@ class AboutUsView extends GetView<AboutUsController> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 10.0,
-                ),
+                SizedBox(height: 10.0),
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -215,9 +211,7 @@ class AboutUsView extends GetView<AboutUsController> {
                             alignment: Alignment.centerLeft,
                           ),
                   ),
-                  SizedBox(
-                    width: 6,
-                  ),
+                  SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       title,

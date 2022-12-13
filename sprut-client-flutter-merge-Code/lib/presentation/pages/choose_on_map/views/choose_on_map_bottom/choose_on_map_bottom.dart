@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -350,8 +349,6 @@ class ChooseOnMapBottomView extends GetView<ChooseOnMapController> {
                                       : 60.0,
                                   buttonText: "Confirm",
                                   onPressed: () {
-
-                                    
                                     HomeViewController homeViewController =
                                         Get.put(HomeViewController());
                                     log(homeViewController.lastFocus);

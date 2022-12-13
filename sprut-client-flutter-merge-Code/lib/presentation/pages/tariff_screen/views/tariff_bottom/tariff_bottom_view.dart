@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../../../resources/app_constants/app_constants.dart';
 import '../../../../../resources/app_themes/app_themes.dart';
 import '../../../../../resources/assets_path/assets_path.dart';
@@ -17,7 +16,7 @@ import '../service/service_view.dart';
 import '../tariff_description/tariff_description.dart';
 
 class TariffBottomView extends GetView<TariffController> {
-  const TariffBottomView({Key? key}) : super(key: key);
+  TariffBottomView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,31 +35,31 @@ class TariffBottomView extends GetView<TariffController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   controller.isBottomSheetExpanded == false
                       ? Center(
                           child: Container(
-                              width: 14.w,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: controller.isBottomSheetExpanded
-                                    ? colorScheme.primary
-                                    : Color(0xffC4C4C4),
-                              )),
+                            width: 14.w,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: controller.isBottomSheetExpanded
+                                  ? colorScheme.primary
+                                  : Color(0xffC4C4C4),
+                            ),
+                          ),
                         )
                       : Center(
                           child: Container(
-                              width: 14.w,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: controller.isBottomSheetExpanded
-                                    ? colorScheme.primary
-                                    : Color(0xffC4C4C4),
-                              )),
+                            width: 14.w,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: controller.isBottomSheetExpanded
+                                  ? colorScheme.primary
+                                  : Color(0xffC4C4C4),
+                            ),
+                          ),
                         ),
                   if (controller.isBottomSheetExpanded == false)
                     Padding(
@@ -158,9 +157,7 @@ class TariffBottomView extends GetView<TariffController> {
                                     ),
                                     child: Row(
                                       children: [
-                                        SizedBox(
-                                          width: 5,
-                                        ),
+                                        SizedBox(width: 5),
                                         Container(
                                           height: 4.h,
                                           width: 15.w,
@@ -233,38 +230,37 @@ class TariffBottomView extends GetView<TariffController> {
                                                     Expanded(
                                                       child: Container(
                                                         child: Text(
-                                                            controller
-                                                                .tariffs[index]
-                                                                .name!,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily:
-                                                                    AppConstants
-                                                                        .fontFamily,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                fontSize:
-                                                                    10.sp)),
+                                                          controller
+                                                              .tariffs[index]
+                                                              .name!,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily:
+                                                                  AppConstants
+                                                                      .fontFamily,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 10.sp),
+                                                        ),
                                                       ),
                                                     ),
-                                                    SizedBox(
-                                                      width: 5,
-                                                    ),
+                                                    SizedBox(width: 5),
                                                     GestureDetector(
                                                       onTap: () {
                                                         showCupertinoModalBottomSheet(
                                                           expand: false,
                                                           enableDrag: true,
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          14)),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        14),
+                                                          ),
                                                           context: context,
                                                           builder: (context) =>
                                                               SafeArea(
@@ -272,6 +268,7 @@ class TariffBottomView extends GetView<TariffController> {
                                                                 TariffDescription(
                                                               carPath:
                                                                   'assets/tariffs/${controller.tariffs[index].code}.svg',
+                                                              // ignore: division_optimization
                                                               downTime: (controller
                                                                               .tariffs[index]
                                                                               .prices!
@@ -283,6 +280,7 @@ class TariffBottomView extends GetView<TariffController> {
                                                                   "10" +
                                                                   " " +
                                                                   language.min,
+                                                              // ignore: division_optimization
                                                               minumumCost: (controller
                                                                               .tariffs[index]
                                                                               .prices!
@@ -296,6 +294,7 @@ class TariffBottomView extends GetView<TariffController> {
                                                                           index]
                                                                       .numberOfSeats ??
                                                                   "",
+                                                              // ignore: division_optimization
                                                               priceForkm: (controller
                                                                               .tariffs[index]
                                                                               .prices!
@@ -328,16 +327,16 @@ class TariffBottomView extends GetView<TariffController> {
                                                 child: Container(
                                                   // width: size.width * 0.42,
                                                   child: Text(
-                                                      language.minOrderAmount,
-                                                      style: textTheme
-                                                          .bodyText1!
-                                                          .copyWith(
-                                                              fontSize: 8.sp,
-                                                              color: colorScheme
-                                                                  .primary,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
+                                                    language.minOrderAmount,
+                                                    style: textTheme.bodyText1!
+                                                        .copyWith(
+                                                            fontSize: 8.sp,
+                                                            color: colorScheme
+                                                                .primary,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
                                                 ),
                                               )
                                             ],
@@ -348,6 +347,7 @@ class TariffBottomView extends GetView<TariffController> {
                                           alignment: Alignment.centerRight,
                                           // color: Colors.blue,
                                           child: Text(
+                                            // ignore: division_optimization
                                             (controller.tariffs[index].prices!
                                                             .minimum! /
                                                         100)
@@ -415,8 +415,8 @@ class TariffBottomView extends GetView<TariffController> {
                                       expand: false,
                                       enableDrag: true,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                       context: context,
                                       builder: (context) => SafeArea(
                                         child: TariffPaymentView(),
@@ -430,9 +430,8 @@ class TariffBottomView extends GetView<TariffController> {
                                         left: 5, right: 5, top: 2, bottom: 14),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8),
-                                      ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
                                     ),
                                     child: Stack(
                                       children: [
@@ -481,8 +480,8 @@ class TariffBottomView extends GetView<TariffController> {
                                       expand: false,
                                       enableDrag: true,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                       context: context,
                                       builder: (context) => SafeArea(
                                         child: ServiceView(),
@@ -539,8 +538,8 @@ class TariffBottomView extends GetView<TariffController> {
                                       expand: false,
                                       enableDrag: true,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                       context: context,
                                       builder: (context) => SafeArea(
                                         child: CommentView(),
@@ -570,26 +569,26 @@ class TariffBottomView extends GetView<TariffController> {
                                           width: 15,
                                         ),
                                         Expanded(
-                                            child: Text(
-                                                controller
-                                                        .commentController.text
-                                                        .toString()
-                                                        .trim()
-                                                        .isEmpty
-                                                    ? language.comments
-                                                    : controller
-                                                        .commentController.text
-                                                        .toString()
-                                                        .trim(),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: textTheme.bodyText1!
-                                                    .copyWith(
-                                                        fontSize: 9.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors
-                                                            .grey.shade400)))
+                                          child: Text(
+                                            controller.commentController.text
+                                                    .toString()
+                                                    .trim()
+                                                    .isEmpty
+                                                ? language.comments
+                                                : controller
+                                                    .commentController.text
+                                                    .toString()
+                                                    .trim(),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: textTheme.bodyText1!
+                                                .copyWith(
+                                                    fontSize: 9.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        Colors.grey.shade400),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -597,26 +596,22 @@ class TariffBottomView extends GetView<TariffController> {
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 6,
-                          ),
+                          SizedBox(height: 6),
                           Container(
-                            // margin: EdgeInsets.only(bottom: 10),
                             padding:
                                 EdgeInsets.only(left: 8, right: 8, bottom: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                    child: PrimaryElevatedBtn(
-                                        buttonText: language.findACar,
-                                        onPressed: () {
-                                          controller.createOrder(context);
-                                          controller.update();
-                                        })),
-                                SizedBox(
-                                  width: 20,
+                                  child: PrimaryElevatedBtn(
+                                      buttonText: language.findACar,
+                                      onPressed: () {
+                                        controller.createOrder(context);
+                                        controller.update();
+                                      }),
                                 ),
+                                SizedBox(width: 20),
                                 GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () {
@@ -624,8 +619,8 @@ class TariffBottomView extends GetView<TariffController> {
                                       expand: false,
                                       enableDrag: true,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                       context: context,
                                       builder: (context) => Wrap(
                                         children: <Widget>[

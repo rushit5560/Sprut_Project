@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,6 @@ import 'package:sprut/resources/assets_path/assets_path.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
 import 'package:sprut/resources/configs/routes/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../../resources/app_constants/app_constants.dart';
 import '../../../../resources/configs/service_locator/service_locator.dart';
 import '../../../../resources/services/database/database.dart';

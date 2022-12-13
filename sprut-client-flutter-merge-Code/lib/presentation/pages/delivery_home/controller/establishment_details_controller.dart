@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:sprut/data/models/tariff_screen_model/order_model.dart';
-
 import '../../../../business_logic/blocs/authentication_bloc/auth_bloc/auth_bloc.dart';
 import '../../../../business_logic/blocs/authentication_bloc/auth_event/auth_event.dart';
 import '../../../../data/models/establishments_all_screen_models/all_sstablishments_list_models.dart';

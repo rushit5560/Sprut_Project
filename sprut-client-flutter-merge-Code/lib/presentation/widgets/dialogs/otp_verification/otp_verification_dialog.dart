@@ -99,15 +99,18 @@ class _OtpVerificationDialogState extends State<OtpVerificationDialog> {
                     children: [
                       Expanded(
                         child: TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(language.cancel,
-                                style: TextStyle(
-                                    color: colorScheme.error,
-                                    fontFamily: AppConstants.fontFamily,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 10.sp))),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            language.cancel,
+                            style: TextStyle(
+                                color: colorScheme.error,
+                                fontFamily: AppConstants.fontFamily,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10.sp),
+                          ),
+                        ),
                       ),
                       Expanded(
                           child: PrimaryElevatedBtn(

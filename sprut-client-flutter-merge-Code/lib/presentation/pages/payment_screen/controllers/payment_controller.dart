@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sprut/data/models/tariff_screen_model/profile_model.dart';
 import 'package:sprut/data/models/tariff_screen_model/recharge_model.dart';
-
 import '../../../../data/models/tariff_screen_model/card_model.dart';
 import '../../../../data/repositories/tariff_screen_repostiory/tariff_screen_repository.dart';
 import '../../../../resources/configs/helpers/helpers.dart';

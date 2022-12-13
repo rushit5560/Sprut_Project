@@ -1258,6 +1258,8 @@ class SearchController extends GetxController {
     String orderGet = databaseService.getFromDisk(DatabaseKeys.order);
     if (orderGet != "") {
       orderModel = OrderModel.fromJson(jsonDecode(orderGet));
+      log("ordermodele     ${orderModel.deliveryStatus}");
+      log("ordermodele1111111    ${orderModel}");
 
       orderId = orderModel.orderId;
 

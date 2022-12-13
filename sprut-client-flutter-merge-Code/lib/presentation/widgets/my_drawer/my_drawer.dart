@@ -1,4 +1,6 @@
 // ignore_for_file: file_names
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -15,7 +17,6 @@ import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../resources/app_constants/app_constants.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -38,9 +39,9 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    if(Helpers.isLoginTypeIn() == AppConstants.TAXI_APP){
+    if (Helpers.isLoginTypeIn() == AppConstants.TAXI_APP) {
       Helpers.systemStatusBar();
-    }else {
+    } else {
       Helpers.systemStatusBar1();
     }
 
@@ -186,9 +187,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                       databaseService.getFromDisk(
                                               DatabaseKeys.activeOrderCounts) !=
                                           "0"
-                                  ? int.parse(databaseService
-                                      .getFromDisk(
-                                          DatabaseKeys.activeOrderCounts))
+                                  ? int.parse(databaseService.getFromDisk(
+                                      DatabaseKeys.activeOrderCounts))
                                   : 0,
                             ),
                             //Food delivery
@@ -274,15 +274,16 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                       //food delivery
-                      if(Get.find<HomeViewController>().selectCityName.value == "Vinnytsia")...[
+                      if (Get.find<HomeViewController>().selectCityName.value ==
+                          "Vinnytsia") ...[
                         GestureDetector(
                           child: Container(
                             child: Align(
                               alignment: FractionalOffset.bottomCenter,
                               child: Container(
                                 padding: EdgeInsets.all(12),
-                                margin:
-                                EdgeInsets.only(left: 4, right: 10, top: 8.0),
+                                margin: EdgeInsets.only(
+                                    left: 4, right: 10, top: 8.0),
                                 decoration: BoxDecoration(
                                   color: colorScheme.primary,
                                   borderRadius: BorderRadius.all(
@@ -291,17 +292,17 @@ class _MyDrawerState extends State<MyDrawer> {
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       height: 40,
                                       width: 50,
                                       child: Helpers.isLoginTypeIn() ==
-                                          AppConstants.TAXI_APP
+                                              AppConstants.TAXI_APP
                                           ? SvgPicture.asset(
-                                          AssetsPath.deliverySmallLogo)
+                                              AssetsPath.deliverySmallLogo)
                                           : SvgPicture.asset(
-                                          AssetsPath.taxiSmallLogo),
+                                              AssetsPath.taxiSmallLogo),
                                     ),
                                     Expanded(
                                       child: Container(
@@ -309,18 +310,18 @@ class _MyDrawerState extends State<MyDrawer> {
                                         padding: EdgeInsets.only(left: 15),
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               Helpers.isLoginTypeIn() ==
-                                                  AppConstants.TAXI_APP
+                                                      AppConstants.TAXI_APP
                                                   ? language.order_a_delivery
                                                   : language.order_a_taxi,
                                               style: textTheme.bodyText1!
                                                   .copyWith(
-                                                  fontSize: 11.sp,
-                                                  color:
-                                                  colorScheme.background),
+                                                      fontSize: 11.sp,
+                                                      color: colorScheme
+                                                          .background),
                                             ),
                                           ],
                                         ),
@@ -336,13 +337,81 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                           ),
                           onTap: () async {
+                            Get.back();
+
                             if (Helpers.isLoginTypeIn() ==
                                 AppConstants.FOOD_APP) {
                               databaseService.saveToDisk(
                                   DatabaseKeys.isLoginTypeIn,
                                   AppConstants.TAXI_APP);
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  Routes.homeScreen, ModalRoute.withName('/'));
+
+                              String order = databaseService
+                                      .getFromDisk(DatabaseKeys.order) ??
+                                  "";
+                              var currentCity = databaseService
+                                  .getFromDisk(DatabaseKeys.currentCity);
+                              var arrivalAddress = databaseService
+                                  .getFromDisk(DatabaseKeys.arrivalAddress);
+                              var destinationAddress = databaseService
+                                  .getFromDisk(DatabaseKeys.destinationAddress);
+                              var kGooglePlex = databaseService
+                                  .getFromDisk(DatabaseKeys.kGooglePlex);
+                              var kLake = databaseService
+                                  .getFromDisk(DatabaseKeys.kLake);
+                              var repeatOrder = databaseService
+                                  .getFromDisk(DatabaseKeys.repeatOrder);
+                              log("order model stored changed in prefs is :: ${order}");
+
+                              if (order != "") {
+                                // Navigator.pushNamedAndRemoveUntil(
+                                //   context,
+                                //   Routes.homeScreen,
+                                //   ModalRoute.withName('/'),
+                                // );
+
+                                // await Get.toNamed(Routes.tarrifSelectionView,
+                                //     arguments: {
+                                //       "currentCity": currentCity,
+                                //       "arrivalAddress": arrivalAddress,
+                                //       "destinationAddress": destinationAddress,
+                                //       "kGooglePlex": kGooglePlex,
+                                //       "kLake": kLake,
+                                //       "repeatOrder": repeatOrder,
+                                //     });
+
+                                await Get.toNamed(Routes.searchView);
+
+                                // .whenComplete(() async {
+                                //   await Get.toNamed(Routes.tarrifSelectionView,
+                                //           arguments: {
+                                //         "currentCity": currentCity,
+                                //         "arrivalAddress": arrivalAddress,
+                                //         "destinationAddress":
+                                //             destinationAddress,
+                                //         "kGooglePlex": kGooglePlex,
+                                //         "kLake": kLake,
+                                //         "repeatOrder": repeatOrder,
+                                //       })!
+                                //       .whenComplete(() async {
+                                //     await Get.toNamed(Routes.searchView);
+                                //   });
+                                // });
+
+                                // await Get.toNamed(Routes.tarrifSelectionView);
+                                // await Get.toNamed(Routes.searchView);
+                              } else {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  Routes.homeScreen,
+                                  ModalRoute.withName('/'),
+                                );
+                              }
+
+                              // Navigator.pushNamedAndRemoveUntil(
+                              //   context,
+                              //   Routes.homeScreen,
+                              //   ModalRoute.withName('/'),
+                              // );
                             } else {
                               //open food screen
                               databaseService.saveToDisk(

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,7 +8,6 @@ import 'package:sprut/presentation/pages/no_internet/no_internet.dart';
 import 'package:sprut/resources/assets_path/assets_path.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
 import 'package:sprut/resources/configs/routes/routes.dart';
-
 import '../../../data/models/available_cities_model/available_cities_model.dart';
 import '../../../data/provider/authentication/auth_provider.dart';
 import '../../../resources/app_constants/app_constants.dart';
@@ -69,8 +67,11 @@ class _SplashScreenState extends State<SplashScreen> {
             //call api for counts
             if (databaseService.getFromDisk(DatabaseKeys.selectedCity) !=
                 null) {
-              selectedCity = AvailableCitiesModel.fromJson(jsonDecode(
-                  databaseService.getFromDisk(DatabaseKeys.selectedCity)));
+              selectedCity = AvailableCitiesModel.fromJson(
+                jsonDecode(
+                  databaseService.getFromDisk(DatabaseKeys.selectedCity),
+                ),
+              );
               if (selectedCity != null) {
                 var cityCode = selectedCity!.code;
                 var response =
@@ -108,7 +109,6 @@ class _SplashScreenState extends State<SplashScreen> {
             Get.offNamed(Routes.loginScreen);
           }
         } catch (e) {
-
           if (mounted) {
             setState(() {
               apiCall = false;
@@ -156,27 +156,27 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
       body: SafeArea(
-              top: false,
-              bottom: false,
-              child: Center(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AssetsPath.logoWithName,
-                        height: 23.h,
-                      ),
-                      if (apiCall) ...[
-                        CircularProgressIndicator(),
-                      ]
-                    ],
-                  ),
-                  color: colorScheme.background,
+        top: false,
+        bottom: false,
+        child: Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  AssetsPath.logoWithName,
+                  height: 23.h,
                 ),
-              ),
+                if (apiCall) ...[
+                  CircularProgressIndicator(),
+                ]
+              ],
             ),
+            color: colorScheme.background,
+          ),
+        ),
+      ),
       backgroundColor: colorScheme.background,
     );
   }
