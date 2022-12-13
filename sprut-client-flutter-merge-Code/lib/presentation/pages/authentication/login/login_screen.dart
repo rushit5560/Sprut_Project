@@ -9,6 +9,7 @@ import 'package:sprut/business_logic/blocs/authentication_bloc/auth_bloc/auth_bl
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_event/auth_event.dart';
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
 import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+import 'package:sprut/data/provider/network_provider.dart';
 import 'package:sprut/presentation/pages/no_internet/no_internet.dart';
 import 'package:sprut/presentation/widgets/app_logo/app_logo.dart';
 import 'package:sprut/presentation/widgets/custom_text_field/custom_text_field.dart';
@@ -37,14 +38,19 @@ class _LoginScreenState extends State<LoginScreen> {
   /// [Form Key] for validating phone number field
   final _formKey = GlobalKey<FormState>();
   final FocusNode focusNode = FocusNode();
+
+  //increment var for changing apiurl between production and live
+  //on appicon tapped 7 times
+  int tapIncreament = 0;
   DatabaseService databaseService = serviceLocator.get<DatabaseService>();
 
   @override
   void initState() {
     super.initState();
-    try{
-      databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-    }catch(e){
+    try {
+      databaseService.saveToDisk(
+          DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+    } catch (e) {
       debugPrint("Login Error:  ${e}");
     }
   }
@@ -172,7 +178,41 @@ class _LoginScreenState extends State<LoginScreen> {
                                           SizedBox(
                                             height: 16.h,
                                           ),
-                                          Center(child: AppLogo()),
+                                          Center(
+                                              child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                tapIncreament++;
+                                              });
+                                              if (tapIncreament == 7) {
+                                                if (NetworkProviderRest
+                                                        .baseUrl ==
+                                                    NetworkProviderRest
+                                                        .prodUrl) {
+                                                  NetworkProviderRest.baseUrl =
+                                                      NetworkProviderRest
+                                                          .releaseUrl;
+                                                } else if (NetworkProviderRest
+                                                        .baseUrl ==
+                                                    NetworkProviderRest
+                                                        .releaseUrl) {
+                                                  NetworkProviderRest.baseUrl =
+                                                      NetworkProviderRest
+                                                          .prodUrl;
+                                                }
+
+                                                setState(() {
+                                                  tapIncreament = 0;
+                                                });
+                                              }
+                                              log("tapIncreament is :: ${tapIncreament}");
+                                              log("base api url is :: ${NetworkProviderRest.baseUrl}");
+                                            },
+                                            child: Image.asset(
+                                              AssetsPath.logo,
+                                              height: 14.h,
+                                            ),
+                                          )),
                                           SizedBox(
                                             height: 10.h,
                                           ),
