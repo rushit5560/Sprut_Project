@@ -51,6 +51,8 @@ class DatabaseKeys {
 
   static String readNews = "read_news";
 
+  //private policy
+  static String privacyPolicyAccepted = "privacyPolicyAccepted";
 
   //FOOD DELIVERY
   static String isLoginTypeSelected = "isLoginTypeSelected";

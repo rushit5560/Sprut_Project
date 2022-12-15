@@ -171,7 +171,6 @@ class _HomeViewState extends State<HomeView> {
       controller.update();
     });
     initializeFCM();
-
   }
 
   @override
@@ -202,6 +201,8 @@ class _HomeViewState extends State<HomeView> {
                     },
                     controller: controller.scrollController,
                     onPanelOpened: () {
+                      // OTW Add
+                      controller.wheretoGoController.clear();
                       controller.whereToGoTapCount += 1;
                       controller.whereToArriveTapCount += 1;
                       controller.closeButtonVisible = true;
@@ -451,9 +452,14 @@ class _HomeViewState extends State<HomeView> {
                                                                 .value ==
                                                             "Haisyn"
                                                         ? language.haisyn
-                                                        : controller
-                                                            .selectCityName
-                                                            .value)),
+                                                        : (controller
+                                                                    .selectCityName
+                                                                    .value ==
+                                                                "Staging"
+                                                            ? language.staging
+                                                            : controller
+                                                                .selectCityName
+                                                                .value))),
                                             style: textTheme.bodyText1!
                                                 .copyWith(
                                                     fontSize: 10.sp,

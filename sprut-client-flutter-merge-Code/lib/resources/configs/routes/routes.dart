@@ -27,6 +27,7 @@ import '../../../presentation/pages/order_screen/views/order_detail_view.dart';
 import '../../../presentation/pages/order_screen/views/order_map_view.dart';
 import '../../../presentation/pages/order_screen/views/order_view.dart';
 import '../../../presentation/pages/payment_screen/views/payment_view.dart';
+import '../../../presentation/pages/privacy_policy/privacy_policy.dart';
 import '../../../presentation/pages/search_screen/views/search_view.dart';
 import '../../../presentation/pages/search_screen/views/search_view_old.dart';
 import '../../../presentation/pages/splash_screen/splash_screen.dart';
@@ -55,6 +56,9 @@ class Routes {
   static const String orderHistoryView = "/orderHistory";
   static const String newsView = "/news";
 
+  // privacy_policy
+  static const String privacyPolicy = "/privacyPolicy";
+
   //Food Delivery Screen
   static const String orderView = "/order";
   static const String orderDetailsView = "/orderDetails";
@@ -80,6 +84,8 @@ class Routes {
     homeScreen: (_) => HomeView(),
     loginScreen: (_) => LoginScreen(),
     otpVerificationScreen: (_) => OtpVerificationScreen(),
+    //privacyPolicy
+    privacyPolicy: (_) => PrivacyPolicy(),
     cityLogin: (_) => CityLogin(),
     welcomeScreen: (_) => WelcomeScreen(),
     splashScreen: (_) => SplashScreen(),
@@ -100,7 +106,8 @@ class Routes {
     foodHomeScreen: (_) => DeliveryHomeView(),
     foodDeliveryItemsScreen: (_) => ItemsListScreenView(),
     foodDeliveryAddressView: (_) => SearchBottomSheetView(),
-    foodDeliveryEstablishmentDetailsView: (_) => EstablishmentDetailsScreenView(),
+    foodDeliveryEstablishmentDetailsView: (_) =>
+        EstablishmentDetailsScreenView(),
     foodDeliveryProductItemDetailsView: (_) => ProductItemDetailsScreenView(),
     foodDeliveryShoppingCartView: (_) => ShoppingCartView(),
     foodEstablishmentSearchView: (_) => EstablishmentSearchView(),

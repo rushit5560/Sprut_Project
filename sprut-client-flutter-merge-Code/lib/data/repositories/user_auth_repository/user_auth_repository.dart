@@ -58,6 +58,8 @@ class UserAuthRepository {
 
       List cities = response.data;
 
+      log("getAvailableCities :: ${response.data}");
+
       List<AvailableCitiesModel> availableCities = [];
       cities.forEach((element) {
         availableCities.add(AvailableCitiesModel.fromJson(element));

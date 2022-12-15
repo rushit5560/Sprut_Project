@@ -1,307 +1,307 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
-import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
-import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
-import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
-import 'package:sprut/presentation/pages/no_internet/no_internet.dart';
-import 'package:sprut/resources/assets_path/assets_path.dart';
-import 'package:sprut/resources/configs/helpers/helpers.dart';
-import 'package:sprut/resources/configs/routes/routes.dart';
+// import 'dart:async';
+// import 'dart:convert';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:get/get.dart';
+// import 'package:sizer/sizer.dart';
+// import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+// import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+// import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
+// import 'package:sprut/presentation/pages/no_internet/no_internet.dart';
+// import 'package:sprut/resources/assets_path/assets_path.dart';
+// import 'package:sprut/resources/configs/helpers/helpers.dart';
+// import 'package:sprut/resources/configs/routes/routes.dart';
 
-import '../../../data/models/available_cities_model/available_cities_model.dart';
-import '../../../data/provider/authentication/auth_provider.dart';
-import '../../../resources/app_constants/app_constants.dart';
-import '../../../resources/configs/service_locator/service_locator.dart';
-import '../../../resources/services/database/database.dart';
-import '../../../resources/services/database/database_keys.dart';
+// import '../../../data/models/available_cities_model/available_cities_model.dart';
+// import '../../../data/provider/authentication/auth_provider.dart';
+// import '../../../resources/app_constants/app_constants.dart';
+// import '../../../resources/configs/service_locator/service_locator.dart';
+// import '../../../resources/services/database/database.dart';
+// import '../../../resources/services/database/database_keys.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+// class SplashScreen extends StatefulWidget {
+//   const SplashScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
+//   @override
+//   State<SplashScreen> createState() => _SplashScreenState();
+// }
 
-class _SplashScreenState extends State<SplashScreen> {
-  bool isConnected = false;
-  bool isStopped = false;
-  bool apiCall = false;
+// class _SplashScreenState extends State<SplashScreen> {
+//   bool isConnected = false;
+//   bool isStopped = false;
+//   bool apiCall = false;
 
-  AvailableCitiesModel? selectedCity;
+//   AvailableCitiesModel? selectedCity;
 
-  @override
-  void initState() {
-    apiCall = true;
-    super.initState();
-    // checkConnection();
-  }
+//   @override
+//   void initState() {
+//     apiCall = true;
+//     super.initState();
+//     // checkConnection();
+//   }
 
-  checkConnection() async {
-    // isConnected = await Helpers.checkInternetConnectivity();
-    await Timer.periodic(Duration(seconds: 1), (timer) async {
-      isConnected = await Helpers.checkInternetConnectivity();
-      if (isConnected == false) {
-        timer.cancel();
-        Helpers.internetDialog(context);
-      } else if (isConnected == true) {
-        timer.cancel();
-        routeStart();
-      }
-      if (mounted) {
-        setState(() {
-          isConnected;
-        });
-      }
-      print("currentRoute Start Call}");
-    });
-  }
+//   checkConnection() async {
+//     // isConnected = await Helpers.checkInternetConnectivity();
+//     await Timer.periodic(Duration(seconds: 1), (timer) async {
+//       isConnected = await Helpers.checkInternetConnectivity();
+//       if (isConnected == false) {
+//         timer.cancel();
+//         Helpers.internetDialog(context);
+//       } else if (isConnected == true) {
+//         timer.cancel();
+//         routeStart();
+//       }
+//       if (mounted) {
+//         setState(() {
+//           isConnected;
+//         });
+//       }
+//       print("currentRoute Start Call}");
+//     });
+//   }
 
-  routeStart() async {
-    UserAuthProvider userAuthProvider = UserAuthProvider();
-    if (isConnected) {
-      Future.delayed(const Duration(seconds: 2), () async {
-        try {
-          if (Helpers.isLoggedIn()) {
-            DatabaseService databaseService = serviceLocator.get<DatabaseService>();
-            //call api for counts
-            if (databaseService.getFromDisk(DatabaseKeys.selectedCity) != null) {
-              selectedCity = AvailableCitiesModel.fromJson(jsonDecode(databaseService.getFromDisk(DatabaseKeys.selectedCity)));
-              if (selectedCity != null) {
-                var cityCode = selectedCity!.code;
-                var response = await userAuthProvider.getActiveCounts(cityCode.toString());
+//   routeStart() async {
+//     UserAuthProvider userAuthProvider = UserAuthProvider();
+//     if (isConnected) {
+//       Future.delayed(const Duration(seconds: 2), () async {
+//         try {
+//           if (Helpers.isLoggedIn()) {
+//             DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+//             //call api for counts
+//             if (databaseService.getFromDisk(DatabaseKeys.selectedCity) != null) {
+//               selectedCity = AvailableCitiesModel.fromJson(jsonDecode(databaseService.getFromDisk(DatabaseKeys.selectedCity)));
+//               if (selectedCity != null) {
+//                 var cityCode = selectedCity!.code;
+//                 var response = await userAuthProvider.getActiveCounts(cityCode.toString());
 
-                if (response != null) {
-                  Map<String, dynamic> mapData =jsonDecode(response.toString());
-                  var counts = mapData['count'];
-                  if (counts > 0) {
-                    databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, counts.toString());
-                    databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+//                 if (response != null) {
+//                   Map<String, dynamic> mapData =jsonDecode(response.toString());
+//                   var counts = mapData['count'];
+//                   if (counts > 0) {
+//                     databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, counts.toString());
+//                     databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
 
-                    Get.offNamed(Routes.foodHomeScreen);
-                  } else {
-                    openActivity(databaseService);
-                  }
-                } else {
-                  openActivity(databaseService);
-                }
-              } else {
-                openActivity(databaseService);
-              }
-            } else {
-              openActivity(databaseService);
-            }
-          } else {
-            if (mounted) {
-              setState(() {
-                apiCall = false;
-              });
-            }
-            Get.offNamed(Routes.loginScreen);
-          }
-        } catch (e) {
+//                     Get.offNamed(Routes.foodHomeScreen);
+//                   } else {
+//                     openActivity(databaseService);
+//                   }
+//                 } else {
+//                   openActivity(databaseService);
+//                 }
+//               } else {
+//                 openActivity(databaseService);
+//               }
+//             } else {
+//               openActivity(databaseService);
+//             }
+//           } else {
+//             if (mounted) {
+//               setState(() {
+//                 apiCall = false;
+//               });
+//             }
+//             Get.offNamed(Routes.loginScreen);
+//           }
+//         } catch (e) {
 
-          if (mounted) {
-            setState(() {
-              apiCall = false;
-            });
-          }
-          Get.offNamed(Routes.loginScreen);
-        }
-      });
-    } else {}
-  }
-  routeStart1() async {
-    UserAuthProvider userAuthProvider = UserAuthProvider();
-    Future.delayed(const Duration(seconds: 2), () async {
-      try {
-        if (Helpers.isLoggedIn()) {
-          DatabaseService databaseService = serviceLocator.get<DatabaseService>();
-          //call api for counts
-          if (databaseService.getFromDisk(DatabaseKeys.selectedCity) != null) {
-            selectedCity = AvailableCitiesModel.fromJson(jsonDecode(databaseService.getFromDisk(DatabaseKeys.selectedCity)));
-            if (selectedCity != null) {
-              var cityCode = selectedCity!.code;
-              var response = await userAuthProvider.getActiveCounts(cityCode.toString());
+//           if (mounted) {
+//             setState(() {
+//               apiCall = false;
+//             });
+//           }
+//           Get.offNamed(Routes.loginScreen);
+//         }
+//       });
+//     } else {}
+//   }
+//   routeStart1() async {
+//     UserAuthProvider userAuthProvider = UserAuthProvider();
+//     Future.delayed(const Duration(seconds: 2), () async {
+//       try {
+//         if (Helpers.isLoggedIn()) {
+//           DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+//           //call api for counts
+//           if (databaseService.getFromDisk(DatabaseKeys.selectedCity) != null) {
+//             selectedCity = AvailableCitiesModel.fromJson(jsonDecode(databaseService.getFromDisk(DatabaseKeys.selectedCity)));
+//             if (selectedCity != null) {
+//               var cityCode = selectedCity!.code;
+//               var response = await userAuthProvider.getActiveCounts(cityCode.toString());
 
-              if (response != null) {
-                Map<String, dynamic> mapData =jsonDecode(response.toString());
-                var counts = mapData['count'];
-                if (counts > 0) {
-                  databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, counts.toString());
-                  databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+//               if (response != null) {
+//                 Map<String, dynamic> mapData =jsonDecode(response.toString());
+//                 var counts = mapData['count'];
+//                 if (counts > 0) {
+//                   databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, counts.toString());
+//                   databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
 
-                  Get.offNamed(Routes.foodHomeScreen);
-                } else {
-                  openActivity(databaseService);
-                }
-              } else {
-                openActivity(databaseService);
-              }
-            } else {
-              openActivity(databaseService);
-            }
-          } else {
-            openActivity(databaseService);
-          }
-        } else {
-          if (mounted) {
-            setState(() {
-              apiCall = false;
-            });
-          }
-          Get.offNamed(Routes.loginScreen);
-        }
-      } catch (e) {
-        if (mounted) {
-          setState(() {
-            apiCall = false;
-          });
-        }
-        Get.offNamed(Routes.loginScreen);
-      }
-    });
-  }
-  openActivity(DatabaseService databaseService) {
-    if (mounted) {
-      setState(() {
-        apiCall = false;
-      });
-    }
-    //set default
-    databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, "0");
-    String selectedType =databaseService.getFromDisk(DatabaseKeys.isLoginTypeSelected) ??AppConstants.TAXI_APP;
-    //check selected type
-    if (selectedType == AppConstants.TAXI_APP) {
-      databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-      Get.offNamed(Routes.homeScreen);
-    } else {
-      databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
-      Get.offNamed(Routes.foodHomeScreen);
-    }
-  }
+//                   Get.offNamed(Routes.foodHomeScreen);
+//                 } else {
+//                   openActivity(databaseService);
+//                 }
+//               } else {
+//                 openActivity(databaseService);
+//               }
+//             } else {
+//               openActivity(databaseService);
+//             }
+//           } else {
+//             openActivity(databaseService);
+//           }
+//         } else {
+//           if (mounted) {
+//             setState(() {
+//               apiCall = false;
+//             });
+//           }
+//           Get.offNamed(Routes.loginScreen);
+//         }
+//       } catch (e) {
+//         if (mounted) {
+//           setState(() {
+//             apiCall = false;
+//           });
+//         }
+//         Get.offNamed(Routes.loginScreen);
+//       }
+//     });
+//   }
+//   openActivity(DatabaseService databaseService) {
+//     if (mounted) {
+//       setState(() {
+//         apiCall = false;
+//       });
+//     }
+//     //set default
+//     databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, "0");
+//     String selectedType =databaseService.getFromDisk(DatabaseKeys.isLoginTypeSelected) ??AppConstants.TAXI_APP;
+//     //check selected type
+//     if (selectedType == AppConstants.TAXI_APP) {
+//       databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+//       Get.offNamed(Routes.homeScreen);
+//     } else {
+//       databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+//       Get.offNamed(Routes.foodHomeScreen);
+//     }
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.transparent, // Note RED here
-    ));
-    var colorScheme = Theme.of(context).colorScheme;
+//   @override
+//   Widget build(BuildContext context) {
+//     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+//       systemNavigationBarIconBrightness: Brightness.dark,
+//       systemNavigationBarColor: Colors.white,
+//       statusBarIconBrightness: Brightness.dark,
+//       statusBarColor: Colors.transparent, // Note RED here
+//     ));
+//     var colorScheme = Theme.of(context).colorScheme;
 
-    return BlocConsumer<ConnectedBloc, ConnectedState>(
-      listener: (context, connectionState) {
-        // TODO: implement listener
+//     return BlocConsumer<ConnectedBloc, ConnectedState>(
+//       listener: (context, connectionState) {
+//         // TODO: implement listener
 
-        if (connectionState is ConnectedFailureState) {
-          print('Connection failed Listener');
-        }
-        if (connectionState is ConnectedSucessState) {
-          print('Connection Listener');
-          routeStart1();
-        }
-      },
-      builder: (context, connectionState) {
+//         if (connectionState is ConnectedFailureState) {
+//           print('Connection failed Listener');
+//         }
+//         if (connectionState is ConnectedSucessState) {
+//           print('Connection Listener');
+//           routeStart1();
+//         }
+//       },
+//       builder: (context, connectionState) {
 
-        if (connectionState is ConnectedSucessState) {
-          print('Connection failed builder');
-          return Scaffold(
-            body: SafeArea(
-              top: false,
-              bottom: false,
-              child: Center(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        AssetsPath.logoWithName,
-                        height: 23.h,
-                      ),
-                      if (apiCall) ...[
-                        CircularProgressIndicator(),
+//         if (connectionState is ConnectedSucessState) {
+//           print('Connection failed builder');
+//           return Scaffold(
+//             body: SafeArea(
+//               top: false,
+//               bottom: false,
+//               child: Center(
+//                 child: Container(
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     crossAxisAlignment: CrossAxisAlignment.center,
+//                     children: [
+//                       Image.asset(
+//                         AssetsPath.logoWithName,
+//                         height: 23.h,
+//                       ),
+//                       if (apiCall) ...[
+//                         CircularProgressIndicator(),
 
-                      ]
-                    ],
-                  ),
-                  color: colorScheme.background,
-                ),
-              ),
-            ),
-            backgroundColor: colorScheme.background,
-          );
-        }
+//                       ]
+//                     ],
+//                   ),
+//                   color: colorScheme.background,
+//                 ),
+//               ),
+//             ),
+//             backgroundColor: colorScheme.background,
+//           );
+//         }
 
-        if (connectionState is ConnectedFailureState) {
-          print('Connection builder');
-          return NoInternetScreen(onPressed: () async {});
-        }
-        if (connectionState is ConnectedInitialState) {
-          print('Connection builder');
-          return NoInternetScreen(onPressed: () async {});
-        }
+//         if (connectionState is ConnectedFailureState) {
+//           print('Connection builder');
+//           return NoInternetScreen(onPressed: () async {});
+//         }
+//         if (connectionState is ConnectedInitialState) {
+//           print('Connection builder');
+//           return NoInternetScreen(onPressed: () async {});
+//         }
 
-        return Center(child: Text('Loading..'),);
-      },
-);
-  }
-  }
+//         return Center(child: Text('Loading..'),);
+//       },
+// );
+//   }
+//   }
 
-/* bool isConnected = false;
-  bool isStopped = false;
-  @override
-  void initState() {
-    super.initState();
-    checkConnection();
-  }
+// /* bool isConnected = false;
+//   bool isStopped = false;
+//   @override
+//   void initState() {
+//     super.initState();
+//     checkConnection();
+//   }
 
-  checkConnection() async {
-    isConnected = await Helpers.checkInternetConnectivity();
+//   checkConnection() async {
+//     isConnected = await Helpers.checkInternetConnectivity();
 
-    Timer.periodic(Duration(seconds: 1), (timer) async {
-      isConnected = await Helpers.checkInternetConnectivity();
-      if (isConnected == false) {
-        Navigator.pop(context);
-        timer.cancel();
-      } else if (isConnected == true) {
-        Navigator.pop(context);
-        timer.cancel();
-      }
-    });
-  }
+//     Timer.periodic(Duration(seconds: 1), (timer) async {
+//       isConnected = await Helpers.checkInternetConnectivity();
+//       if (isConnected == false) {
+//         Navigator.pop(context);
+//         timer.cancel();
+//       } else if (isConnected == true) {
+//         Navigator.pop(context);
+//         timer.cancel();
+//       }
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.transparent, // Note RED here
-    ));
+//   @override
+//   Widget build(BuildContext context) {
+//      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+//       systemNavigationBarIconBrightness: Brightness.dark,
+//       systemNavigationBarColor: Colors.white,
+//       statusBarIconBrightness: Brightness.dark,
+//       statusBarColor: Colors.transparent, // Note RED here
+//     ));
     
-    var colorScheme = Theme.of(context).colorScheme;
-    var textTheme = Theme.of(context).textTheme;
+//     var colorScheme = Theme.of(context).colorScheme;
+//     var textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      body: SafeArea(
-          top: false,
-          bottom: false,
-          child:Center(
-        child: Center(
-            child: Image.asset(
-          AssetsPath.logoWithName,
-          height: 23.h,
-        )),
-      ),
-      ),
-      backgroundColor: colorScheme.background,
-    );
-  }*/
+//     return Scaffold(
+//       body: SafeArea(
+//           top: false,
+//           bottom: false,
+//           child:Center(
+//         child: Center(
+//             child: Image.asset(
+//           AssetsPath.logoWithName,
+//           height: 23.h,
+//         )),
+//       ),
+//       ),
+//       backgroundColor: colorScheme.background,
+//     );
+//   }*/
 
