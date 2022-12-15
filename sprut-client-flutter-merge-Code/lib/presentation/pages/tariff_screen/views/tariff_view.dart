@@ -23,6 +23,7 @@ import 'tariff_bottom/tariff_bottom_view.dart';
 
 class TariffView extends GetView<TariffController> {
   final HomeViewController homeViewController = Get.find<HomeViewController>();
+  final TariffController teriffViewController = Get.find<TariffController>();
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +60,22 @@ class TariffView extends GetView<TariffController> {
                   }
                 },
                 controller: controller.scrollController,
-                onPanelOpened: () {},
+                onPanelOpened: () {
+                  teriffViewController.update();
+                },
                 onPanelClosed: () {
                   if (controller.isBottomSheetExpanded) {
                     controller.isBottomSheetExpanded = false;
-                    controller.update();
+                    teriffViewController.update();
                   }
+                  teriffViewController.update();
                 },
-                minHeight: _scaffoldKey.currentState != null
-                    ? _scaffoldKey.currentState!.isDrawerOpen
-              ? 0 : MediaQuery.of(context).size.width * 0.950 : MediaQuery.of(context).size.width * 0.950,
-                maxHeight: MediaQuery.of(context).size.height * 0.950,
+            minHeight: _scaffoldKey.currentState != null
+                        ? _scaffoldKey.currentState!.isDrawerOpen
+                            ? 0
+                            : MediaQuery.of(context).size.width * 0.950
+                        : MediaQuery.of(context).size.width * 0.950,
+                    maxHeight: MediaQuery.of(context).size.height * 0.950,
                 panel: TariffBottomView(),
 
                 body: Scaffold(
