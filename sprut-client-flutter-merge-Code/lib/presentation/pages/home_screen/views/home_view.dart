@@ -456,7 +456,7 @@ class _HomeViewState extends State<HomeView> {
                                                                     .selectCityName
                                                                     .value ==
                                                                 "Staging"
-                                                            ? language.staging
+                                                            ? "Staging"
                                                             : controller
                                                                 .selectCityName
                                                                 .value))),

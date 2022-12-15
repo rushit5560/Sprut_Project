@@ -146,7 +146,6 @@ class _CityLoginState extends State<CityLogin> {
                         if (state.availableCities.isNotEmpty) {
                           if (selectedCityName == null) {
                             selectedCityName = state.availableCities[0];
-                          
                           }
                         }
 
@@ -174,9 +173,6 @@ class _CityLoginState extends State<CityLogin> {
                                 } else if (state.availableCities[index].name ==
                                     "Haisyn") {
                                   cityName = language.haisyn;
-                                } else if (state.availableCities[index].name ==
-                                    "Staging") {
-                                  cityName = language.staging;
                                 } else if (state.availableCities[index].name ==
                                     "Vinnytsia Prod") {
                                   cityName = "Vinnytsia";
