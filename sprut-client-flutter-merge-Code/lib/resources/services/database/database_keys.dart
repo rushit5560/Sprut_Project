@@ -36,9 +36,15 @@ class DatabaseKeys {
   static String comments = "comments";
 
   static String order = "order";
+
+  //data passing from homeview to tariffview
+  static String currentCity = "currentCity";
   static String arrivalAddress = "arrival_address";
   static String destinationAddress = "destination_address";
 
+//private policy
+  static String privacyPolicyAccepted = "privacyPolicyAccepted";
+  //end 
   static String preorder = "preorder";
 
   static String orderArriveTime = "order_arrive_time";
@@ -50,9 +56,6 @@ class DatabaseKeys {
   static String crashlytics = "crashlytics";
 
   static String readNews = "read_news";
-
-  //private policy
-  static String privacyPolicyAccepted = "privacyPolicyAccepted";
 
   //FOOD DELIVERY
   static String isLoginTypeSelected = "isLoginTypeSelected";
