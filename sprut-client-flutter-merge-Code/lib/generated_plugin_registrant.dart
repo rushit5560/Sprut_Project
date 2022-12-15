@@ -10,6 +10,7 @@ import 'package:cloud_firestore_web/cloud_firestore_web.dart';
 import 'package:connectivity_plus_web/connectivity_plus_web.dart';
 import 'package:firebase_core_web/firebase_core_web.dart';
 import 'package:firebase_messaging_web/firebase_messaging_web.dart';
+import 'package:firebase_remote_config_web/firebase_remote_config_web.dart';
 import 'package:fl_location_web/fl_location_web.dart';
 import 'package:flutter_keyboard_visibility_web/flutter_keyboard_visibility_web.dart';
 import 'package:flutter_native_splash/flutter_native_splash_web.dart';
@@ -27,6 +28,7 @@ void registerPlugins(Registrar registrar) {
   ConnectivityPlusPlugin.registerWith(registrar);
   FirebaseCoreWeb.registerWith(registrar);
   FirebaseMessagingWeb.registerWith(registrar);
+  FirebaseRemoteConfigWeb.registerWith(registrar);
   FlLocationWeb.registerWith(registrar);
   FlutterKeyboardVisibilityPlugin.registerWith(registrar);
   FlutterNativeSplashWeb.registerWith(registrar);

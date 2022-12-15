@@ -48,9 +48,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           databaseService.saveToDisk(DatabaseKeys.isLoggedIn, true);
           databaseService.saveToDisk(
               DatabaseKeys.userPhoneNumber, arguments["userPhone"]);
-          Navigator.pushReplacementNamed(context, Routes.privacyPolicy);
+          // Navigator.pushReplacementNamed(context, Routes.privacyPolicy);
 
-          // Navigator.pushReplacementNamed(context, Routes.cityLogin);
+          Navigator.pushReplacementNamed(context, Routes.cityLogin);
         } else if (state is AuthUsingOtpFailed) {
           Navigator.pop(context);
 

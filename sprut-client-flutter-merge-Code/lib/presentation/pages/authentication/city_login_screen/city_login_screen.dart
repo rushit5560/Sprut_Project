@@ -17,6 +17,7 @@ import 'package:sprut/resources/app_themes/app_themes.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
 
 import '../../../../business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
+import '../../../../data/provider/network_provider.dart';
 import '../../../../resources/configs/routes/routes.dart';
 import '../../../../resources/configs/service_locator/service_locator.dart';
 import '../../../../resources/services/database/database.dart';
@@ -164,19 +165,39 @@ class _CityLoginState extends State<CityLogin> {
                               itemBuilder: (context, index) {
                                 String cityName = "";
 
-                                if (state.availableCities[index].name ==
-                                    "Vinnytsia") {
-                                  cityName = "Staging";
-                                } else if (state.availableCities[index].name ==
-                                    "Uman") {
-                                  cityName = language.uman;
-                                } else if (state.availableCities[index].name ==
-                                    "Haisyn") {
-                                  cityName = language.haisyn;
-                                } else if (state.availableCities[index].name ==
-                                    "Vinnytsia Prod") {
-                                  cityName = "Vinnytsia";
+                                if (NetworkProviderRest.baseUrl ==
+                                    NetworkProviderRest.prodUrl) {
+                                  if (state.availableCities[index].name ==
+                                      "Vinnytsia") {
+                                    cityName = "Staging";
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Uman") {
+                                    cityName = language.uman;
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Haisyn") {
+                                    cityName = language.haisyn;
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Vinnytsia Prod") {
+                                    cityName = "Vinnytsia";
+                                  }
+                                } else {
+                                  if (state.availableCities[index].name ==
+                                      "Vinnytsia") {
+                                    cityName = "Vinnytsia";
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Uman") {
+                                    cityName = language.uman;
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Haisyn") {
+                                    cityName = language.haisyn;
+                                  }
                                 }
+
                                 print('herecityname  $cityName');
 
                                 return GestureDetector(

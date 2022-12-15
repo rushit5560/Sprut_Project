@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\values-pt-rPT\\values-pt-rPT.xml",
+            "outputFile": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\values-pt-rPT\\values-pt-rPT.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\2ee4694ed2533b5064475b6a98c639f4\\jetified-play-services-basement-18.0.0\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\2ee4694ed2533b5064475b6a98c639f4\\jetified-play-services-basement-18.0.0\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -57,10 +57,10 @@
             ]
         },
         {
-            "outputFile": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt-rPT\\values-pt-rPT.xml",
+            "outputFile": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt-rPT\\values-pt-rPT.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\2ee4694ed2533b5064475b6a98c639f4\\jetified-play-services-basement-18.0.0\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\2ee4694ed2533b5064475b6a98c639f4\\jetified-play-services-basement-18.0.0\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -77,7 +77,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -94,7 +94,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-pt-rPT\\values-pt-rPT.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

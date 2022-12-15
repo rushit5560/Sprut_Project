@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\url_launcher_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ar\\values-ar.xml",
+            "outputFile": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\url_launcher_android\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-ar\\values-ar.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-ar\\values-ar.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-ar\\values-ar.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -16,10 +16,10 @@
             ]
         },
         {
-            "outputFile": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\url_launcher_android\\intermediates\\res\\merged\\debug\\values-ar\\values-ar.xml",
+            "outputFile": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\url_launcher_android\\intermediates\\res\\merged\\debug\\values-ar\\values-ar.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-ar\\values-ar.xml",
+                    "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\b6aae338e12656be2a534c392ca3bc09\\core-1.6.0\\res\\values-ar\\values-ar.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

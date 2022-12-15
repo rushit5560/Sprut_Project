@@ -1,14 +1,14 @@
 [
     {
-        "merged": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_tint.xml",
-        "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\color\\common_google_signin_btn_tint.xml"
+        "merged": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_text_dark.xml",
+        "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\color\\common_google_signin_btn_text_dark.xml"
     },
     {
-        "merged": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_text_dark.xml",
-        "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\color\\common_google_signin_btn_text_dark.xml"
+        "merged": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_tint.xml",
+        "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\color\\common_google_signin_btn_tint.xml"
     },
     {
-        "merged": "D:\\github projects\\Sprut_Project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_text_light.xml",
-        "source": "C:\\Users\\user\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\color\\common_google_signin_btn_text_light.xml"
+        "merged": "D:\\flutter_github_projects\\sprut_project\\sprut-client-flutter-merge-Code\\build\\google_maps_flutter_android\\intermediates\\res\\merged\\debug\\color\\common_google_signin_btn_text_light.xml",
+        "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-2\\files-2.1\\f8885f053ebe5512b1a882db2772d1f3\\jetified-play-services-base-18.0.1\\res\\color\\common_google_signin_btn_text_light.xml"
     }
 ]

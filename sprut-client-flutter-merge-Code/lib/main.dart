@@ -42,7 +42,6 @@ void main() async {
             theme: AppThemes.primaryMaterialTheme,
             supportedLocales: L10n.all,
           );
-
         },
       )));
 }

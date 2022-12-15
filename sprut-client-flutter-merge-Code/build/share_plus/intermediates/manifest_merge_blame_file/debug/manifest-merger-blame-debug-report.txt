@@ -3,26 +3,26 @@
 3    package="dev.fluttercommunity.plus.share" >
 4
 5    <uses-sdk android:minSdkVersion="16" />
-5-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml
+5-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml
 6
 7    <application>
-7-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:3:5-13:19
+7-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:3:5-13:19
 8        <provider
-8-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:4:7-12:18
+8-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:4:7-12:18
 9            android:name="dev.fluttercommunity.plus.share.ShareFileProvider"
-9-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:5:9-73
+9-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:5:9-73
 10            android:authorities="${applicationId}.flutter.share_provider"
-10-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:6:9-70
+10-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:6:9-70
 11            android:exported="false"
-11-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:7:9-33
+11-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:7:9-33
 12            android:grantUriPermissions="true" >
-12-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:8:9-43
+12-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:8:9-43
 13            <meta-data
-13-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:9:9-11:61
+13-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:9:9-11:61
 14                android:name="android.support.FILE_PROVIDER_PATHS"
-14-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:10:11-61
+14-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:10:11-61
 15                android:resource="@xml/flutter_share_file_paths" />
-15-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:11:11-59
+15-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\share_plus-2.1.0-nullsafety.0\android\src\main\AndroidManifest.xml:11:11-59
 16        </provider>
 17    </application>
 18

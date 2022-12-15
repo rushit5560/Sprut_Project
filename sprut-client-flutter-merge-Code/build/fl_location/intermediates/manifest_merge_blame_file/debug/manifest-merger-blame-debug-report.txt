@@ -3,27 +3,27 @@
 3    package="com.pravera.fl_location" >
 4
 5    <uses-sdk android:minSdkVersion="21" />
-5-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml
+5-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml
 6
 7    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-7-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:3:5-81
-7-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:3:22-78
+7-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:3:5-81
+7-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:3:22-78
 8    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-8-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:4:5-79
-8-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:4:22-76
+8-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:4:5-79
+8-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:4:22-76
 9
 10    <application>
-10-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:6:5-12:19
+10-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:6:5-12:19
 11        <service
-11-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:7:9-11:40
+11-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:7:9-11:40
 12            android:name="com.pravera.fl_location.service.LocationServicesStatusIntentService"
-12-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:8:13-72
+12-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:8:13-72
 13            android:enabled="true"
-13-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:10:13-35
+13-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:10:13-35
 14            android:exported="false"
-14-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:11:13-37
+14-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:11:13-37
 15            android:permission="android.permission.BIND_JOB_SERVICE" />
-15-->E:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:9:13-69
+15-->D:\flutter_sdk\flutter_3_0_5\flutter\.pub-cache\hosted\pub.dartlang.org\fl_location-1.2.2\android\src\main\AndroidManifest.xml:9:13-69
 16    </application>
 17
 18</manifest>
