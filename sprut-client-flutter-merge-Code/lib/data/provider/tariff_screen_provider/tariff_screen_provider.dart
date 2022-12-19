@@ -21,9 +21,19 @@ class TariffSelectionProvider {
   }
 
   Future<dynamic> getProfile() async {
+    String url = "${NetworkProviderRest.baseUrl}/profile";
+
+    if (NetworkProviderRest.baseUrl == NetworkProviderRest.stagingUrl) {
+      url = "${NetworkProviderRest.baseUrl}/profile";
+    } else {
+      url =
+          "${NetworkProviderRest.baseUrl.substring(0, NetworkProviderRest.baseUrl.length - 3)}/v2/profile";
+    }
+
     try {
       final Response response = await networkProvider.get(
-        url: "${NetworkProviderRest.baseUrl}/profile",
+        url: url,
+        // url: "${NetworkProviderRest.baseUrl}/profile",
       );
 
       return response;

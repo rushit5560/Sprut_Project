@@ -23,6 +23,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../../../data/provider/network_provider.dart';
 import '../../../../resources/app_constants/app_constants.dart';
 import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/configs/service_locator/service_locator.dart';
@@ -171,7 +172,6 @@ class _HomeViewState extends State<HomeView> {
       controller.update();
     });
     initializeFCM();
-
   }
 
   @override
@@ -439,21 +439,44 @@ class _HomeViewState extends State<HomeView> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Obx(() {
+                                          String cityName = "";
+
+                                          if (NetworkProviderRest.baseUrl ==
+                                              NetworkProviderRest.stagingUrl) {
+                                            if (controller
+                                                    .selectCityName.value ==
+                                                "Vinnytsia") {
+                                              cityName = "Staging";
+                                            } else if (controller
+                                                    .selectCityName.value ==
+                                                "Uman") {
+                                              cityName = language.uman;
+                                            } else if (controller
+                                                    .selectCityName.value ==
+                                                "Haisyn") {
+                                              cityName = language.haisyn;
+                                            } else if (controller
+                                                    .selectCityName.value ==
+                                                "Vinnytsia Prod") {
+                                              cityName = "Vinnytsia";
+                                            }
+                                          } else {
+                                            if (controller
+                                                    .selectCityName.value ==
+                                                "Vinnytsia") {
+                                              cityName = "Vinnytsia";
+                                            } else if (controller
+                                                    .selectCityName.value ==
+                                                "Uman") {
+                                              cityName = language.uman;
+                                            } else if (controller
+                                                    .selectCityName.value ==
+                                                "Haisyn") {
+                                              cityName = language.haisyn;
+                                            }
+                                          }
                                           return Text(
-                                            controller.selectCityName.value ==
-                                                    "Vinnytsia"
-                                                ? language.vinnytsia
-                                                : (controller.selectCityName
-                                                            .value ==
-                                                        "Uman"
-                                                    ? language.uman
-                                                    : (controller.selectCityName
-                                                                .value ==
-                                                            "Haisyn"
-                                                        ? language.haisyn
-                                                        : controller
-                                                            .selectCityName
-                                                            .value)),
+                                            cityName,
                                             style: textTheme.bodyText1!
                                                 .copyWith(
                                                     fontSize: 10.sp,
@@ -471,7 +494,8 @@ class _HomeViewState extends State<HomeView> {
                                           colorScheme.primary.withOpacity(0.7),
                                       borderRadius: BorderRadius.circular(8)),
                                   height: 5.h,
-                                  width: 27.w,
+                                  // width: 27.w,
+                                  padding: EdgeInsets.only(left: 8),
                                 ),
                               ),
                             ),

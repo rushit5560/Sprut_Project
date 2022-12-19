@@ -127,20 +127,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   /// [For availableCities of user]
 
   Stream<AuthState> mapAvailableCitiesToState() async* {
+    DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+    String testPhones = await RemoteConfigService.fetchRemoteConfig();
+    String userPhoneNumber =
+        databaseService.getFromDisk(DatabaseKeys.userPhoneNumber) ?? "";
     yield FetchingAvailableCities();
 
     try {
       List<AvailableCitiesModel> availableCities =
           await UserAuthRepository().getAvailableCities();
-      if (NetworkProviderRest.baseUrl == NetworkProviderRest.prodUrl) {
-        DatabaseService databaseService = serviceLocator.get<DatabaseService>();
-        String testPhones = await RemoteConfigService.fetchRemoteConfig();
+      if (NetworkProviderRest.baseUrl == NetworkProviderRest.stagingUrl) {
         // availableCities.clear();
         // availableCities.addAll(availableCities.reversed);
         // // availableCities = availableCities.reversed;
-
-        String userPhoneNumber =
-            databaseService.getFromDisk(DatabaseKeys.userPhoneNumber) ?? "";
 
         log("remotreconfig testPhones list is :: ${testPhones}");
 
@@ -153,8 +152,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           availableCities.removeWhere((item) => item.name == "Vinnytsia");
           yield FetechedAvailableCities(availableCities: availableCities);
         }
-      } else {
-        yield FetechedAvailableCities(availableCities: availableCities);
+      } else if (NetworkProviderRest.baseUrl ==
+          NetworkProviderRest.releaseUrl) {
+        if (testPhones.contains(userPhoneNumber)) {
+// List<AvailableCitiesModel> availableCitiesUpdated =
+
+          yield FetechedAvailableCities(availableCities: availableCities);
+        } else {
+          availableCities.removeWhere((item) => item.name == "Vinnytsia");
+          yield FetechedAvailableCities(availableCities: availableCities);
+        }
       }
 
       // yield FetechedAvailableCities(availableCities: availableCities);

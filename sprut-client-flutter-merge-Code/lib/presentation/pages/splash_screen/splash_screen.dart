@@ -127,15 +127,32 @@ class _SplashScreenState extends State<SplashScreen> {
           DatabaseService databaseService =
               serviceLocator.get<DatabaseService>();
 
-          log("if user acceprted policy :: ${databaseService.getFromDisk(DatabaseKeys.privacyPolicyAccepted)}");
+          log("if user accepted policy :: ${databaseService.getFromDisk(DatabaseKeys.privacyPolicyAccepted)}");
           if ((databaseService
                       .getFromDisk(DatabaseKeys.privacyPolicyAccepted) ??
                   false) ==
               false) {
             Get.offNamed(Routes.privacyPolicy);
-          } else {
+          } else if (Helpers.isLoggedIn()) {
+            log("going login screen :: else if case 0");
             //call api for counts
-            if (databaseService.getFromDisk(DatabaseKeys.selectedCity) !=
+            selectedCity = AvailableCitiesModel.fromJson(jsonDecode(
+                databaseService.getFromDisk(DatabaseKeys.selectedCity)));
+
+            String selectedType =
+                databaseService.getFromDisk(DatabaseKeys.isLoginTypeSelected) ??
+                    AppConstants.TAXI_APP;
+            if (selectedType == AppConstants.TAXI_APP) {
+              databaseService.saveToDisk(
+                  DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+              Get.offNamed(Routes.homeScreen);
+            } else if (selectedType == AppConstants.FOOD_APP) {
+//  databaseService.saveToDisk(
+//                             DatabaseKeys.activeOrderCounts, counts.toString());
+              databaseService.saveToDisk(
+                  DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+              Get.offNamed(Routes.foodHomeScreen);
+            } else if (databaseService.getFromDisk(DatabaseKeys.selectedCity) !=
                 null) {
               selectedCity = AvailableCitiesModel.fromJson(jsonDecode(
                   databaseService.getFromDisk(DatabaseKeys.selectedCity)));
@@ -207,6 +224,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     }
                   }
                 } else {
+                  log("going login screen :: else 1");
                   databaseService.saveToDisk(DatabaseKeys.isLoggedIn, false);
 
                   if (mounted) {
@@ -217,6 +235,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   Get.offNamed(Routes.loginScreen);
                 }
               } else {
+                log("going login screen :: else 2");
                 databaseService.saveToDisk(DatabaseKeys.isLoggedIn, false);
 
                 if (mounted) {
@@ -227,6 +246,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Get.offNamed(Routes.loginScreen);
               }
             } else {
+              log("going login screen :: else 3");
               databaseService.saveToDisk(DatabaseKeys.isLoggedIn, false);
 
               if (mounted) {
@@ -238,6 +258,7 @@ class _SplashScreenState extends State<SplashScreen> {
             }
           }
         } else {
+          log("going login screen :: else 4");
           if (mounted) {
             setState(() {
               apiCall = false;
@@ -246,6 +267,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Get.offNamed(Routes.loginScreen);
         }
       } catch (e) {
+        log("going login screen :: else 5");
         if (mounted) {
           setState(() {
             apiCall = false;

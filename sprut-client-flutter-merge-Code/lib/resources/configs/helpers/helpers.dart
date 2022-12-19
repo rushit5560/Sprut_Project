@@ -267,8 +267,10 @@ class Helpers {
     dataBaseService.saveToDisk(DatabaseKeys.saveCurrentLang, "");
     dataBaseService.saveToDisk(DatabaseKeys.saveCard, "");
     dataBaseService.saveToDisk(DatabaseKeys.isLocationStatus, false);
-    dataBaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-    dataBaseService.saveToDisk(DatabaseKeys.isLoginTypeSelected, AppConstants.TAXI_APP);
+    dataBaseService.saveToDisk(
+        DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+    dataBaseService.saveToDisk(
+        DatabaseKeys.isLoginTypeSelected, AppConstants.TAXI_APP);
     dataBaseService.saveToDisk(DatabaseKeys.deliveryOrder, "");
     dataBaseService.saveToDisk(DatabaseKeys.cartObject, "");
     dataBaseService.saveToDisk(DatabaseKeys.establishmentObject, "");
@@ -556,8 +558,8 @@ class Helpers {
     }
   * */
 
-  static String getListingOrderStatus(BuildContext context, String? deliveryStatus, AppLocalizations language){
-
+  static String getListingOrderStatus(
+      BuildContext context, String? deliveryStatus, AppLocalizations language) {
     switch (deliveryStatus.toString()) {
       case "Order preparing":
         return language.txt_order_preparing;
@@ -619,7 +621,7 @@ class Helpers {
 
   static String? getOrderStatusByDeliveryStatusDefault(
       BuildContext context, String? deliveryStatus, AppLocalizations language) {
-   // print("deliveryStatus:: $deliveryStatus");
+    // print("deliveryStatus:: $deliveryStatus");
     switch (deliveryStatus) {
       case AppConstants.ORDER_STATUS_NEW:
         return "Order preparing";

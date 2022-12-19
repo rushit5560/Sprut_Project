@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -51,9 +53,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           databaseService.saveToDisk(
               DatabaseKeys.userPhoneNumber, arguments["userPhone"]);
 
-          Navigator.pushReplacementNamed(context, Routes.privacyPolicy);
-
-          // Navigator.pushReplacementNamed(context, Routes.cityLogin);
+          if ((databaseService
+                      .getFromDisk(DatabaseKeys.privacyPolicyAccepted) ??
+                  false) ==
+              false) {
+            Navigator.pushReplacementNamed(context, Routes.privacyPolicy);
+          } else {
+            Navigator.pushReplacementNamed(context, Routes.cityLogin);
+          }
         } else if (state is AuthUsingOtpFailed) {
           Navigator.pop(context);
 
@@ -130,7 +137,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                             if (otpEditingController.text.length == 4) {
                               context.read<AuthBloc>().add(AuthVerifyOtp(
-                                  otp: otpEditingController.text));
+                                    otp: otpEditingController.text,
+                                  ));
                             }
 
                             setState(() {});

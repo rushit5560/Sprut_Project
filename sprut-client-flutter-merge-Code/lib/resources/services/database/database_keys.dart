@@ -79,12 +79,16 @@ class DatabaseKeys {
   static String lastStatus = "lastStatus";
   static String paymentMethod = "paymentMethod";
   static String orderAmounts = "orderAmounts";
-//homr_controller_key
 
+  //home_controller_key
   static String currentCityValue = "currentCityValue";
   static String arrivalAddressValue = "arrivalAddressValue";
   static String destinationAddressValue = "destinationAddressValue";
   static String kGooglePlexLatValue = "kGooglePlexLatValue";
   static String kGooglePlexLngValue = "kGooglePlexLngValue";
   static String kLakeValue = "kLakeValue";
+
+  //api url prefs
+  static String baseApiUrlValue = "baseApiUrlValue";
+
 }

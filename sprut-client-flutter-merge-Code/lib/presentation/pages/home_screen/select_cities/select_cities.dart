@@ -22,6 +22,7 @@ import 'package:sprut/resources/configs/service_locator/service_locator.dart';
 import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
 
+import '../../../../data/provider/network_provider.dart';
 import '../../no_internet/no_internet.dart';
 
 class SelectCities extends StatefulWidget {
@@ -48,395 +49,470 @@ class _SelectCitiesState extends State<SelectCities> {
       databaseService.getFromDisk(DatabaseKeys.selectedCityGroupValue) ?? 0;
 
   bool isDefaultCitySaved = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedCity = AvailableCitiesModel(
+        code: "vin",
+        name: "Vinnytsia",
+        localizedName: "Ukraine.Vinnytsia",
+        comment: "",
+        defaultZoom: 13,
+        defaultZoomOnMobile: 13,
+        coatOfArmsUrl: null,
+        wikipediaArticleUrl:
+            "https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BD%D0%BD%D0%B8%D1%86%D1%8F",
+        officialWebsiteUrl: "http://vmr.gov.ua/",
+        population: 372,
+        phoneAreaCode: "43",
+        trivia: null,
+        lat: 49.2372,
+        lon: 28.46722);
+  }
+
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
     var textTheme = Theme.of(context).textTheme;
     var language = AppLocalizations.of(context)!;
     return BlocConsumer<ConnectedBloc, ConnectedState>(
-  listener: (context, state) {
-    // TODO: implement listener
-  },
-  builder: (context, connectionState) {
-    if (connectionState is ConnectedFailureState) {
-      return NoInternetScreen(onPressed: () async {});
-    }
-    if (connectionState is ConnectedSucessState) {}
-    return SafeArea(
-      top: widget.isSettingScreen ? false : true,
-      bottom: widget.isSettingScreen ? false : true,
-      child: Scaffold(
-        bottomNavigationBar: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 8.0, right: 8.0, top: 8.0, bottom: 16.0),
-            child: PrimaryElevatedBtn(
-                buttonText: language.confirm,
-                onPressed: () async {
-                  bool isConnected = await Helpers.checkInternetConnectivity();
-
-                  if (!isConnected) {
-                    Helpers.internetDialog(context);
-                    return;
-                  }
-
-                  if (selectedCity != null) {
-                    Helpers.submitCity(city: selectedCity!);
-
-                    /// Saving radio button group value into db for  showing the previous selectedCity in UI
-                    databaseService.saveToDisk(
-                        DatabaseKeys.selectedCityGroupValue,
-                        selectCityRadioValue);
-
-                    databaseService.saveToDisk(
-                        DatabaseKeys.selectedCityCode, selectedCity!.code);
-                    if (widget.isChooseMapScreen == false) {
-                      /// It Means it is home screen
-
-                      homeScreenScreenController.selectCityName.value =
-                          selectedCity!.name;
-                      homeScreenScreenController.currentCity = selectedCity;
-                      homeScreenScreenController.selectedCityCode =
-                          selectedCity!.code;
-
-                      homeScreenScreenController.googleMapController!
-                          .animateCamera(
-                        CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                            target: (LatLng(
-                                homeScreenScreenController
-                                    .locationData!.latitude!,
-                                homeScreenScreenController
-                                    .locationData!.longitude!)),
-                            zoom: 17.0,
-                          ),
-                        ),
-                      );
-                      homeScreenScreenController.update();
-                      log(homeScreenScreenController.selectCityName.value);
-                    } else if (widget.isChooseMapScreen == true) {
-                      Helpers.submitCity(city: selectedCity!);
-                      databaseService.saveToDisk(
-                          DatabaseKeys.selectedCityCode, selectedCity!.code);
-                      chooseOnMapController.selectCityName.value =
-                          selectedCity!.name;
-                      log(chooseOnMapController.selectCityName.value);
-                      chooseOnMapController.currentCity = selectedCity;
-                      chooseOnMapController.selectedCityCode =
-                          selectedCity!.code;
-
-                      chooseOnMapController.googleMapControllerTwo!
-                          .animateCamera(
-                        CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                            target: (LatLng(
-                                chooseOnMapController.locationData!.latitude!,
-                                chooseOnMapController
-                                    .locationData!.longitude!)),
-                            zoom: 17.0,
-                          ),
-                        ),
-                      );
-                      log(homeScreenScreenController.selectCityName.value);
-                    }
-
-                    Navigator.pop(context);
-                  }
-                }),
-          ),
-        ),
-        body: SafeArea(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, connectionState) {
+        if (connectionState is ConnectedFailureState) {
+          return NoInternetScreen(onPressed: () async {});
+        }
+        if (connectionState is ConnectedSucessState) {}
+        return SafeArea(
           top: widget.isSettingScreen ? false : true,
           bottom: widget.isSettingScreen ? false : true,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: widget.isSettingScreen ? 10 : 32,
-                ),
-                if (widget.isSettingScreen)
-                  SafeArea(
-                    top: true,
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                  size: 7.w,
-                                ),
-                                height: 5.h,
-                                width: 5.h,
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
+          child: Scaffold(
+            bottomNavigationBar: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 8.0, top: 8.0, bottom: 16.0),
+                child: PrimaryElevatedBtn(
+                    buttonText: language.confirm,
+                    onPressed: () async {
+                      bool isConnected =
+                          await Helpers.checkInternetConnectivity();
+
+                      if (!isConnected) {
+                        Helpers.internetDialog(context);
+                        return;
+                      }
+
+                      if (selectedCity != null) {
+                        Helpers.submitCity(city: selectedCity!);
+
+                        /// Saving radio button group value into db for  showing the previous selectedCity in UI
+                        databaseService.saveToDisk(
+                            DatabaseKeys.selectedCityGroupValue,
+                            selectCityRadioValue);
+
+                        databaseService.saveToDisk(
+                            DatabaseKeys.selectedCityCode, selectedCity!.code);
+                        if (widget.isChooseMapScreen == false) {
+                          /// It Means it is home screen
+
+                          homeScreenScreenController.selectCityName.value =
+                              selectedCity!.name;
+                          homeScreenScreenController.currentCity = selectedCity;
+                          homeScreenScreenController.selectedCityCode =
+                              selectedCity!.code;
+
+                          homeScreenScreenController.googleMapController!
+                              .animateCamera(
+                            CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                target: (LatLng(
+                                    homeScreenScreenController
+                                        .locationData!.latitude!,
+                                    homeScreenScreenController
+                                        .locationData!.longitude!)),
+                                zoom: 17.0,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                // _sizedBox(),
-                Text(language.city,
-                    style: textTheme.bodyText1!
-                        .copyWith(fontSize: 15.sp, color: AppThemes.dark)),
-                SizedBox(
-                  height: 4.0,
-                ),
-                Text(language.whereLive,
-                    style: textTheme.bodyText1!.copyWith(
-                        fontSize: 10.sp, color: colorScheme.secondary)),
-                SizedBox(
-                  height: 8.0,
-                ),
-                // _sizedBox(),
-                BlocConsumer<AuthBloc, AuthState>(
-                  listener: (context, state) {
-                    if (state is FetechedAvailableCities) {
-                      if (isDefaultCitySaved == false &&
-                          selectCityRadioValue == 0) {
-                        selectedCity = state.availableCities[0];
-                      } else {
-                        selectedCity =
-                            state.availableCities[selectCityRadioValue];
+                          );
+                          homeScreenScreenController.update();
+                          log(homeScreenScreenController.selectCityName.value);
+                        } else if (widget.isChooseMapScreen == true) {
+                          Helpers.submitCity(city: selectedCity!);
+                          databaseService.saveToDisk(
+                              DatabaseKeys.selectedCityCode,
+                              selectedCity!.code);
+                          chooseOnMapController.selectCityName.value =
+                              selectedCity!.name;
+                          log(chooseOnMapController.selectCityName.value);
+                          chooseOnMapController.currentCity = selectedCity;
+                          chooseOnMapController.selectedCityCode =
+                              selectedCity!.code;
+
+                          chooseOnMapController.googleMapControllerTwo!
+                              .animateCamera(
+                            CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                target: (LatLng(
+                                    chooseOnMapController
+                                        .locationData!.latitude!,
+                                    chooseOnMapController
+                                        .locationData!.longitude!)),
+                                zoom: 17.0,
+                              ),
+                            ),
+                          );
+                          log(homeScreenScreenController.selectCityName.value);
+                        }
+
+                        Navigator.pop(context);
                       }
-
-                      if (state.availableCities.isNotEmpty) {
-                        setState(() {});
-                      }
-                    }
-                  },
-                  builder: (context, state) {
-                    if (homeScreenScreenController.allCities != null) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        alignment: Alignment.topCenter,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount:
-                                homeScreenScreenController.allCities!.length,
-                            padding: EdgeInsets.all(0),
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              String cityName = "";
-
-                              if (homeScreenScreenController
-                                      .allCities![index]!.name ==
-                                  "Vinnytsia") {
-                                cityName = language.vinnytsia;
-                              } else if (homeScreenScreenController
-                                      .allCities![index]!.name ==
-                                  "Uman") {
-                                cityName = language.uman;
-                              } else if (homeScreenScreenController
-                                      .allCities![index]!.name ==
-                                  "Haisyn") {
-                                cityName = language.haisyn;
-                              }
-
-                              return GestureDetector(
-                                onTap: () {
-                                  selectCityRadioValue = index;
-
-                                  selectedCity = homeScreenScreenController
-                                      .allCities![index];
-                                  homeScreenScreenController.getCars();
-                                  isDefaultCitySaved = true;
-                                  setState(() {});
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 4),
-                                  child: Container(
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 14),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              cityName,
-                                              style: TextStyle(
-                                                  color: selectCityRadioValue !=
-                                                          index
-                                                      ? Colors.black
-                                                      : colorScheme.primary,
-                                                  fontFamily:
-                                                      AppConstants.fontFamily,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 10.sp),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                selectCityRadioValue = index;
-
-                                                selectedCity =
-                                                    homeScreenScreenController
-                                                        .allCities![index];
-                                                homeScreenScreenController
-                                                    .getCars();
-
-                                                databaseService.saveToDisk(
-                                                    DatabaseKeys
-                                                        .selectedCityGroupValue,
-                                                    index);
-                                                setState(() {});
-                                              },
-                                              child: AbsorbPointer(
-                                                absorbing: true,
-                                                child: Radio(
-                                                  activeColor:
-                                                      colorScheme.primary,
-                                                  groupValue: index,
-                                                  value: selectCityRadioValue,
-                                                  onChanged: (value) {},
-                                                ),
-                                              ),
-                                            )
-                                          ]),
-                                    ),
-                                    height: 8.h,
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        borderRadius: BorderRadius.circular(9)),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                    if (state is FetechedAvailableCities) {
-                      homeScreenScreenController.allCities =
-                          state.availableCities;
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        alignment: Alignment.topCenter,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount:
-                                homeScreenScreenController.allCities!.length,
-                            padding: EdgeInsets.all(0),
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              String cityName = "";
-
-                              if (homeScreenScreenController
-                                      .allCities![index]!.name ==
-                                  "Vinnytsia") {
-                                cityName = language.vinnytsia;
-                              } else if (homeScreenScreenController
-                                      .allCities![index]!.name ==
-                                  "Uman") {
-                                cityName = language.uman;
-                              } else if (homeScreenScreenController
-                                      .allCities![index]!.name ==
-                                  "Haisyn") {
-                                cityName = language.haisyn;
-                              }
-
-                              return GestureDetector(
-                                onTap: () {
-                                  selectCityRadioValue = index;
-
-                                  selectedCity = homeScreenScreenController
-                                      .allCities![index];
-                                  isDefaultCitySaved = true;
-                                  setState(() {});
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 4),
-                                  child: Container(
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 14),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              cityName,
-                                              style: TextStyle(
-                                                  color: selectCityRadioValue !=
-                                                          index
-                                                      ? Colors.black
-                                                      : colorScheme.primary,
-                                                  fontFamily:
-                                                      AppConstants.fontFamily,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 10.sp),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                selectCityRadioValue = index;
-
-                                                selectedCity =
-                                                    homeScreenScreenController
-                                                        .allCities![index];
-                                                homeScreenScreenController
-                                                    .getCars();
-
-                                                setState(() {});
-                                              },
-                                              child: AbsorbPointer(
-                                                absorbing: true,
-                                                child: Radio(
-                                                  activeColor:
-                                                      colorScheme.primary,
-                                                  groupValue: index,
-                                                  value: selectCityRadioValue,
-                                                  onChanged: (value) {},
-                                                ),
-                                              ),
-                                            )
-                                          ]),
-                                    ),
-                                    height: 8.h,
-                                    decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        borderRadius: BorderRadius.circular(9)),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 40.h,
-                          ),
-                          Center(child: SprutCircularProgressBar()),
-                        ],
-                      );
-                    }
-                  },
-                )
-              ],
+                    }),
+              ),
             ),
+            body: SafeArea(
+              top: widget.isSettingScreen ? false : true,
+              bottom: widget.isSettingScreen ? false : true,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: widget.isSettingScreen ? 10 : 32,
+                    ),
+                    if (widget.isSettingScreen)
+                      SafeArea(
+                        top: true,
+                        bottom: false,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Container(
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.white,
+                                      size: 7.w,
+                                    ),
+                                    height: 5.h,
+                                    width: 5.h,
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    // _sizedBox(),
+                    Text(language.city,
+                        style: textTheme.bodyText1!
+                            .copyWith(fontSize: 15.sp, color: AppThemes.dark)),
+                    SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(language.whereLive,
+                        style: textTheme.bodyText1!.copyWith(
+                            fontSize: 10.sp, color: colorScheme.secondary)),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    // _sizedBox(),
+                    BlocConsumer<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        if (state is FetechedAvailableCities) {
+                          if (isDefaultCitySaved == false &&
+                              selectCityRadioValue == 0) {
+                            selectedCity = state.availableCities[0];
+                          } else {
+                            selectedCity =
+                                state.availableCities[selectCityRadioValue];
+                          }
+
+                          if (state.availableCities.isNotEmpty) {
+                            setState(() {});
+                          }
+                        }
+                      },
+                      builder: (context, state) {
+                        if (homeScreenScreenController.allCities != null) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.topCenter,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: homeScreenScreenController
+                                    .allCities!.length,
+                                padding: EdgeInsets.all(0),
+                                physics: BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  String cityName = "";
+
+                                  if (NetworkProviderRest.baseUrl ==
+                                      NetworkProviderRest.stagingUrl) {
+                                    if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Vinnytsia") {
+                                      cityName = "Staging";
+                                    } else if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Uman") {
+                                      cityName = language.uman;
+                                    } else if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Haisyn") {
+                                      cityName = language.haisyn;
+                                    } else if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Vinnytsia Prod") {
+                                      cityName = "Vinnytsia";
+                                    }
+                                  } else {
+                                    if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Vinnytsia") {
+                                      cityName = "Vinnytsia";
+                                    } else if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Uman") {
+                                      cityName = language.uman;
+                                    } else if (homeScreenScreenController
+                                            .allCities![index]!.name ==
+                                        "Haisyn") {
+                                      cityName = language.haisyn;
+                                    }
+                                  }
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      selectCityRadioValue = index;
+
+                                      selectedCity = homeScreenScreenController
+                                          .allCities![index];
+                                      homeScreenScreenController.getCars();
+                                      isDefaultCitySaved = true;
+                                      setState(() {});
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 4),
+                                      child: Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 14),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  cityName,
+                                                  style: TextStyle(
+                                                      color:
+                                                          selectCityRadioValue !=
+                                                                  index
+                                                              ? Colors.black
+                                                              : colorScheme
+                                                                  .primary,
+                                                      fontFamily: AppConstants
+                                                          .fontFamily,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 10.sp),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    selectCityRadioValue =
+                                                        index;
+
+                                                    selectedCity =
+                                                        homeScreenScreenController
+                                                            .allCities![index];
+                                                    homeScreenScreenController
+                                                        .getCars();
+
+                                                    databaseService.saveToDisk(
+                                                        DatabaseKeys
+                                                            .selectedCityGroupValue,
+                                                        index);
+                                                    setState(() {});
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            new FocusNode());
+                                                  },
+                                                  child: AbsorbPointer(
+                                                    absorbing: true,
+                                                    child: Radio(
+                                                      activeColor:
+                                                          colorScheme.primary,
+                                                      groupValue: index,
+                                                      value:
+                                                          selectCityRadioValue,
+                                                      onChanged: (value) {},
+                                                    ),
+                                                  ),
+                                                )
+                                              ]),
+                                        ),
+                                        height: 8.h,
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background,
+                                            borderRadius:
+                                                BorderRadius.circular(9)),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          );
+                        }
+                        if (state is FetechedAvailableCities) {
+                          homeScreenScreenController.allCities =
+                              state.availableCities;
+
+                          log("state.availableCities :: ${state.availableCities}");
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.topCenter,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: homeScreenScreenController
+                                    .allCities!.length,
+                                padding: EdgeInsets.all(0),
+                                physics: BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  String cityName = "";
+
+                                  if (homeScreenScreenController
+                                          .allCities![index]!.name ==
+                                      "Vinnytsia") {
+                                    cityName = language.vinnytsia;
+                                  } else if (homeScreenScreenController
+                                          .allCities![index]!.name ==
+                                      "Uman") {
+                                    cityName = language.uman;
+                                  } else if (homeScreenScreenController
+                                          .allCities![index]!.name ==
+                                      "Haisyn") {
+                                    cityName = language.haisyn;
+                                  }
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      selectCityRadioValue = index;
+
+                                      selectedCity = homeScreenScreenController
+                                          .allCities![index];
+                                      isDefaultCitySaved = true;
+                                      setState(() {});
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 4),
+                                      child: Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 14),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  cityName,
+                                                  style: TextStyle(
+                                                      color:
+                                                          selectCityRadioValue !=
+                                                                  index
+                                                              ? Colors.black
+                                                              : colorScheme
+                                                                  .primary,
+                                                      fontFamily: AppConstants
+                                                          .fontFamily,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 10.sp),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    selectCityRadioValue =
+                                                        index;
+
+                                                    selectedCity =
+                                                        homeScreenScreenController
+                                                            .allCities![index];
+                                                    homeScreenScreenController
+                                                        .getCars();
+
+                                                    setState(() {});
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            new FocusNode());
+                                                  },
+                                                  child: AbsorbPointer(
+                                                    absorbing: true,
+                                                    child: Radio(
+                                                      activeColor:
+                                                          colorScheme.primary,
+                                                      groupValue: index,
+                                                      value:
+                                                          selectCityRadioValue,
+                                                      onChanged: (value) {},
+                                                    ),
+                                                  ),
+                                                )
+                                              ]),
+                                        ),
+                                        height: 8.h,
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background,
+                                            borderRadius:
+                                                BorderRadius.circular(9)),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          );
+                        } else {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 40.h,
+                              ),
+                              Center(child: SprutCircularProgressBar()),
+                            ],
+                          );
+                        }
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+            backgroundColor: colorScheme.onBackground,
           ),
-        ),
-        backgroundColor: colorScheme.onBackground,
-      ),
+        );
+      },
     );
-  },
-);
   }
 
   SizedBox _sizedBox() {

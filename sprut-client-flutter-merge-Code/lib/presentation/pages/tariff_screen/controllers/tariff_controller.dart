@@ -773,6 +773,37 @@ class TariffController extends GetxController {
     polylines[id] = polyline;
     update();
   }
+   // Create the polylines for showing the route between two places
+  _createPolylines(
+    double startLatitude,
+    double startLongitude,
+    double destinationLatitude,
+    double destinationLongitude,
+  ) async {
+    polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      "AIzaSyAgOMMJYUIhOFW_uiRmfNFUvkMvI0t9pis", // Google Maps API Key
+      PointLatLng(startLatitude, startLongitude),
+      PointLatLng(destinationLatitude, destinationLongitude),
+      travelMode: TravelMode.driving,
+    );
+
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
+
+    PolylineId id = PolylineId('poly');
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Color(0xff8370DC),
+      points: polylineCoordinates,
+      width: 4,
+    );
+    polylines[id] = polyline;
+  }
+
 
   getDirections() async {
     List<LatLng> polylineCoordinates = [];

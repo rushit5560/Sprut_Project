@@ -106,12 +106,15 @@ class TariffView extends GetView<TariffController> {
                                   child: GoogleMap(
                                     zoomControlsEnabled: true,
                                     onCameraMove: (position) {
-                                      controller.customInfoWindowController.onCameraMove!();
+                                      controller.customInfoWindowController
+                                          .onCameraMove!();
                                     },
                                     onTap: (lat) {
-                                      controller.customInfoWindowController.hideInfoWindow!();
+                                      controller.customInfoWindowController
+                                          .hideInfoWindow!();
                                     },
-                                    polylines: Set<Polyline>.of(controller.polylines.values),
+                                    polylines: Set<Polyline>.of(
+                                        controller.polylines.values),
                                     mapType: MapType.normal,
                                     compassEnabled: false,
                                     mapToolbarEnabled: false,
@@ -119,11 +122,12 @@ class TariffView extends GetView<TariffController> {
                                     myLocationButtonEnabled: false,
 
                                     // markers: value.markersSet,
-                                    markers: Set<Marker>.of(controller.markers.values),
+                                    markers: Set<Marker>.of(
+                                        controller.markers.values),
 
                                     initialCameraPosition: CameraPosition(
-                                        target:
-                                        /*(Get.find<HomeViewController>()
+                                      target:
+                                          /*(Get.find<HomeViewController>()
                                                     .locationData !=
                                                 null)
                                             ? LatLng(
@@ -133,13 +137,14 @@ class TariffView extends GetView<TariffController> {
                                                 Get.find<HomeViewController>()
                                                     .locationData!
                                                     .longitude!)
-                                            :*/ LatLng(
-                                                Get.find<HomeViewController>()
-                                                    .selectedCity!
-                                                    .lat,
-                                                Get.find<HomeViewController>()
-                                                    .selectedCity!
-                                                    .lon),
+                                            :*/
+                                          LatLng(
+                                              Get.find<HomeViewController>()
+                                                  .selectedCity!
+                                                  .lat,
+                                              Get.find<HomeViewController>()
+                                                  .selectedCity!
+                                                  .lon),
                                       zoom: 12.4746,
                                     ),
 
@@ -160,8 +165,9 @@ class TariffView extends GetView<TariffController> {
                                         child: Container(
                                           width:
                                               MediaQuery.of(context).size.width,
-                                          height:
-                                              MediaQuery.of(context).size.height,
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
                                           color: Colors.white,
                                           child: Column(
                                             mainAxisAlignment:
@@ -192,7 +198,8 @@ class TariffView extends GetView<TariffController> {
                                   left: 6,
                                   child: SafeArea(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -229,7 +236,8 @@ class TariffView extends GetView<TariffController> {
                                                 .updateSuggestionsOnBack();
                                             Get.back();
                                             // FocusManager.instance.primaryFocus?.focus();
-                                            FocusScope.of(context).requestFocus(new FocusNode());
+                                            FocusScope.of(context)
+                                                .requestFocus(new FocusNode());
                                           },
                                           child: Container(
                                             child: Icon(
@@ -241,11 +249,11 @@ class TariffView extends GetView<TariffController> {
                                             width: 5.h,
                                             decoration: BoxDecoration(
                                               color: colorScheme.primary,
-                                              borderRadius: BorderRadius.circular(5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                             ),
                                           ),
                                         ),
-
                                         const SizedBox(
                                           height: 8.0,
                                         ),

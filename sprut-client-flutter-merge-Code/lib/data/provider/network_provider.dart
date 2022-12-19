@@ -9,6 +9,10 @@ import 'package:sprut/resources/app_enums/api_enums.dart';
 import 'package:sprut/resources/app_strings/app_strings.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
 
+import '../../resources/configs/service_locator/service_locator.dart';
+import '../../resources/services/database/database.dart';
+import '../../resources/services/database/database_keys.dart';
+
 class NetworkProviderRest {
   late Dio _dio;
   late Dio _dioSecured;
@@ -17,13 +21,18 @@ class NetworkProviderRest {
     prepareBaseRestRequest();
   }
 
+  static String prefUrl = serviceLocator
+          .get<DatabaseService>()
+          .getFromDisk(DatabaseKeys.baseApiUrlValue) ??
+      "";
+
   final Duration defaultTimeout = Duration(seconds: 100);
   // https://fp-test.altertaxi.com.ua/v1/ukrvin/orders/8247893
 
-  static String prodUrl = "https://fp-test.altertaxi.com.ua/v1";
+  static String stagingUrl = "https://fp-test.altertaxi.com.ua/v1";
   static String releaseUrl = "https://client-api.sprut.mobi/v1";
 
-  static String baseUrl = prodUrl;
+  static String baseUrl = prefUrl == "" ? releaseUrl : prefUrl;
 
   // static final baseUrl = "https://fp-test.altertaxi.com.ua/v1";
   // Taxi

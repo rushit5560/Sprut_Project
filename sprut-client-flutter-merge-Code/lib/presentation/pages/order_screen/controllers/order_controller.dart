@@ -46,12 +46,12 @@ class OrderController extends GetxController {
 
   MainScreenRepostory mainScreenRepostory = MainScreenRepostory();
 
-
   /// [Location Fields]
   PermissionStatus? permissionGranted;
   LocationData? locationData;
   Location location = new Location();
   String selectedCityCode = "";
+
   /// Is Location Service Enabled
   bool serviceEnabled = false;
 
@@ -152,14 +152,14 @@ class OrderController extends GetxController {
       calculateDistance();
     }
 
-    if(orderInfoDetails.value?.car != null ){
+    if (orderInfoDetails.value?.car != null) {
       tempCarData = orderInfoDetails.value?.car;
     }
 
     //orderInfoDetails.value?.deliveryStatus ==
     //             AppConstants.ORDER_STATUS_CANCELED_CLIENT ||
     if (orderInfoDetails.value?.deliveryStatus ==
-            AppConstants.ORDER_STATUS_CANCELED_KITCHEN) {
+        AppConstants.ORDER_STATUS_CANCELED_KITCHEN) {
       isShowCancelDialog = true;
       update();
     } else {
@@ -610,63 +610,60 @@ class OrderController extends GetxController {
     String? establishmentAddress = "";
 
     if (orderInfoDetails.value?.addresses != null) {
-      if (orderInfoDetails.value?.establishment?.addresses?.isNotEmpty == true) {
-
+      if (orderInfoDetails.value?.establishment?.addresses?.isNotEmpty ==
+          true) {
         var length = orderInfoDetails.value?.addresses?.length;
-        for (int i = 0; i < length!.toInt(); i++){
-
-          if(orderInfoDetails.value?.addresses![i].osmId?.isNotEmpty == true){
-
-            if (orderInfoDetails.value?.establishment?.addresses![i].place?.street
-                .toString()
-                .isNotEmpty ==
+        for (int i = 0; i < length!.toInt(); i++) {
+          if (orderInfoDetails.value?.addresses![i].osmId?.isNotEmpty == true) {
+            if (orderInfoDetails
+                    .value?.establishment?.addresses![i].place?.street
+                    .toString()
+                    .isNotEmpty ==
                 true) {
               establishmentAddress = orderInfoDetails
                   .value?.establishment?.addresses![i].place?.street
                   .toString();
             }
 
-
             if (orderInfoDetails
-                .value?.establishment?.addresses![i].place?.houseNumber
-                .toString()
-                .isNotEmpty ==
+                    .value?.establishment?.addresses![i].place?.houseNumber
+                    .toString()
+                    .isNotEmpty ==
                 true) {
               if (establishmentAddress?.isEmpty == true) {
                 establishmentAddress =
-                "${orderInfoDetails.value?.establishment?.addresses![i].place?.houseNumber.toString()}";
+                    "${orderInfoDetails.value?.establishment?.addresses![i].place?.houseNumber.toString()}";
               } else {
                 establishmentAddress =
-                "$establishmentAddress, ${orderInfoDetails.value?.establishment?.addresses![i].place?.houseNumber.toString()}";
+                    "$establishmentAddress, ${orderInfoDetails.value?.establishment?.addresses![i].place?.houseNumber.toString()}";
               }
             }
 
             if (orderInfoDetails.value?.establishment?.addresses![i].place?.name
-                .toString()
-                .isNotEmpty ==
+                    .toString()
+                    .isNotEmpty ==
                 true) {
               if (establishmentAddress?.isEmpty == true) {
                 establishmentAddress =
-                "${orderInfoDetails.value?.establishment?.addresses![i].place?.name.toString()}";
+                    "${orderInfoDetails.value?.establishment?.addresses![i].place?.name.toString()}";
               } else {
                 establishmentAddress =
-                "$establishmentAddress, ${orderInfoDetails.value?.establishment?.addresses![i].place?.name.toString()}";
+                    "$establishmentAddress, ${orderInfoDetails.value?.establishment?.addresses![i].place?.name.toString()}";
               }
             }
 
             if (orderInfoDetails.value?.establishment?.addresses![i].place?.city
-                .toString()
-                .isNotEmpty ==
+                    .toString()
+                    .isNotEmpty ==
                 true) {
               if (establishmentAddress?.isEmpty == true) {
                 establishmentAddress =
-                "${orderInfoDetails.value?.establishment?.addresses![i].place?.city.toString()}";
+                    "${orderInfoDetails.value?.establishment?.addresses![i].place?.city.toString()}";
               } else {
                 establishmentAddress =
-                "$establishmentAddress, ${orderInfoDetails.value?.establishment?.addresses![i].place?.city.toString()}";
+                    "$establishmentAddress, ${orderInfoDetails.value?.establishment?.addresses![i].place?.city.toString()}";
               }
             }
-
           }
         }
       }
@@ -883,8 +880,6 @@ class OrderController extends GetxController {
     }
   }
 
-
-
   fetchUserLocation() async {
     serviceEnabled = await location.serviceEnabled();
     print("Locationn data 5");
@@ -918,7 +913,7 @@ class OrderController extends GetxController {
     print("Locationn data 1 $permissionGranted");
 
     if ((permissionGranted == PermissionStatus.granted ||
-        permissionGranted == PermissionStatus.grantedLimited) &&
+            permissionGranted == PermissionStatus.grantedLimited) &&
         locationServiceStatus == fl.LocationServicesStatus.enabled) {
       Position a = await Geolocator.getCurrentPosition();
       if (a != null) {
@@ -935,20 +930,16 @@ class OrderController extends GetxController {
     }
   }
 
-
   animateToCurrent() async {
     if (locationData != null) {
       googleMapController!.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            target: LatLng(
-                locationData!.latitude!,
-                locationData!.longitude!),
+            target: LatLng(locationData!.latitude!, locationData!.longitude!),
             zoom: 17.0,
           ),
         ),
       );
     }
   }
-
 }

@@ -1500,7 +1500,7 @@ class HomeViewController extends GetxController {
     print("updateStatus() : For Car Order");
     String order = "";
     try {
-      order = databaseService.getFromDisk(DatabaseKeys.order);
+      order = databaseService.getFromDisk(DatabaseKeys.order) ?? "";
     } catch (e) {
       print("updateStatus() : Execution");
     }

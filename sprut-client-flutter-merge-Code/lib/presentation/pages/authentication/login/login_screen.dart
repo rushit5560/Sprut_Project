@@ -187,10 +187,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 if (NetworkProviderRest
                                                         .baseUrl ==
                                                     NetworkProviderRest
-                                                        .prodUrl) {
+                                                        .stagingUrl) {
                                                   NetworkProviderRest.baseUrl =
                                                       NetworkProviderRest
                                                           .releaseUrl;
+
+                                                  DatabaseService
+                                                      databaseService =
+                                                      serviceLocator.get<
+                                                          DatabaseService>();
+
+                                                  databaseService.saveToDisk(
+                                                      DatabaseKeys
+                                                          .baseApiUrlValue,
+                                                      NetworkProviderRest
+                                                          .baseUrl);
+
+                                                  String url = databaseService
+                                                      .getFromDisk(DatabaseKeys
+                                                          .baseApiUrlValue);
+
+                                                  log("pref url is :: ${url}");
 
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
@@ -206,7 +223,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         .releaseUrl) {
                                                   NetworkProviderRest.baseUrl =
                                                       NetworkProviderRest
-                                                          .prodUrl;
+                                                          .stagingUrl;
+
+                                                  databaseService.saveToDisk(
+                                                      DatabaseKeys
+                                                          .baseApiUrlValue,
+                                                      NetworkProviderRest
+                                                          .baseUrl);
+
+                                                  String url = databaseService
+                                                      .getFromDisk(DatabaseKeys
+                                                          .baseApiUrlValue);
+
+                                                  log("pref url is :: ${url}");
+
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
                                                     SnackBar(

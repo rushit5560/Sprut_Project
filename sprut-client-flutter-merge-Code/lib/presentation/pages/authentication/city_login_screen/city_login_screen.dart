@@ -88,20 +88,24 @@ class _CityLoginState extends State<CityLogin> {
 
     log("remotreconfig testPhones list is :: ${testPhones}");
 
-    if (NetworkProviderRest.baseUrl == NetworkProviderRest.prodUrl) {
+    if (NetworkProviderRest.baseUrl == NetworkProviderRest.stagingUrl) {
       if (testPhones.contains(userPhoneNumber)) {
 // List<AvailableCitiesModel> availableCitiesUpdated =
         setState(() {
           selectCityRadioValue = 3;
         });
+
+        databaseService.saveToDisk(DatabaseKeys.selectedCityGroupValue, 3);
       } else {
         setState(() {
           selectCityRadioValue = 0;
+          databaseService.saveToDisk(DatabaseKeys.selectedCityGroupValue, 0);
         });
       }
     } else {
       setState(() {
         selectCityRadioValue = 0;
+        databaseService.saveToDisk(DatabaseKeys.selectedCityGroupValue, 0);
       });
     }
   }
@@ -212,7 +216,7 @@ class _CityLoginState extends State<CityLogin> {
                                 String cityName = "";
 
                                 if (NetworkProviderRest.baseUrl ==
-                                    NetworkProviderRest.prodUrl) {
+                                    NetworkProviderRest.stagingUrl) {
                                   if (state.availableCities[index].name ==
                                       "Vinnytsia") {
                                     cityName = "Staging";
