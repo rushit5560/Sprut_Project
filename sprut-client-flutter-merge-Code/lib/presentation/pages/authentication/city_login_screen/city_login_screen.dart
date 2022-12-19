@@ -17,10 +17,12 @@ import 'package:sprut/resources/app_themes/app_themes.dart';
 import 'package:sprut/resources/configs/helpers/helpers.dart';
 
 import '../../../../business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
+import '../../../../data/provider/network_provider.dart';
 import '../../../../resources/configs/routes/routes.dart';
 import '../../../../resources/configs/service_locator/service_locator.dart';
 import '../../../../resources/services/database/database.dart';
 import '../../../../resources/services/database/database_keys.dart';
+import '../../../../resources/services/remote_config_service.dart';
 import '../../no_internet/no_internet.dart';
 
 class CityLogin extends StatefulWidget {
@@ -29,32 +31,81 @@ class CityLogin extends StatefulWidget {
 }
 
 class _CityLoginState extends State<CityLogin> {
-  DatabaseService databaseService = serviceLocator.get<DatabaseService>();
   int selectCityRadioValue = 0;
+  var testPhones = "";
+  AvailableCitiesModel? selectedCityName;
 
   @override
   void initState() {
+    fetchRemotedata();
     super.initState();
+
+    selectedCityName = AvailableCitiesModel(
+        code: "vin",
+        name: "Vinnytsia",
+        localizedName: "Ukraine.Vinnytsia",
+        comment: "",
+        defaultZoom: 13,
+        defaultZoomOnMobile: 13,
+        coatOfArmsUrl: null,
+        wikipediaArticleUrl:
+            "https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BD%D0%BD%D0%B8%D1%86%D1%8F",
+        officialWebsiteUrl: "http://vmr.gov.ua/",
+        population: 372,
+        phoneAreaCode: "43",
+        trivia: null,
+        lat: 49.2372,
+        lon: 28.46722);
+
     Helpers.submitCity(
-        city: AvailableCitiesModel(
-            code: "vin",
-            name: "Vinnytsia",
-            localizedName: "Ukraine.Vinnytsia",
-            comment: "",
-            defaultZoom: 13,
-            defaultZoomOnMobile: 13,
-            coatOfArmsUrl: null,
-            wikipediaArticleUrl:
-                "https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BD%D0%BD%D0%B8%D1%86%D1%8F",
-            officialWebsiteUrl: "http://vmr.gov.ua/",
-            population: 372,
-            phoneAreaCode: "43",
-            trivia: null,
-            lat: 49.2372,
-            lon: 28.46722));
+      city: AvailableCitiesModel(
+          code: "vin",
+          name: "Vinnytsia",
+          localizedName: "Ukraine.Vinnytsia",
+          comment: "",
+          defaultZoom: 13,
+          defaultZoomOnMobile: 13,
+          coatOfArmsUrl: null,
+          wikipediaArticleUrl:
+              "https://uk.wikipedia.org/wiki/%D0%92%D1%96%D0%BD%D0%BD%D0%B8%D1%86%D1%8F",
+          officialWebsiteUrl: "http://vmr.gov.ua/",
+          population: 372,
+          phoneAreaCode: "43",
+          trivia: null,
+          lat: 49.2372,
+          lon: 28.46722),
+    );
   }
 
-  AvailableCitiesModel? selectedCityName;
+  Future<void> fetchRemotedata() async {
+    DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+    testPhones = await RemoteConfigService.fetchRemoteConfig();
+    setState(() {});
+    log("remotreconfig testPhones list is :: ${testPhones}");
+
+    String userPhoneNumber =
+        databaseService.getFromDisk(DatabaseKeys.userPhoneNumber) ?? "";
+
+    log("remotreconfig testPhones list is :: ${testPhones}");
+
+    if (NetworkProviderRest.baseUrl == NetworkProviderRest.prodUrl) {
+      if (testPhones.contains(userPhoneNumber)) {
+// List<AvailableCitiesModel> availableCitiesUpdated =
+        setState(() {
+          selectCityRadioValue = 3;
+        });
+      } else {
+        setState(() {
+          selectCityRadioValue = 0;
+        });
+      }
+    } else {
+      setState(() {
+        selectCityRadioValue = 0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Helpers.systemStatusBar();
@@ -89,19 +140,17 @@ class _CityLoginState extends State<CityLogin> {
                   bool isConnected = await Helpers.checkInternetConnectivity();
                   if (!isConnected) {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NoInternetScreen(
-                          onPressed: () async {
-                            bool isConnected =
-                                await Helpers.checkInternetConnectivity();
-                            if (isConnected) {
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                      ),
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NoInternetScreen(
+                                  onPressed: () async {
+                                    bool isConnected = await Helpers
+                                        .checkInternetConnectivity();
+                                    if (isConnected) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                )));
 
                     // Helpers.internetDialog(context);
                     return;
@@ -142,14 +191,12 @@ class _CityLoginState extends State<CityLogin> {
                   BlocConsumer<AuthBloc, AuthState>(
                     listener: (context, state) {
                       if (state is FetechedAvailableCities) {
-                        log("FetechedAvailableCities seting city");
                         if (state.availableCities.isNotEmpty) {
                           if (selectedCityName == null) {
                             selectedCityName = state.availableCities[0];
                           }
+                          setState(() {});
                         }
-
-                        setState(() {});
                       }
                     },
                     builder: (context, state) {
@@ -164,18 +211,37 @@ class _CityLoginState extends State<CityLogin> {
                               itemBuilder: (context, index) {
                                 String cityName = "";
 
-                                if (state.availableCities[index].name ==
-                                    "Vinnytsia") {
-                                  cityName = "Staging";
-                                } else if (state.availableCities[index].name ==
-                                    "Uman") {
-                                  cityName = language.uman;
-                                } else if (state.availableCities[index].name ==
-                                    "Haisyn") {
-                                  cityName = language.haisyn;
-                                } else if (state.availableCities[index].name ==
-                                    "Vinnytsia Prod") {
-                                  cityName = "Vinnytsia";
+                                if (NetworkProviderRest.baseUrl ==
+                                    NetworkProviderRest.prodUrl) {
+                                  if (state.availableCities[index].name ==
+                                      "Vinnytsia") {
+                                    cityName = "Staging";
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Uman") {
+                                    cityName = language.uman;
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Haisyn") {
+                                    cityName = language.haisyn;
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Vinnytsia Prod") {
+                                    cityName = "Vinnytsia";
+                                  }
+                                } else {
+                                  if (state.availableCities[index].name ==
+                                      "Vinnytsia") {
+                                    cityName = "Vinnytsia";
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Uman") {
+                                    cityName = language.uman;
+                                  } else if (state
+                                          .availableCities[index].name ==
+                                      "Haisyn") {
+                                    cityName = language.haisyn;
+                                  }
                                 }
                                 print('herecityname  $cityName');
 
@@ -185,9 +251,6 @@ class _CityLoginState extends State<CityLogin> {
                                     selectedCityName =
                                         state.availableCities[index];
                                     setState(() {});
-
-                                    // log("selectCityRadioValue is :: ${selectCityRadioValue}");
-                                    // log("selectCityRadioValue is :: ${selectedCityName = state.availableCities[index]}");
                                   },
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(vertical: 6),

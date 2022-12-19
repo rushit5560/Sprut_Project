@@ -40,6 +40,8 @@
 
 "myLocation": "My Location",
 
+"accept": "Accept",
+
 "logout": "Logout",
 "orderHistory": "Order history",
 "payment": "Payment",

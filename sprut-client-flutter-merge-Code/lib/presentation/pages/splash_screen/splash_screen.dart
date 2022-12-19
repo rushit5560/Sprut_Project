@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkConnection() async {
-     isConnected = await Helpers.checkInternetConnectivity();
+    isConnected = await Helpers.checkInternetConnectivity();
     await Timer.periodic(Duration(seconds: 1), (timer) async {
       isConnected = await Helpers.checkInternetConnectivity();
       if (isConnected == false) {
@@ -122,45 +123,67 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () async {
       try {
         if (Helpers.isLoggedIn()) {
+          log("if user logged in :: ${Helpers.isLoggedIn()}");
           DatabaseService databaseService =
               serviceLocator.get<DatabaseService>();
-          //call api for counts
-          if (databaseService.getFromDisk(DatabaseKeys.selectedCity) != null) {
-            selectedCity = AvailableCitiesModel.fromJson(jsonDecode(
-                databaseService.getFromDisk(DatabaseKeys.selectedCity)));
-            if (selectedCity != null) {
-              var cityCode = selectedCity!.code;
-              var response =
-                  await userAuthProvider.getActiveCounts(cityCode.toString());
 
-              if (response != null) {
-                Map<String, dynamic> mapData = jsonDecode(response.toString());
-                var counts = mapData['count'];
-                String order = "";
-                try {
-                  order = databaseService.getFromDisk(DatabaseKeys.order);
-                } catch (e) {}
+          log("if user acceprted policy :: ${databaseService.getFromDisk(DatabaseKeys.privacyPolicyAccepted)}");
+          if ((databaseService
+                      .getFromDisk(DatabaseKeys.privacyPolicyAccepted) ??
+                  false) ==
+              false) {
+            Get.offNamed(Routes.privacyPolicy);
+          } else {
+            //call api for counts
+            if (databaseService.getFromDisk(DatabaseKeys.selectedCity) !=
+                null) {
+              selectedCity = AvailableCitiesModel.fromJson(jsonDecode(
+                  databaseService.getFromDisk(DatabaseKeys.selectedCity)));
+              if (selectedCity != null) {
+                var cityCode = selectedCity!.code;
+                var response =
+                    await userAuthProvider.getActiveCounts(cityCode.toString());
 
-                String selectedType = databaseService
-                        .getFromDisk(DatabaseKeys.isLoginTypeSelected) ??
-                    AppConstants.TAXI_APP;
-                //check selected type
-                if (selectedType == AppConstants.TAXI_APP) {
-                  if (order != "") {
-                    OrderModel orderModel =
-                        OrderModel.fromJson(jsonDecode(order));
-                    if (orderModel != null) {
-                      databaseService.saveToDisk(
-                          DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-                      Get.offNamed(Routes.homeScreen);
-                    } else if (counts > 0) {
-                      databaseService.saveToDisk(
-                          DatabaseKeys.activeOrderCounts, counts.toString());
-                      databaseService.saveToDisk(
-                          DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
-                      Get.offNamed(Routes.foodHomeScreen);
+                if (response != null) {
+                  Map<String, dynamic> mapData =
+                      jsonDecode(response.toString());
+                  var counts = mapData['count'];
+                  String order = "";
+                  try {
+                    order = databaseService.getFromDisk(DatabaseKeys.order);
+                  } catch (e) {}
+
+                  String selectedType = databaseService
+                          .getFromDisk(DatabaseKeys.isLoginTypeSelected) ??
+                      AppConstants.TAXI_APP;
+                  //check selected type
+                  if (selectedType == AppConstants.TAXI_APP) {
+                    if (order != "") {
+                      OrderModel orderModel =
+                          OrderModel.fromJson(jsonDecode(order));
+                      if (orderModel != null) {
+                        databaseService.saveToDisk(
+                            DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+                        Get.offNamed(Routes.homeScreen);
+                      } else if (counts > 0) {
+                        databaseService.saveToDisk(
+                            DatabaseKeys.activeOrderCounts, counts.toString());
+                        databaseService.saveToDisk(
+                            DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+                        Get.offNamed(Routes.foodHomeScreen);
+                      } else {
+                        openActivity(databaseService);
+                      }
                     } else {
-                      openActivity(databaseService);
+                      if (counts > 0) {
+                        databaseService.saveToDisk(
+                            DatabaseKeys.activeOrderCounts, counts.toString());
+                        databaseService.saveToDisk(
+                            DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+                        Get.offNamed(Routes.foodHomeScreen);
+                      } else {
+                        openActivity(databaseService);
+                      }
                     }
                   } else {
                     if (counts > 0) {
@@ -169,30 +192,29 @@ class _SplashScreenState extends State<SplashScreen> {
                       databaseService.saveToDisk(
                           DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
                       Get.offNamed(Routes.foodHomeScreen);
+                    } else if (order != "") {
+                      OrderModel orderModel =
+                          OrderModel.fromJson(jsonDecode(order));
+                      if (orderModel != null) {
+                        databaseService.saveToDisk(
+                            DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
+                        Get.offNamed(Routes.homeScreen);
+                      } else {
+                        openActivity(databaseService);
+                      }
                     } else {
                       openActivity(databaseService);
                     }
                   }
                 } else {
-                  if (counts > 0) {
-                    databaseService.saveToDisk(
-                        DatabaseKeys.activeOrderCounts, counts.toString());
-                    databaseService.saveToDisk(
-                        DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
-                    Get.offNamed(Routes.foodHomeScreen);
-                  } else if (order != "") {
-                    OrderModel orderModel =
-                        OrderModel.fromJson(jsonDecode(order));
-                    if (orderModel != null) {
-                      databaseService.saveToDisk(
-                          DatabaseKeys.isLoginTypeIn, AppConstants.TAXI_APP);
-                      Get.offNamed(Routes.homeScreen);
-                    } else {
-                      openActivity(databaseService);
-                    }
-                  } else {
-                    openActivity(databaseService);
+                  databaseService.saveToDisk(DatabaseKeys.isLoggedIn, false);
+
+                  if (mounted) {
+                    setState(() {
+                      apiCall = false;
+                    });
                   }
+                  Get.offNamed(Routes.loginScreen);
                 }
               } else {
                 databaseService.saveToDisk(DatabaseKeys.isLoggedIn, false);
@@ -214,15 +236,6 @@ class _SplashScreenState extends State<SplashScreen> {
               }
               Get.offNamed(Routes.loginScreen);
             }
-          } else {
-            databaseService.saveToDisk(DatabaseKeys.isLoggedIn, false);
-
-            if (mounted) {
-              setState(() {
-                apiCall = false;
-              });
-            }
-            Get.offNamed(Routes.loginScreen);
           }
         } else {
           if (mounted) {
@@ -295,30 +308,30 @@ class _SplashScreenState extends State<SplashScreen> {
         return connectionState is ConnectedFailureState || !isConnected
             ? NoInternetScreen(onPressed: () async {})
             : Scaffold(
-          body: SafeArea(
-            top: false,
-            bottom: false,
-            child: Center(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      AssetsPath.logoWithName,
-                      height: 23.h,
+                body: SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: Center(
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            AssetsPath.logoWithName,
+                            height: 23.h,
+                          ),
+                          if (apiCall) ...[
+                            CircularProgressIndicator(),
+                          ]
+                        ],
+                      ),
+                      color: colorScheme.background,
                     ),
-                    if (apiCall) ...[
-                      CircularProgressIndicator(),
-                    ]
-                  ],
+                  ),
                 ),
-                color: colorScheme.background,
-              ),
-            ),
-          ),
-          backgroundColor: colorScheme.background,
-        );
+                backgroundColor: colorScheme.background,
+              );
       },
     );
   }

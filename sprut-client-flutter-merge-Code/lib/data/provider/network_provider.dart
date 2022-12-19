@@ -19,11 +19,15 @@ class NetworkProviderRest {
 
   final Duration defaultTimeout = Duration(seconds: 100);
   // https://fp-test.altertaxi.com.ua/v1/ukrvin/orders/8247893
+
   static String prodUrl = "https://fp-test.altertaxi.com.ua/v1";
   static String releaseUrl = "https://client-api.sprut.mobi/v1";
+
+  static String baseUrl = prodUrl;
+
   // static final baseUrl = "https://fp-test.altertaxi.com.ua/v1";
-  static String baseUrl = releaseUrl;
-  static String apiKey = "b20b86bc-bbd1-70ca-6535-451d2d7e5922";
+  // Taxi
+  static final apiKey = "b20b86bc-bbd1-70ca-6535-451d2d7e5922";
 
   //Food Delivery
   static final apiKey1 = "9e7af99a-60f8-496b-a2fc-f31b267f79c3";

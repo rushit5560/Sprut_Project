@@ -17,6 +17,8 @@ import 'package:sprut/resources/configs/service_locator/service_locator.dart';
 import 'package:sprut/resources/services/database/database.dart';
 import 'package:sprut/resources/services/database/database_keys.dart';
 
+import '../../Privacy_police/Views/privacy_policy_screen.dart';
+
 class OtpVerificationScreen extends StatefulWidget {
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -48,6 +50,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           databaseService.saveToDisk(DatabaseKeys.isLoggedIn, true);
           databaseService.saveToDisk(
               DatabaseKeys.userPhoneNumber, arguments["userPhone"]);
+
           Navigator.pushReplacementNamed(context, Routes.privacyPolicy);
 
           // Navigator.pushReplacementNamed(context, Routes.cityLogin);

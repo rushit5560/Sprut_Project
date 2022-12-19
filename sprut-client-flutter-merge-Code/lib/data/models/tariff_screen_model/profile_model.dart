@@ -38,7 +38,7 @@ class Profile {
   final String? birthday;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        balance: json["balance"] ?? 0,
+        balance: json["balance"] ?? "",
         paymentType: json["paymentType"] ?? "",
         useBonuses: json["useBonuses"] ?? false,
         referrerAccountId: json["referrerAccountId"] ?? 0,

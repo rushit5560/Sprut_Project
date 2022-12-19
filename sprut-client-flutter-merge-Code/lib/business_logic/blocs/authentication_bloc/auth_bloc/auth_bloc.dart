@@ -5,12 +5,17 @@ import 'package:sprut/business_logic/blocs/authentication_bloc/auth_event/auth_e
 import 'package:sprut/business_logic/blocs/authentication_bloc/auth_state/auth_state.dart';
 import 'package:sprut/data/models/available_cities_model/available_cities_model.dart';
 import 'package:sprut/data/repositories/user_auth_repository/user_auth_repository.dart';
+import 'package:sprut/resources/services/database/database.dart';
 
 import '../../../../data/models/establishments_all_screen_models/all_sstablishments_list_models.dart';
 import '../../../../data/models/establishments_all_screen_models/establishment_product_list/product_list_response.dart';
 import '../../../../data/models/establishments_all_screen_models/types/food_type_list_models.dart';
 import '../../../../data/models/food_category_models/food_category_list_models.dart';
+import '../../../../data/provider/network_provider.dart';
 import '../../../../data/repositories/food_category_screen_repostiory/FoodCategoryRepository.dart';
+import '../../../../resources/configs/service_locator/service_locator.dart';
+import '../../../../resources/services/database/database_keys.dart';
+import '../../../../resources/services/remote_config_service.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(InitialAuthState());
@@ -38,33 +43,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     //Food Delivery
-    if(event is AuthFoodDeliveryCategoryListEvent){
+    if (event is AuthFoodDeliveryCategoryListEvent) {
       log("message::::::::");
       yield* mapFoodCategoryListToState();
     }
 
     //establishments
-    if(event is AuthAllEstablishmentsListEvent){
-      yield*  mapEstablishmentsListToState(event.categoryID, event.latitude, event.longitude);
+    if (event is AuthAllEstablishmentsListEvent) {
+      yield* mapEstablishmentsListToState(
+          event.categoryID, event.latitude, event.longitude);
     }
 
     //food type
-    if(event is AuthTypeEstablishmentsListEvent){
+    if (event is AuthTypeEstablishmentsListEvent) {
       yield* mapFoodTypeEstablishmentsListToState(event.categoryID);
     }
 
     //product list
-    if(event is AuthEstablishmentProductListEvent){
-      yield* mapFoodEstablishmentProductListToState(event.brandID, event.establishmentId, event.placeId);
+    if (event is AuthEstablishmentProductListEvent) {
+      yield* mapFoodEstablishmentProductListToState(
+          event.brandID, event.establishmentId, event.placeId);
     }
 
     //make order
-    if(event is AuthMakeOrderEvent){
+    if (event is AuthMakeOrderEvent) {
       yield* mapMakeOrderToState(event.body);
     }
 
     //order status checked
-    if(event is AuthStatusOfOrderEvent){
+    if (event is AuthStatusOfOrderEvent) {
       yield* mapCheckOrderStatusToState(event.oderId);
     }
     //End
@@ -119,17 +126,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   /// [For availableCities of user]
 
-  
   Stream<AuthState> mapAvailableCitiesToState() async* {
     yield FetchingAvailableCities();
 
     try {
       List<AvailableCitiesModel> availableCities =
           await UserAuthRepository().getAvailableCities();
+      if (NetworkProviderRest.baseUrl == NetworkProviderRest.prodUrl) {
+        DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+        String testPhones = await RemoteConfigService.fetchRemoteConfig();
+        // availableCities.clear();
+        // availableCities.addAll(availableCities.reversed);
+        // // availableCities = availableCities.reversed;
 
-      yield FetechedAvailableCities(availableCities: availableCities);
+        String userPhoneNumber =
+            databaseService.getFromDisk(DatabaseKeys.userPhoneNumber) ?? "";
+
+        log("remotreconfig testPhones list is :: ${testPhones}");
+
+        if (testPhones.contains(userPhoneNumber)) {
+// List<AvailableCitiesModel> availableCitiesUpdated =
+
+          yield FetechedAvailableCities(
+              availableCities: availableCities.reversed.toList());
+        } else {
+          availableCities.removeWhere((item) => item.name == "Vinnytsia");
+          yield FetechedAvailableCities(availableCities: availableCities);
+        }
+      } else {
+        yield FetechedAvailableCities(availableCities: availableCities);
+      }
+
+      // yield FetechedAvailableCities(availableCities: availableCities);
     } catch (e) {
-     
       yield FailedFetchAvailableCitiesState();
     }
   }
@@ -140,9 +169,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield FetchingFoodDeliveryCategoryProgress();
 
     try {
-      FoodCategoryListModel foodResponse = await FoodCategoryRepository().getFoodCategoryList();
+      FoodCategoryListModel foodResponse =
+          await FoodCategoryRepository().getFoodCategoryList();
 
-      yield FetchingFoodDeliveryCategorySucceed(availableCategory: foodResponse.items);
+      yield FetchingFoodDeliveryCategorySucceed(
+          availableCategory: foodResponse.items);
     } catch (e) {
       log(e.toString());
       yield FetchingFoodDeliveryCategoryFailed(message: e.toString());
@@ -150,11 +181,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   ///[establishments all list get]
-  Stream<AuthState> mapEstablishmentsListToState(String categoryID, double latitude, double longitude) async* {
+  Stream<AuthState> mapEstablishmentsListToState(
+      String categoryID, double latitude, double longitude) async* {
     yield FetchingEstablishmentsListProgress();
     try {
-      AllEstablishments foodResponse = await FoodCategoryRepository().getEstablishmentsList(categoryID, latitude, longitude);
-      yield FetchingEstablishmentsListSucceed(availableEstablishmentsList: foodResponse.items);
+      AllEstablishments foodResponse = await FoodCategoryRepository()
+          .getEstablishmentsList(categoryID, latitude, longitude);
+      yield FetchingEstablishmentsListSucceed(
+          availableEstablishmentsList: foodResponse.items);
     } catch (e) {
       log(e.toString());
       yield FetchingEstablishmentsListFailed(message: e.toString());
@@ -162,12 +196,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   ///[establishments food type list]
-  Stream<AuthState> mapFoodTypeEstablishmentsListToState(String categoryID) async* {
+  Stream<AuthState> mapFoodTypeEstablishmentsListToState(
+      String categoryID) async* {
     yield FetchingFoodTypeEstablishmentsListProgress();
     try {
-      FoodTypeModels foodResponse = await FoodCategoryRepository().getFoodTypesList(categoryID);
-      log("Food Type Response:: "+foodResponse.items.toString());
-      yield FetchingFoodTypeEstablishmentsListSucceed(allFoodType: foodResponse.items);
+      FoodTypeModels foodResponse =
+          await FoodCategoryRepository().getFoodTypesList(categoryID);
+      log("Food Type Response:: " + foodResponse.items.toString());
+      yield FetchingFoodTypeEstablishmentsListSucceed(
+          allFoodType: foodResponse.items);
     } catch (e) {
       log(e.toString());
       yield FetchingEstablishmentsListFailed(message: e.toString());
@@ -175,12 +212,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   ///[establishments product list]
-  Stream<AuthState> mapFoodEstablishmentProductListToState(String brandID,String establishmentId,String placeId) async* {
+  Stream<AuthState> mapFoodEstablishmentProductListToState(
+      String brandID, String establishmentId, String placeId) async* {
     yield FetchingFoodEstablishmentProductListProgress();
     try {
-      ProductListResponse productListResponse = await FoodCategoryRepository().getProductList(brandID,establishmentId,placeId);
-      log("Product List Response:: "+productListResponse.items.toString());
-      yield FetchingFoodEstablishmentProductListSucceed(allProductList: productListResponse.items);
+      ProductListResponse productListResponse = await FoodCategoryRepository()
+          .getProductList(brandID, establishmentId, placeId);
+      log("Product List Response:: " + productListResponse.items.toString());
+      yield FetchingFoodEstablishmentProductListSucceed(
+          allProductList: productListResponse.items);
     } catch (e) {
       log(e.toString());
       yield FetchingFoodEstablishmentProductListFailed(message: e.toString());
@@ -192,7 +232,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield FetchingMakeOrderProgress();
     try {
       var orderResponse = await FoodCategoryRepository().makeAOrder(body);
-      log("Make Order :: "+orderResponse.toString());
+      log("Make Order :: " + orderResponse.toString());
       yield FetchingMakeOrderSucceed(responseOrder: orderResponse);
     } catch (e) {
       log(e.toString());
@@ -204,9 +244,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapCheckOrderStatusToState(int? oderID) async* {
     yield FetchingCheckedOrderStatusProgress();
     try {
-      var orderStatusResponse = await FoodCategoryRepository().statusCheckedAOrder(oderID);
-      log("Make Order :: "+orderStatusResponse.toString());
-      yield FetchingCheckedOrderStatusSucceed(responseOrder: orderStatusResponse);
+      var orderStatusResponse =
+          await FoodCategoryRepository().statusCheckedAOrder(oderID);
+      log("Make Order :: " + orderStatusResponse.toString());
+      yield FetchingCheckedOrderStatusSucceed(
+          responseOrder: orderStatusResponse);
     } catch (e) {
       log(e.toString());
       yield FetchingCheckedOrderStatusFailed(message: e.toString());

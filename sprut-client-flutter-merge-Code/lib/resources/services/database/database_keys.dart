@@ -51,9 +51,9 @@ class DatabaseKeys {
 
   static String readNews = "read_news";
 
-  //private policy
+//private policy
   static String privacyPolicyAccepted = "privacyPolicyAccepted";
-
+  //end
   //FOOD DELIVERY
   static String isLoginTypeSelected = "isLoginTypeSelected";
   static String isLoginTypeIn = "isLoginTypeIn";
@@ -79,4 +79,12 @@ class DatabaseKeys {
   static String lastStatus = "lastStatus";
   static String paymentMethod = "paymentMethod";
   static String orderAmounts = "orderAmounts";
+//homr_controller_key
+
+  static String currentCityValue = "currentCityValue";
+  static String arrivalAddressValue = "arrivalAddressValue";
+  static String destinationAddressValue = "destinationAddressValue";
+  static String kGooglePlexLatValue = "kGooglePlexLatValue";
+  static String kGooglePlexLngValue = "kGooglePlexLngValue";
+  static String kLakeValue = "kLakeValue";
 }

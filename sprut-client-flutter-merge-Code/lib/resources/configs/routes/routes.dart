@@ -4,6 +4,7 @@ import 'package:sprut/presentation/pages/news/views/news_view.dart';
 import 'package:sprut/presentation/pages/order_history/views/order_history_view.dart';
 import 'package:sprut/presentation/pages/settings/views/settings_view.dart';
 
+import '../../../presentation/pages/Privacy_police/Views/privacy_policy_screen.dart';
 import '../../../presentation/pages/authentication/city_login_screen/city_login_screen.dart';
 import '../../../presentation/pages/authentication/login/login_screen.dart';
 import '../../../presentation/pages/authentication/otp_verification/otp_verification.dart';
@@ -27,7 +28,6 @@ import '../../../presentation/pages/order_screen/views/order_detail_view.dart';
 import '../../../presentation/pages/order_screen/views/order_map_view.dart';
 import '../../../presentation/pages/order_screen/views/order_view.dart';
 import '../../../presentation/pages/payment_screen/views/payment_view.dart';
-import '../../../presentation/pages/privacy_policy/privacy_policy.dart';
 import '../../../presentation/pages/search_screen/views/search_view.dart';
 import '../../../presentation/pages/search_screen/views/search_view_old.dart';
 import '../../../presentation/pages/splash_screen/splash_screen.dart';
@@ -39,6 +39,8 @@ class Routes {
 
   static const String homeScreen = "/homeScreen";
   static const String loginScreen = "/loginScreen";
+
+  
   static const String otpVerificationScreen = "/otpVerificationScreen";
   static const String cityLogin = "/cityLogin";
   static const String welcomeScreen = "/welcomeScreen";
@@ -55,9 +57,9 @@ class Routes {
   static const String settingsView = "/settings";
   static const String orderHistoryView = "/orderHistory";
   static const String newsView = "/news";
-
   // privacy_policy
   static const String privacyPolicy = "/privacyPolicy";
+  //Food Delivery Screen
 
   //Food Delivery Screen
   static const String orderView = "/order";
@@ -83,9 +85,12 @@ class Routes {
       <String, WidgetBuilder>{
     homeScreen: (_) => HomeView(),
     loginScreen: (_) => LoginScreen(),
-    otpVerificationScreen: (_) => OtpVerificationScreen(),
+
     //privacyPolicy
     privacyPolicy: (_) => PrivacyPolicy(),
+    
+    // end
+    otpVerificationScreen: (_) => OtpVerificationScreen(),
     cityLogin: (_) => CityLogin(),
     welcomeScreen: (_) => WelcomeScreen(),
     splashScreen: (_) => SplashScreen(),

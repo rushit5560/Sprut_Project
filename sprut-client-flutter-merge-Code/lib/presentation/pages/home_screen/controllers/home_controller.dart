@@ -410,14 +410,19 @@ class HomeViewController extends GetxController {
       locationServiceStatus = serviceEnabled
           ? fl.LocationServicesStatus.enabled
           : fl.LocationServicesStatus.disabled;
-      if (!serviceEnabled) {permissionGranted = await location.hasPermission();
+      if (!serviceEnabled) {
+        permissionGranted = await location.hasPermission();
         update();
         return;
       }
     }
 
-    locationServiceStatus = serviceEnabled ? fl.LocationServicesStatus.enabled : fl.LocationServicesStatus.disabled;
-    locationServiceStatus = serviceEnabled ? fl.LocationServicesStatus.enabled : fl.LocationServicesStatus.disabled;
+    locationServiceStatus = serviceEnabled
+        ? fl.LocationServicesStatus.enabled
+        : fl.LocationServicesStatus.disabled;
+    locationServiceStatus = serviceEnabled
+        ? fl.LocationServicesStatus.enabled
+        : fl.LocationServicesStatus.disabled;
 
     // }
 
@@ -438,16 +443,30 @@ class HomeViewController extends GetxController {
 
       // Navigator.pop(Get.context!);
       if (locationData != null) {
-        databaseService.saveToDisk(DatabaseKeys.defaultLatitude, locationData!.latitude!);
-        databaseService.saveToDisk(DatabaseKeys.defaultLongitude, locationData!.longitude!);
+        databaseService.saveToDisk(
+            DatabaseKeys.defaultLatitude, locationData!.latitude!);
+        databaseService.saveToDisk(
+            DatabaseKeys.defaultLongitude, locationData!.longitude!);
 
-        final DecodedAddress address = await mainScreenRepostory.reverseGeoCoding(latitude: locationData!.latitude!, longitude: locationData!.longitude!, cityCode: selectedCityCode);
+        final DecodedAddress address =
+            await mainScreenRepostory.reverseGeoCoding(
+                latitude: locationData!.latitude!,
+                longitude: locationData!.longitude!,
+                cityCode: selectedCityCode);
 
         String getDecAddress = filterDecodedAddress(address) ?? "";
 
         if (getDecAddress != "") {
           Future.delayed(Duration(seconds: 1), () async {
-            googleMapController!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target:LatLng(locationData!.latitude!, locationData!.longitude!), zoom: 17.0,),),);
+            googleMapController!.moveCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  target:
+                      LatLng(locationData!.latitude!, locationData!.longitude!),
+                  zoom: 17.0,
+                ),
+              ),
+            );
 
             whereToAriveEdtingController.text = getDecAddress;
             currentAddress = getDecAddress;
@@ -896,13 +915,29 @@ class HomeViewController extends GetxController {
 
     if (whereToAriveEdtingController.text.isNotEmpty ||
         wheretoGoController.text.isNotEmpty) {
-      await Get.toNamed(Routes.tarrifSelectionView, arguments: {
-        "currentCity": currentCity,
-        "arrivalAddress": arrivalAddress,
-        "destinationAddress": destinationAddress,
-        "kGooglePlex": kGooglePlex,
-        "kLake": kLake,
-      });
+      DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+
+      databaseService.saveToDisk(
+          DatabaseKeys.currentCityValue, jsonEncode(currentCity));
+      databaseService.saveToDisk(
+          DatabaseKeys.arrivalAddressValue, jsonEncode(arrivalAddress));
+      databaseService.saveToDisk(
+          DatabaseKeys.destinationAddressValue, jsonEncode(destinationAddress));
+      databaseService.saveToDisk(
+          DatabaseKeys.kGooglePlexLatValue, kGooglePlex!.target.latitude);
+      databaseService.saveToDisk(
+          DatabaseKeys.kGooglePlexLngValue, kGooglePlex!.target.longitude);
+
+      await Get.toNamed(
+        Routes.tarrifSelectionView,
+        arguments: {
+          "currentCity": currentCity,
+          "arrivalAddress": arrivalAddress,
+          "destinationAddress": destinationAddress,
+          "kGooglePlex": kGooglePlex,
+          "kLake": kLake,
+        },
+      );
     }
   }
 
@@ -1402,8 +1437,6 @@ class HomeViewController extends GetxController {
       update();
     }
 
-
-
     isStartLoading = false;
     update();
 
@@ -1463,7 +1496,7 @@ class HomeViewController extends GetxController {
 //     );
   }
 
-  Future<void> updateStatus() async{
+  Future<void> updateStatus() async {
     print("updateStatus() : For Car Order");
     String order = "";
     try {
@@ -1493,8 +1526,13 @@ class HomeViewController extends GetxController {
     // OrderModel orderModel = await tariffScreenRepository.updateOrder(
     //     cityCode: Get.find<HomeViewController>().selectedCityCode,
     //     orderId: orderModelVal.orderId!);
-    print("herepreorder  ${databaseService.getFromDisk(DatabaseKeys.preorder)}");
-    if (orderModel.status == "cancelled" ||orderModel.status == "completed" ||orderModel.status == null ||orderModel.status == "" ||databaseService.getFromDisk(DatabaseKeys.preorder) != "") {
+    print(
+        "herepreorder  ${databaseService.getFromDisk(DatabaseKeys.preorder)}");
+    if (orderModel.status == "cancelled" ||
+        orderModel.status == "completed" ||
+        orderModel.status == null ||
+        orderModel.status == "" ||
+        databaseService.getFromDisk(DatabaseKeys.preorder) != "") {
       databaseService.saveToDisk(DatabaseKeys.order, "");
       databaseService.saveToDisk(DatabaseKeys.arrivalAddress, "");
       databaseService.saveToDisk(DatabaseKeys.destinationAddress, "");
@@ -1615,11 +1653,13 @@ class HomeViewController extends GetxController {
   //Food Delivery
   //change screen
   changeScreenStatus(context) async {
-    databaseService.saveToDisk(DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
+    databaseService.saveToDisk(
+        DatabaseKeys.isLoginTypeIn, AppConstants.FOOD_APP);
     Get.toNamed(Routes.foodHomeScreen);
     // Navigator.pushNamedAndRemoveUntil(
     //     context, Routes.foodHomeScreen, (route) => true);
   }
+
 //food delivery address return
   String getDeliveryAddress() {
     var data = databaseService.getFromDisk(DatabaseKeys.saveDeliverAddress);
@@ -1654,12 +1694,13 @@ class HomeViewController extends GetxController {
     permissionGranted = await location.hasPermission();
     update();
   }
+
 //Delivery address
   String displayDefaultAddress(AppLocalizations language) {
     if (databaseService
-        .getFromDisk(DatabaseKeys.saveDeliverAddress)
-        .toString() !=
-        "null" &&
+                .getFromDisk(DatabaseKeys.saveDeliverAddress)
+                .toString() !=
+            "null" &&
         databaseService
             .getFromDisk(DatabaseKeys.saveDeliverAddress)
             .toString()
@@ -1667,8 +1708,8 @@ class HomeViewController extends GetxController {
       return getDeliveryAddress();
     } else if (isLocationEnable()) {
       LocationUtil.checkAndRequestPermission().then((value) => {
-        if (value) {this.updateLocationIfNeeded()}
-      });
+            if (value) {this.updateLocationIfNeeded()}
+          });
       return language.select_address_or_turn_on_gps;
     } else {
       return getCurrentLocationAddress();
@@ -1677,7 +1718,7 @@ class HomeViewController extends GetxController {
 
   bool isLocationEnable() {
     return (permissionGranted != PermissionStatus.granted &&
-        permissionGranted != PermissionStatus.grantedLimited) ||
+            permissionGranted != PermissionStatus.grantedLimited) ||
         locationServiceStatus == fl.LocationServicesStatus.disabled;
   }
 
@@ -1686,9 +1727,9 @@ class HomeViewController extends GetxController {
     String currentAddressString = "";
 
     if (databaseService
-        .getFromDisk(DatabaseKeys.saveCurrentAddress)
-        .toString() !=
-        "null" &&
+                .getFromDisk(DatabaseKeys.saveCurrentAddress)
+                .toString() !=
+            "null" &&
         databaseService
             .getFromDisk(DatabaseKeys.saveCurrentAddress)
             .toString()
@@ -1698,16 +1739,22 @@ class HomeViewController extends GetxController {
           .toString();
     }
 
-    if(currentAddressString.isEmpty){
-      if(arrivalAddress != null){
-        if(arrivalAddress.name?.isNotEmpty == true){
+    if (currentAddressString.isEmpty) {
+      if (arrivalAddress != null) {
+        if (arrivalAddress.name?.isNotEmpty == true) {
           //print("getCurrentLocationAddress-------> ${arrivalAddress.name}");
-          databaseService.saveToDisk(DatabaseKeys.saveCurrentAddress, arrivalAddress.name);
-          databaseService.saveToDisk(DatabaseKeys.saveCurrentObjectAddress, jsonEncode(arrivalAddress).toString());
-          databaseService.saveToDisk(DatabaseKeys.saveCurrentLat, arrivalAddress.lat);
-          databaseService.saveToDisk(DatabaseKeys.saveCurrentLang, arrivalAddress.lon);
+          databaseService.saveToDisk(
+              DatabaseKeys.saveCurrentAddress, arrivalAddress.name);
+          databaseService.saveToDisk(DatabaseKeys.saveCurrentObjectAddress,
+              jsonEncode(arrivalAddress).toString());
+          databaseService.saveToDisk(
+              DatabaseKeys.saveCurrentLat, arrivalAddress.lat);
+          databaseService.saveToDisk(
+              DatabaseKeys.saveCurrentLang, arrivalAddress.lon);
 
-          currentAddressString = databaseService.getFromDisk(DatabaseKeys.saveCurrentAddress).toString();
+          currentAddressString = databaseService
+              .getFromDisk(DatabaseKeys.saveCurrentAddress)
+              .toString();
         }
       }
     }
@@ -1721,9 +1768,10 @@ class HomeViewController extends GetxController {
   activeCounts() async {
     var response = await mainScreenRepostory.getActiveCounts(selectedCityCode);
     print("Response-----> $response");
-    Map<String,dynamic> mapData = jsonDecode(response.toString());
+    Map<String, dynamic> mapData = jsonDecode(response.toString());
     var counts = mapData['count'];
-    databaseService.saveToDisk(DatabaseKeys.activeOrderCounts, counts.toString());
+    databaseService.saveToDisk(
+        DatabaseKeys.activeOrderCounts, counts.toString());
     update();
   }
 
@@ -1744,6 +1792,7 @@ class HomeViewController extends GetxController {
 }
 
 enum pageState { Home, TariffSelection }
+
 enum locationState {
   Uknown,
   NoPermission_NoService,

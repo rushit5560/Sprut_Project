@@ -38,11 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
   /// [Form Key] for validating phone number field
   final _formKey = GlobalKey<FormState>();
   final FocusNode focusNode = FocusNode();
-
-  //increment var for changing apiurl between production and live
-  //on appicon tapped 7 times
-  int tapIncreament = 0;
   DatabaseService databaseService = serviceLocator.get<DatabaseService>();
+
+  int tapIncreament = 0;
 
   @override
   void initState() {
@@ -178,6 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           SizedBox(
                                             height: 16.h,
                                           ),
+                                          // Center(child: AppLogo()),
                                           Center(
                                               child: GestureDetector(
                                             onTap: () {
@@ -192,6 +191,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   NetworkProviderRest.baseUrl =
                                                       NetworkProviderRest
                                                           .releaseUrl;
+
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        "Now you are in production.",
+                                                      ),
+                                                    ),
+                                                  );
                                                 } else if (NetworkProviderRest
                                                         .baseUrl ==
                                                     NetworkProviderRest
@@ -199,6 +207,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   NetworkProviderRest.baseUrl =
                                                       NetworkProviderRest
                                                           .prodUrl;
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        "Now you are in staging.",
+                                                      ),
+                                                    ),
+                                                  );
                                                 }
 
                                                 setState(() {

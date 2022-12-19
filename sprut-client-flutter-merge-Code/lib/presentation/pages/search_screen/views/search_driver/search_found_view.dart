@@ -1,11 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../../data/models/available_cities_model/available_cities_model.dart';
+import '../../../../../data/models/map_screen_models/my_address_model/my_address_model.dart';
 import '../../../../../resources/app_themes/app_themes.dart';
 import '../../../../../resources/assets_path/assets_path.dart';
+import '../../../../../resources/configs/routes/routes.dart';
+import '../../../../../resources/configs/service_locator/service_locator.dart';
+import '../../../../../resources/services/database/database.dart';
+import '../../../../../resources/services/database/database_keys.dart';
+import '../../../home_screen/controllers/home_controller.dart';
 import '../../controllers/search_controller.dart';
 
 class SearchFoundView extends GetView<SearchController> {
@@ -158,7 +168,8 @@ class SearchFoundView extends GetView<SearchController> {
                           child: Container(
                             height: 8.h,
                             width: 17.w,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 14),
+                            padding: EdgeInsets.only(
+                                left: 5, right: 5, top: 2, bottom: 14),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.all(
@@ -291,7 +302,8 @@ class SearchFoundView extends GetView<SearchController> {
                                             cursorHeight: 23,
                                             cursorColor: colorScheme.primary,
                                             onTap: () {},
-                                            controller: controller.whereToAriveEdtingController,
+                                            controller: controller
+                                                .whereToAriveEdtingController,
                                             readOnly: true,
                                             onSubmitted: (v) {},
                                             style: TextStyle(
@@ -299,7 +311,8 @@ class SearchFoundView extends GetView<SearchController> {
                                                 fontFamily: "SF-Pro Display"),
                                             onChanged: (text) {},
                                             decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.only(bottom: 8.0),
+                                              contentPadding:
+                                                  EdgeInsets.only(bottom: 8.0),
                                               suffixIconConstraints:
                                                   BoxConstraints(
                                                 maxWidth: 30,
@@ -323,7 +336,8 @@ class SearchFoundView extends GetView<SearchController> {
                                                       .isBottomSheetExpanded
                                                   ? 0
                                                   : 0),
-                                          width: MediaQuery.of(context).size.width,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           height: 0.5,
                                           decoration: BoxDecoration(
                                             color: Colors.grey,
@@ -431,9 +445,78 @@ class SearchFoundView extends GetView<SearchController> {
                                       Expanded(
                                         flex: 1,
                                         child: TextButton(
-                                          onPressed: () {
+                                          onPressed: () async {
                                             Navigator.pop(context1);
-                                            controller.deleteOrder(context);
+
+                                            DatabaseService databaseService =
+                                                serviceLocator
+                                                    .get<DatabaseService>();
+
+                                            AvailableCitiesModel currentCity =
+                                                AvailableCitiesModel.fromJson(
+                                                    jsonDecode(databaseService
+                                                            .getFromDisk(
+                                                                DatabaseKeys
+                                                                    .currentCityValue) ??
+                                                        ""));
+                                            MyAddress arrivalAddress =
+                                                MyAddress.fromJson(jsonDecode(
+                                                    databaseService.getFromDisk(
+                                                            DatabaseKeys
+                                                                .arrivalAddressValue) ??
+                                                        ""));
+                                            MyAddress destinationAddress =
+                                                MyAddress.fromJson(jsonDecode(
+                                                    databaseService.getFromDisk(
+                                                            DatabaseKeys
+                                                                .destinationAddressValue) ??
+                                                        ""));
+
+                                            double kGoogleLatPlex = databaseService
+                                                    .getFromDisk(DatabaseKeys
+                                                        .kGooglePlexLatValue) ??
+                                                0;
+                                            double kGoogleLngPlex = databaseService
+                                                    .getFromDisk(DatabaseKeys
+                                                        .kGooglePlexLngValue) ??
+                                                0;
+
+                                            //set home controller longitude
+
+                                            Get.find<HomeViewController>()
+                                                .wheretoGoController
+                                                .text = "";
+                                            //set home controller lattitude
+                                            // Get.find<HomeViewController>()
+                                            //     .selectedCity!
+                                            //     .lat = kGoogleLatPlex;
+
+                                            await controller
+                                                .deleteOrder(context);
+
+                                            await Get.offNamed(
+                                                Routes.tarrifSelectionView,
+                                                arguments: {
+                                                  "currentCity": currentCity,
+                                                  "arrivalAddress":
+                                                      arrivalAddress,
+                                                  "destinationAddress":
+                                                      destinationAddress,
+                                                  "kGooglePlex": CameraPosition(
+                                                    target: LatLng(
+                                                        kGoogleLatPlex,
+                                                        kGoogleLngPlex),
+                                                    zoom: 3.4746,
+                                                  ),
+                                                  "kLake": CameraPosition(
+                                                    bearing: 192.8334901395799,
+                                                    target: LatLng(
+                                                        kGoogleLatPlex,
+                                                        kGoogleLngPlex),
+                                                    tilt: 59.440717697143555,
+                                                    zoom: 19.151926040649414,
+                                                  ),
+                                                });
                                           },
                                           style: ButtonStyle(
                                             backgroundColor:

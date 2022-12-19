@@ -8,12 +8,11 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
-import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
+// import 'package:sprut/business_logic/blocs/connection_bloc/connection_bloc.dart';
 import 'package:sprut/business_logic/blocs/connection_bloc/connection_state/connection_state.dart';
 import 'package:sprut/presentation/pages/search_screen/views/search_driver/driver_arrived_view.dart';
 import 'package:sprut/presentation/pages/search_screen/views/search_driver/rating_view.dart';
 import 'package:sprut/presentation/pages/search_screen/views/search_driver/ride_view.dart';
-
 import '../../../../resources/configs/helpers/helpers.dart';
 import '../../../../resources/configs/service_locator/service_locator.dart';
 import '../../../../resources/services/database/database.dart';
@@ -44,226 +43,240 @@ class SearchView extends GetView<SearchController> {
       },
       builder: (context, connectionState) {
         if (connectionState is ConnectedFailureState) {
-
           return NoInternetScreen(onPressed: () async {});
         }
 
         if (connectionState is ConnectedSucessState) {}
 
-      return WillPopScope(
-      onWillPop: () async => false,
-       child: SafeArea(
-        top: false,
-        bottom: false,
-        child: GetBuilder<SearchController>(
-          init: SearchController(context: context),
-          builder: (controller) {
-            return SlidingUpPanel(
-              onPanelSlide: (value) {
-                if (!controller.isBottomSheetExpanded) {
-                  if (value > 0.02 && (controller.status == "searching" || controller.status == "driver-assigned" || controller.status == "arrived" || controller.status == "transporting" || controller.status == "completed")) {
-                    controller.isBottomSheetExpanded = true;
-                    controller.update();
-                  }
-                }
-              },
-              controller: controller.scrollController,
-              onPanelOpened: () {},
-              onPanelClosed: () {
-                if (controller.isBottomSheetExpanded) {
-                  controller.isBottomSheetExpanded = false;
-                  controller.update();
-                }
-              },
-              minHeight: _scaffoldKey.currentState != null
-            ? _scaffoldKey.currentState!.isDrawerOpen
-            ? 0
-                : findMinHeight(context)
-                : findMinHeight(context),
-              maxHeight: findMaxHeight(context),
-              panel: findStatusWidget(),
-              body: Scaffold(
-                key: _scaffoldKey,
-                resizeToAvoidBottomInset: false,
-                onDrawerChanged: (isOpened) {
-                  controller.update();
-                },
-                onEndDrawerChanged: (isOpened) {
-                  controller.update();
-                },
-                drawer: MyDrawer(
-                  isEnable: false,
-                ),
-              body: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    // height: controller.status.isEmpty
-                    //     ? MediaQuery.of(context).size.width * 1.320
-                    //     : (controller.status == "driver-assigned" || controller.status == "transporting"
-                    //         ? MediaQuery.of(context).size.width * 1.470
-                    //         : MediaQuery.of(context).size.width * 1.600),
-                    child: GoogleMap(
-                      zoomControlsEnabled: false,
-                      onCameraMove: (position) {
-                        controller.customInfoWindowController.onCameraMove!();
-                      },
-                      onTap: (lat) {
-                        controller
-                            .customInfoWindowController.hideInfoWindow!();
-                      },
-                      polylines:
-                          Set<Polyline>.of(controller.polylines.values),
-                      mapType: MapType.normal,
-                      compassEnabled: false,
-                      mapToolbarEnabled: false,
-                      myLocationButtonEnabled: false,
-                      markers: Set<Marker>.of(controller.markers.values),
-                      initialCameraPosition: CameraPosition(
-                          target: (controller.locationData != null)
-                              ? LatLng(controller.locationData!.latitude!,
-                                  controller.locationData!.longitude!)
-                              : LatLng(controller.currentCity!.lat,
-                                  controller.currentCity!.lon)),
-                      onMapCreated: controller.onMapsCreated,
-                      onCameraIdle: () {},
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: GetBuilder<SearchController>(
+              init: SearchController(context: context),
+              builder: (controller) {
+                return SlidingUpPanel(
+                  onPanelSlide: (value) {
+                    if (!controller.isBottomSheetExpanded) {
+                      if (value > 0.02 &&
+                          (controller.status == "searching" ||
+                              controller.status == "driver-assigned" ||
+                              controller.status == "arrived" ||
+                              controller.status == "transporting" ||
+                              controller.status == "completed")) {
+                        controller.isBottomSheetExpanded = true;
+                        controller.update();
+                      }
+                    }
+                  },
+                  controller: controller.scrollController,
+                  onPanelOpened: () {},
+                  onPanelClosed: () {
+                    if (controller.isBottomSheetExpanded) {
+                      controller.isBottomSheetExpanded = false;
+                      controller.update();
+                    }
+                  },
+                  minHeight: _scaffoldKey.currentState != null
+                  
+                      ? _scaffoldKey.currentState!.isDrawerOpen
+                          ? 0
+                          : findMinHeight(context)
+                      : findMinHeight(context),
+                  maxHeight: findMaxHeight(context),
+                  panel: findStatusWidget(),
+                  body: Scaffold(
+                    key: _scaffoldKey,
+                    resizeToAvoidBottomInset: false,
+                    onDrawerChanged: (isOpened) {
+                      controller.update();
+                    },
+                    onEndDrawerChanged: (isOpened) {
+                      controller.update();
+                    },
+                    drawer: MyDrawer(
+                      isEnable: false,
                     ),
-                  ),
-                  controller.mapLoading
-                      ? Positioned(
-                          top: 0,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            color: Colors.white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: lottie.Lottie.asset(
-                                      'assets/images/loading1.json',
-                                      height: 10.h),
-                                ),
-                                SizedBox(
-                                  height: 45.h,
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : SizedBox(),
-                  CustomInfoWindow(
-                    controller: controller.customInfoWindowController,
-                    height: 50,
-                    width: 310,
-                    offset: 50,
-                  ),
-                  if (controller.databaseService.getFromDisk(DatabaseKeys.preorder) !="" && controller.status != "searching")
-                    Positioned(
-                      top: 10,
-                      right: 8,
-                      child: SafeArea(
-                        child: Container(
-                          width: 12.h,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: PrimaryElevatedBtn(
-                              height: 5.h,
-                              fontSize: 10.sp,
-                              buttonText: language.done,
-                              onPressed: () {
-                                controller.cancelPreOrder();
-                                Navigator.of(context).pop();
-                              },
-                            ),
+                    body: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          // height: controller.status.isEmpty
+                          //     ? MediaQuery.of(context).size.width * 1.320
+                          //     : (controller.status == "driver-assigned" || controller.status == "transporting"
+                          //         ? MediaQuery.of(context).size.width * 1.470
+                          //         : MediaQuery.of(context).size.width * 1.600),
+                          child: GoogleMap(
+                            zoomControlsEnabled: false,
+                            onCameraMove: (position) {
+                              controller
+                                  .customInfoWindowController.onCameraMove!();
+                            },
+                            onTap: (lat) {
+                              controller
+                                  .customInfoWindowController.hideInfoWindow!();
+                            },
+                            polylines:
+                                Set<Polyline>.of(controller.polylines.values),
+                            mapType: MapType.normal,
+                            compassEnabled: false,
+                            mapToolbarEnabled: false,
+                            myLocationButtonEnabled: false,
+                            markers: Set<Marker>.of(controller.markers.values),
+                            initialCameraPosition: CameraPosition(
+                                target: (controller.locationData != null)
+                                    ? LatLng(controller.locationData!.latitude!,
+                                        controller.locationData!.longitude!)
+                                    : LatLng(controller.currentCity!.lat,
+                                        controller.currentCity!.lon)),
+                            onMapCreated: controller.onMapsCreated,
+                            onCameraIdle: () {},
                           ),
                         ),
-                      ),
-                    ),
-                  if (!controller.isBottomSheetExpanded)
-                    Positioned(
-                      top: 10,
-                      left: 6,
-                      right: 5,
-                      child: SafeArea(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _scaffoldKey.currentState!.openDrawer();
-                              },
-                              child: Container(
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Icon(
-                                        Icons.menu,
-                                        color: Colors.white,
-                                        size: 7.w,
+                        controller.mapLoading
+                            ? Positioned(
+                                top: 0,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  color: Colors.white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: lottie.Lottie.asset(
+                                            'assets/images/loading1.json',
+                                            height: 10.h),
                                       ),
-                                    ),
-                                    if ((databaseService.getFromDisk(
-                                                    DatabaseKeys.readNews) ==
-                                                null ||
-                                            (databaseService.getFromDisk(
-                                                        DatabaseKeys
-                                                            .readNews) !=
-                                                    null &&
-                                                homeViewController.newsCount >
-                                                    databaseService
-                                                        .getFromDisk(
-                                                            DatabaseKeys
-                                                                .readNews))) &&
-                                        homeViewController.newsCount > 0)
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.red,
-                                          ),
-                                          margin: const EdgeInsets.all(4.0),
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(
-                                            "${(databaseService.getFromDisk(DatabaseKeys.readNews) != null && homeViewController.newsCount > databaseService.getFromDisk(DatabaseKeys.readNews)) ? (homeViewController.newsCount - databaseService.getFromDisk(DatabaseKeys.readNews)).toInt() : homeViewController.newsCount}",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10.0,
-                                            ),
-                                          ),
-                                        ),
+                                      SizedBox(
+                                        height: 45.h,
                                       ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                                height: 5.h,
-                                width: 5.h,
-                                decoration: BoxDecoration(
-                                    color: colorScheme.primary,
-                                    borderRadius: BorderRadius.circular(5)),
+                              )
+                            : SizedBox(),
+                        CustomInfoWindow(
+                          controller: controller.customInfoWindowController,
+                          height: 50,
+                          width: 310,
+                          offset: 50,
+                        ),
+                        if (controller.databaseService
+                                    .getFromDisk(DatabaseKeys.preorder) !=
+                                "" &&
+                            controller.status != "searching")
+                          Positioned(
+                            top: 10,
+                            right: 8,
+                            child: SafeArea(
+                              child: Container(
+                                width: 12.h,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: PrimaryElevatedBtn(
+                                    height: 5.h,
+                                    fontSize: 10.sp,
+                                    buttonText: language.done,
+                                    onPressed: () {
+                                      controller.cancelPreOrder();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 8.0,
+                          ),
+                        if (!controller.isBottomSheetExpanded)
+                          Positioned(
+                            top: 10,
+                            left: 6,
+                            right: 5,
+                            child: SafeArea(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      _scaffoldKey.currentState!.openDrawer();
+                                    },
+                                    child: Container(
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Icon(
+                                              Icons.menu,
+                                              color: Colors.white,
+                                              size: 7.w,
+                                            ),
+                                          ),
+                                          if ((databaseService.getFromDisk(
+                                                          DatabaseKeys
+                                                              .readNews) ==
+                                                      null ||
+                                                  (databaseService.getFromDisk(
+                                                              DatabaseKeys
+                                                                  .readNews) !=
+                                                          null &&
+                                                      homeViewController
+                                                              .newsCount >
+                                                          databaseService
+                                                              .getFromDisk(
+                                                                  DatabaseKeys
+                                                                      .readNews))) &&
+                                              homeViewController.newsCount > 0)
+                                            Align(
+                                              alignment: Alignment.topRight,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                margin:
+                                                    const EdgeInsets.all(4.0),
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Text(
+                                                  "${(databaseService.getFromDisk(DatabaseKeys.readNews) != null && homeViewController.newsCount > databaseService.getFromDisk(DatabaseKeys.readNews)) ? (homeViewController.newsCount - databaseService.getFromDisk(DatabaseKeys.readNews)).toInt() : homeViewController.newsCount}",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      height: 5.h,
+                                      width: 5.h,
+                                      decoration: BoxDecoration(
+                                          color: colorScheme.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  controller.locationStatusBar(context),
+                                ],
+                              ),
                             ),
-                            controller.locationStatusBar(context),
-                          ],
-                        ),
-                      ),
+                          ),
+                      ],
                     ),
-                ],
-              ),
-              ),
-            );
-          },
-        ),
-      ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
-  },
-);
   }
 
   double findMinHeight(BuildContext context) {

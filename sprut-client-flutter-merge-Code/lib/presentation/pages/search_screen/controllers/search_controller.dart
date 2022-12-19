@@ -42,7 +42,8 @@ class SearchController extends GetxController {
 
   final BuildContext? context;
 
-  CustomInfoWindowController customInfoWindowController = CustomInfoWindowController();
+  CustomInfoWindowController customInfoWindowController =
+      CustomInfoWindowController();
   bool mapLoading = true;
   bool isPanelSlide = false;
   bool isBottomSheetExpanded = false;
@@ -91,12 +92,15 @@ class SearchController extends GetxController {
   final amountController = new TextEditingController(text: "0");
   FocusNode amountFocusNode = FocusNode();
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   String formattedTime(String dateTimeVal) {
     if (dateTimeVal.isEmpty) return "";
 
-    int timeVal = DateTime.now().difference(DateTime.parse(dateTimeVal).toLocal()).inSeconds;
+    int timeVal = DateTime.now()
+        .difference(DateTime.parse(dateTimeVal).toLocal())
+        .inSeconds;
 
     final int minutes = timeVal ~/ 60;
     final int seconds = timeVal % 60;
@@ -105,7 +109,9 @@ class SearchController extends GetxController {
 
   String formattedArrivedTime(String dateTimeVal) {
     if (dateTimeVal.isEmpty) return "";
-    int timeVal = DateTime.now().difference(DateTime.parse(dateTimeVal).toLocal()).inSeconds;
+    int timeVal = DateTime.now()
+        .difference(DateTime.parse(dateTimeVal).toLocal())
+        .inSeconds;
 
     final int minutes = timeVal ~/ 60;
     final int seconds = timeVal % 60;
@@ -116,6 +122,7 @@ class SearchController extends GetxController {
     if (dateTimeVal.isEmpty) return "";
     return timeFormatter.format(DateTime.parse(dateTimeVal).toLocal());
   }
+
   OrderModel? _orderModel;
 
   OrderModel get orderModel => _orderModel!;
@@ -236,7 +243,7 @@ class SearchController extends GetxController {
 
     databaseService.saveToDisk(DatabaseKeys.preorder, "");
 
-    Navigator.pop(context);
+    // Navigator.pop(context);
     isDeleteApi = false;
   }
 
@@ -247,8 +254,10 @@ class SearchController extends GetxController {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       print("heretimer  ${timer.tick} $status");
 
-      String _arriveTimeCheck = databaseService.getFromDisk(DatabaseKeys.orderArriveTime) ?? "";
-      String _rideTimeCheck = databaseService.getFromDisk(DatabaseKeys.orderRideTime) ?? "";
+      String _arriveTimeCheck =
+          databaseService.getFromDisk(DatabaseKeys.orderArriveTime) ?? "";
+      String _rideTimeCheck =
+          databaseService.getFromDisk(DatabaseKeys.orderRideTime) ?? "";
 
       if (status == "searching") {
         orderCreateTime = formattedTime(orderModel.createdAt!);

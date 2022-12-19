@@ -1,2 +1,0 @@
-com/pravera/fl_location/BuildConfig.java
- com.pravera.fl_location.BuildConfig
