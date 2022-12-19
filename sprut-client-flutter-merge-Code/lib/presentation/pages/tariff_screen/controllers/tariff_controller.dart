@@ -135,8 +135,8 @@ class TariffController extends GetxController {
   Cards get card => _card!;
   set card(value) => _card = value;
 
-  RxString _balance = "".obs;
-  String get balance => _balance.value;
+  RxInt _balance = 0.obs;
+  int get balance => _balance.value;
   set balance(value) => _balance.value = value;
 
   RxString _paymentType = "".obs;
@@ -484,7 +484,7 @@ class TariffController extends GetxController {
     //   zoom: 17,
     // );
 
-    gMapCompleter.complete(controller);
+    // gMapCompleter.complete(controller);
     await Future.delayed(Duration(milliseconds: 100), () async {});
     print("heremo");
     MarkerId markerId1 = MarkerId(markerIdVal(increment: true));

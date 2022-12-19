@@ -27,7 +27,7 @@ class Profile {
     this.email,
     this.birthday,
   });
-  final String? balance;
+  final int? balance;
   final String? paymentType;
   final bool? useBonuses;
   final int? referrerAccountId;
@@ -38,7 +38,7 @@ class Profile {
   final String? birthday;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        balance: json["balance"] ?? "",
+        balance: json["balance"] ?? 0,
         paymentType: json["paymentType"] ?? "",
         useBonuses: json["useBonuses"] ?? false,
         referrerAccountId: json["referrerAccountId"] ?? 0,

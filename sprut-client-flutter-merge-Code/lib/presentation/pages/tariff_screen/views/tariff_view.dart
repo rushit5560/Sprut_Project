@@ -80,182 +80,190 @@ class TariffView extends GetView<TariffController> {
                         Get.offNamed(Routes.homeScreen);
                         return true;
                       },
-                      child: Scaffold(
-                          key: _scaffoldKey,
-                          onDrawerChanged: (isOpened) {
-                            controller.update();
-                          },
-                          onEndDrawerChanged: (isOpened) {
-                            controller.update();
-                          },
-                          drawer: MyDrawer(
-                            isEnable: false,
-                          ),
-                          resizeToAvoidBottomInset: false,
-                          body: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.width * 1.300,
-                                child: GoogleMap(
-                                  zoomControlsEnabled: false,
-                                  onCameraMove: (position) {
-                                    controller.customInfoWindowController
-                                        .onCameraMove!();
-                                  },
-                                  onTap: (lat) {
-                                    controller.customInfoWindowController
-                                        .hideInfoWindow!();
-                                  },
-                                  polylines: Set<Polyline>.of(
-                                      controller.polylines.values),
-                                  mapType: MapType.normal,
-                                  compassEnabled: false,
-                                  mapToolbarEnabled: false,
+                      child: WillPopScope(
+                        onWillPop: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          return true;
+                        },
+                        child: Scaffold(
+                            key: _scaffoldKey,
+                            onDrawerChanged: (isOpened) {
+                              controller.update();
+                            },
+                            onEndDrawerChanged: (isOpened) {
+                              controller.update();
+                            },
+                            drawer: MyDrawer(
+                              isEnable: false,
+                            ),
+                            resizeToAvoidBottomInset: false,
+                            body: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.width * 1.100,
+                                  child: GoogleMap(
+                                    zoomControlsEnabled: true,
+                                    onCameraMove: (position) {
+                                      controller.customInfoWindowController.onCameraMove!();
+                                    },
+                                    onTap: (lat) {
+                                      controller.customInfoWindowController.hideInfoWindow!();
+                                    },
+                                    polylines: Set<Polyline>.of(controller.polylines.values),
+                                    mapType: MapType.normal,
+                                    compassEnabled: false,
+                                    mapToolbarEnabled: false,
 
-                                  myLocationButtonEnabled: false,
+                                    myLocationButtonEnabled: false,
 
-                                  // markers: value.markersSet,
-                                  markers:
-                                      Set<Marker>.of(controller.markers.values),
+                                    // markers: value.markersSet,
+                                    markers: Set<Marker>.of(controller.markers.values),
 
-                                  initialCameraPosition: CameraPosition(
-                                      target: (Get.find<HomeViewController>()
-                                                  .locationData !=
-                                              null)
-                                          ? LatLng(
-                                              Get.find<HomeViewController>()
-                                                  .locationData!
-                                                  .latitude!,
-                                              Get.find<HomeViewController>()
-                                                  .locationData!
-                                                  .longitude!)
-                                          : LatLng(
-                                              Get.find<HomeViewController>()
-                                                  .selectedCity!
-                                                  .lat,
-                                              Get.find<HomeViewController>()
-                                                  .selectedCity!
-                                                  .lon)),
+                                    initialCameraPosition: CameraPosition(
+                                        target:
+                                        /*(Get.find<HomeViewController>()
+                                                    .locationData !=
+                                                null)
+                                            ? LatLng(
+                                                Get.find<HomeViewController>()
+                                                    .locationData!
+                                                    .latitude!,
+                                                Get.find<HomeViewController>()
+                                                    .locationData!
+                                                    .longitude!)
+                                            :*/ LatLng(
+                                                Get.find<HomeViewController>()
+                                                    .selectedCity!
+                                                    .lat,
+                                                Get.find<HomeViewController>()
+                                                    .selectedCity!
+                                                    .lon),
+                                      zoom: 12.4746,
+                                    ),
 
-                                  onMapCreated: controller.onMapsCreated,
+                                    onMapCreated: controller.onMapsCreated,
 
-                                  // markers: Set<Marker>.of(value.markers.values),
-                                  // markers: value.mapMarkers,
-                                  // markers: value.markersSet,
-                                  // markers: Set<Marker>.of(controller.mapMarkers.values),
-                                  onCameraIdle: () {},
+                                    // markers: Set<Marker>.of(value.markers.values),
+                                    // markers: value.mapMarkers,
+                                    // markers: value.markersSet,
+                                    // markers: Set<Marker>.of(controller.mapMarkers.values),
+                                    onCameraIdle: () {},
 
-                                  // markers: Set.of(Marker),
+                                    // markers: Set.of(Marker),
+                                  ),
                                 ),
-                              ),
-                              controller.mapLoading
-                                  ? Positioned(
-                                      top: 0,
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height:
-                                            MediaQuery.of(context).size.height,
-                                        color: Colors.white,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Center(
-                                              child: lottie.Lottie.asset(
-                                                  'assets/images/loading1.json',
-                                                  height: 10.h),
-                                            ),
-                                            SizedBox(
-                                              height: 45.h,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : SizedBox(),
-                              CustomInfoWindow(
-                                controller:
-                                    controller.customInfoWindowController,
-                                height: 50,
-                                width: 310,
-                                offset: 50,
-                              ),
-                              Positioned(
-                                top: 10,
-                                left: 6,
-                                child: SafeArea(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          _scaffoldKey.currentState!
-                                              .openDrawer();
-                                        },
+                                controller.mapLoading
+                                    ? Positioned(
+                                        top: 0,
                                         child: Container(
-                                          child: Stack(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height:
+                                              MediaQuery.of(context).size.height,
+                                          color: Colors.white,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Icon(
-                                                  Icons.menu,
-                                                  color: Colors.white,
-                                                  size: 7.w,
-                                                ),
+                                              Center(
+                                                child: lottie.Lottie.asset(
+                                                    'assets/images/loading1.json',
+                                                    height: 10.h),
+                                              ),
+                                              SizedBox(
+                                                height: 45.h,
                                               ),
                                             ],
                                           ),
-                                          height: 5.h,
-                                          width: 5.h,
-                                          decoration: BoxDecoration(
-                                              color: colorScheme.primary,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
                                         ),
-                                      ),
-                                      // GestureDetector(
-                                      //   onTap: () {
-                                      //     homeViewController
-                                      //         .updateSuggestionsOnBack();
-                                      //     Get.back();
-                                      //   },
-                                      //   child: Container(
-                                      //     child: Icon(
-                                      //       Icons.arrow_back,
-                                      //       color: Colors.white,
-                                      //       size: 7.w,
-                                      //     ),
-                                      //     height: 5.h,
-                                      //     width: 5.h,
-                                      //     decoration: BoxDecoration(
-                                      //       color: colorScheme.primary,
-                                      //       borderRadius: BorderRadius.circular(5),
-                                      //     ),
-                                      //   ),
-                                      // ),
+                                      )
+                                    : SizedBox(),
+                                CustomInfoWindow(
+                                  controller:
+                                      controller.customInfoWindowController,
+                                  height: 50,
+                                  width: 310,
+                                  offset: 50,
+                                ),
+                                Positioned(
+                                  top: 10,
+                                  left: 6,
+                                  child: SafeArea(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        /*GestureDetector(
+                                          onTap: () {
+                                            _scaffoldKey.currentState!
+                                                .openDrawer();
+                                          },
+                                          child: Container(
+                                            child: Stack(
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.center,
+                                                  child: Icon(
+                                                    Icons.menu,
+                                                    color: Colors.white,
+                                                    size: 7.w,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            height: 5.h,
+                                            width: 5.h,
+                                            decoration: BoxDecoration(
+                                                color: colorScheme.primary,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),*/
 
-                                      const SizedBox(
-                                        height: 8.0,
-                                      ),
-                                      controller.locationStatusBar(context),
-                                    ],
+                                        GestureDetector(
+                                          onTap: () {
+                                            homeViewController
+                                                .updateSuggestionsOnBack();
+                                            Get.back();
+                                            // FocusManager.instance.primaryFocus?.focus();
+                                            FocusScope.of(context).requestFocus(new FocusNode());
+                                          },
+                                          child: Container(
+                                            child: Icon(
+                                              Icons.arrow_back,
+                                              color: Colors.white,
+                                              size: 7.w,
+                                            ),
+                                            height: 5.h,
+                                            width: 5.h,
+                                            decoration: BoxDecoration(
+                                              color: colorScheme.primary,
+                                              borderRadius: BorderRadius.circular(5),
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(
+                                          height: 8.0,
+                                        ),
+                                        controller.locationStatusBar(context),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              // Positioned(
-                              //   right: 5,
-                              //   bottom:
-                              //       Responsive.isSmallMobile(context) ? 14.h : 12.h,
-                              //   child: controller.locationStatusBar(context),
-                              // ),
-                            ],
-                          ),
-                          backgroundColor: colorScheme.onBackground),
+                                // Positioned(
+                                //   right: 5,
+                                //   bottom:
+                                //       Responsive.isSmallMobile(context) ? 14.h : 12.h,
+                                //   child: controller.locationStatusBar(context),
+                                // ),
+                              ],
+                            ),
+                            backgroundColor: colorScheme.onBackground),
+                      ),
                     ),
                   )),
         );
